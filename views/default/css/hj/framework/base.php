@@ -74,11 +74,11 @@ div.mandatory {
 	background:transparent url(<?php echo $graphics_url ?>mandatory.png) no-repeat 98% 23px;
 }
 
-input.hj-input-processing {
-	background:white url(<?php echo $graphics_url ?>loader/indicator.gif) no-repeat right;
-}
-
-input.hj-input-processing:hover {
+input.hj-input-processing,
+input.hj-input-processing:hover,
+textarea.hj-input-processing,
+textarea.hj-input-processing:hover
+{
 	background:white url(<?php echo $graphics_url ?>loader/indicator.gif) no-repeat right;
 }
 
@@ -122,9 +122,14 @@ input.hj-input-processing:hover {
 .elgg-list .elgg-module-aside .elgg-head {
 padding-top:10px;
 }
-	.hj-view-list,
-	.hj-view-list > li {
+
+.hj-view-list,
+.hj-view-list > li {
 	border:none;
+}
+
+.elgg-item {
+	position:relative;
 }
 
 .elgg-menu > li > a.hidden {
@@ -174,6 +179,11 @@ padding-top:10px;
 	margin-top:10px;
 }
 
+.hj-pagination-next .hj-ajax-loader {
+	float:left;
+	margin:2px 5px 0;
+}
+
 /* ***************************************
 	Tags
 *************************************** */
@@ -192,4 +202,72 @@ padding-top:10px;
 }
 .elgg-tagcloud {
 	text-align: justify;
+}
+
+
+/* SLIDESHOW */
+
+.hj-carousel-pagination {
+	font-size:10px;
+}
+
+.hj-carousel-next {
+	text-align:right;
+	float:left;
+}
+
+.hj-carousel-pager {
+	text-align:center;
+	float:left;
+}
+
+.hj-carousel-prev {
+	text-align:left;
+	float:left;
+}
+
+.bx-window {
+	border-top:1px solid #f4f4f4;
+	border-bottom:1px solid #f4f4f4;
+	margin-bottom:10px;
+}
+
+.hj-pagination-next.hj-pagination-carousel {
+	padding:0;
+	margin:0;
+	font-size:10px;
+	text-align:right;
+	background:none;
+	border:0;
+}
+
+
+/* Overlay sidebar */
+
+.hj-overlay-sidebar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	background: white;
+	border-right: 1px solid #B0B0B0;
+	-moz-box-shadow: 1px 0px 4px #b0b0b0;
+	-webkit-box-shadow: 1px 0px 4px #b0b0b0;
+	box-shadow: 1px 0px 4px #b0b0b0;
+}
+
+.hj-overlay-sidebar-content {
+	width:250px;
+}
+
+.hj-overlay-sidebar-open,
+.hj-overlay-sidebar-close
+{
+	font-weight: bold;
+	font-size: 10px;
+	padding:10px 5px;
+}
+
+.hj-overlay-sidebar-close {
+	float:right;
 }

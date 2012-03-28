@@ -1,7 +1,7 @@
 <?php
 
 elgg_load_js('hj.framework.ajax');
-elgg_load_js('hj.framework.fieldcheck');
+
 
 $entity = elgg_extract('entity', $vars);
 

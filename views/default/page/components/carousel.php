@@ -13,18 +13,11 @@
  * @uses $vars['pagination']  Show pagination? (default: true)
  * @uses $vars['position']    Position of the pagination: before, after, or both
  * @uses $vars['full_view']   Show the full view of the items (default: false)
- * @uses $vars['gallery_class']  Additional CSS class for the <ul> element
+ * @uses $vars['list_class']  Additional CSS class for the <ul> element
  * @uses $vars['item_class']  Additional CSS class for the <li> elements
  * @uses $vars['inverse_order']  Is this list in an inversed order in relation to data_options
  * $uses $vars['data-options'] An array of options that was used to render the items
  */
-
-$list_type = elgg_extract('list_type', $vars, 'gallery');
-
-if ($list_type !== 'gallery' && elgg_view_exists("page/components/$list_type")) {
-	echo elgg_view("page/components/$list_type", $vars);
-	return true;
-}
 $items = $vars['items'];
 $offset = elgg_extract('offset', $vars);
 $limit = elgg_extract('limit', $vars);
@@ -34,18 +27,20 @@ $base_url = elgg_extract('base_url', $vars, '');
 $pagination = elgg_extract('pagination', $vars, true);
 $offset_key = elgg_extract('offset_key', $vars, 'offset');
 $position = elgg_extract('position', $vars, 'after');
-$gallery_class = 'elgg-list';
+$list_class = 'elgg-list hj-carousel hidden';
 $list_id = elgg_extract('list_id', $vars, null);
 $inverse_order = elgg_extract('inverse_order', $vars, null);
 $data_options = elgg_extract('data-options', $vars, false);
 $full_view = elgg_extract('full_view', $vars, false);
 
+elgg_push_context('carousel');
+
 if (is_array($data_options)) {
-	$gallery_class = "$gallery_class hj-syncable";
+	$list_class = "$list_class hj-syncable";
 }
 
-if (isset($vars['gallery_class'])) {
-	$gallery_class = "$gallery_class {$vars['gallery_class']}";
+if (isset($vars['list_class'])) {
+	$list_class = "$list_class {$vars['list_class']}";
 }
 
 $item_class = 'elgg-item';
@@ -78,13 +73,13 @@ if ($pagination && $count) {
 		$pagination_options['ajaxify'] = true;
 	}
 
-	$nav .= elgg_view('navigation/pagination', $pagination_options);
+	$nav .= '<div class="hidden">' . elgg_view('navigation/pagination', $pagination_options) . '</div>';
 }
 
 $before = elgg_view('page/components/list/prepend', $vars);
 $after = elgg_view('page/components/list/append', $vars);
 
-$list_params = array('items', 'offset', 'limit', 'count', 'base_url', 'pagination', 'offset_key', 'position', 'gallery_class', 'list_id', 'data-options');
+$list_params = array('items', 'offset', 'limit', 'count', 'base_url', 'pagination', 'offset_key', 'position', 'list_class', 'list_id', 'data-options');
 foreach ($list_params as $list_param) {
 	if (isset($vars[$list_param])) {
 		unset($vars[$list_param]);
@@ -95,17 +90,26 @@ $html .= $before;
 
 $data_options_list_items = array();
 if (is_array($items) && count($items) > 0) {
+	if (!$selected = get_input('guid')) {
+		$selected = $items[0]->guid;
+	}
+
 	foreach ($items as $item) {
+
 		if (elgg_instanceof($item)) {
 			$id = "elgg-{$item->getType()}-{$item->getGUID()}";
+			if (!$title = $item->title) {
+				$title = $item->name;
+			}
 			$data_options_list_items[] = $item->getGUID();
-		} else {
-			$id = "item-{$item->getType()}-{$item->id}";
-			$time = $item->posted;
-			$data_options_list_items[] = $item->id;
+			if ($item->getGUID() == $guid) {
+				$selected = "hj-carousel-selected";
+			} else {
+				$selected = "";
+			}
 		}
 
-		$html .= "<li id=\"$id\" class=\"$item_class\">";
+		$html .= "<li id=\"$id\" class=\"$item_class $selected\" title=\"$title\">";
 		$html .= elgg_view_list_item($item, $vars);
 		$html .= '</li>';
 	}
@@ -113,16 +117,18 @@ if (is_array($items) && count($items) > 0) {
 
 $html .= $after;
 
-$html = "<ul id=\"$list_id\" class=\"$gallery_class\">$html</ul>";
+$html = "<ul id=\"$list_id\" class=\"$list_class\">$html</ul>";
 
-if ($position == 'before' || $position == 'both' && !$ajaxify) {
-	$html = $nav . $html;
-}
-
-if ($position == 'after' || $position == 'both') {
-	$html .= $nav;
-}
-echo $html;
+$carousel = "<div id=\"carousel-$list_id\" class=\"hj-carousel-wrapper\">";
+$carousel .= "<div class=\"hj-carousel-pagination clearfix\">";
+$carousel .= "<div class=\"hj-carousel-prev elgg-col-1of3\"></div>";
+$carousel .= "<div class=\"hj-carousel-pager elgg-col-1of3\"></div>";
+$carousel .= "<div class=\"hj-carousel-next elgg-col-1of3\"></div>";
+$carousel .= "</div>";
+$carousel .= "<div class=\"hj-carousel-content\"></div>";
+$carousel .= $html;
+$carousel .= $nav;
+$carousel .= '</div>';
 
 // We are storing details of this list in the window.hjdata object
 // This gives us access to guids of elements that have been rendered and other data we can use in JS
@@ -142,8 +148,21 @@ if ($list_id) {
 			if (!window.hjdata) {
 				window.hjdata = new Object();
 			}
+			if (!window.hjdata.lists["$list_id"]) {
+				window.hjdata.lists["$list_id"] = new Object();
+				var init = true;
+			}
 			window.hjdata = $.extend(true, window.hjdata, new_list);
+			if (init) {
+				var params = new Object();
+				params.list_id = "$list_id";
+				params.data = $data;
+				elgg.trigger_hook('new_lists', 'hj:framework:ajax', params, true);
+			}
 		</script>
 ___JS;
 	echo $script;
 }
+elgg_pop_context();
+
+echo $carousel;

@@ -50,8 +50,8 @@ $english = array(
     'item:object:hjlanguage' => 'Language',
 	'items:object:hjlanguage' => 'Languages',
 
-	'item:object:hjannotation' => 'Interaction',
-	'items:object:hjannotation' => 'Interactions',
+	'item:object:hjannotation' => 'Comments',
+	'items:object:hjannotation' => 'Comments',
     /**
      * River Items
      */
@@ -98,7 +98,7 @@ $english = array(
     'hj:framework:addnew' => 'Add',
     'hj:framework:refresh' => 'Refresh',
     'hj:framework:gallery' => 'Gallery View',
-    'hj:framework:gallerytitle' => "Details for %s",
+    'hj:framework:gallerytitle' => "Preview",
     'hj:framework:addwidget' => 'Add Section',
     'hj:framework:download' => 'Download',
     'hj:framework:edit' => 'Edit',
@@ -129,6 +129,8 @@ $english = array(
     /**
      * Forms
      */
+	'hj:framework:from:error:fieldexists' => 'Field names must be unique',
+	
     'hj:label:hjportfoliofile:title' => 'Title',
     'hj:label:hjportfoliofile:description' => 'Description',
     'hj:label:hjportfoliofile:tags' => 'Tags',
@@ -188,7 +190,21 @@ $english = array(
     'hj:framework:success' => 'Successfully completed',
     'hj:framework:error' => 'Something went wrong',
 
-	'hj:framework:pagination:loadmore' => 'Show More',
+	'hj:framework:pagination:loadmore' => 'Show all %s %s',
+	'hj:framework:pagination:loadnext' => 'Load more',
+
+	/**
+	 * List Types
+	 */
+
+	'hj:framework:list:type' => 'List Type',
+	'hj:framework:list:list' => 'List',
+	'hj:framework:list:gallery' => 'Gallery',
+	'hj:framework:list:carousel' => 'Slider',
+
+	'hj:showpanel' => 'Show panel',
+	'hj:hidepanel' => 'Hide panel',
+	
 );
 
 

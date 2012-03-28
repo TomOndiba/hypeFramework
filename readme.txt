@@ -36,6 +36,12 @@ REQUIREMENTS
 ------------
 1) Elgg 1.8.3+
 
+TIPS
+----
+Since hypeFramework is a JS intensive framework, I highly recommend that you have Minify installed and enabled on your Elgg Site:
+http://community.elgg.org/pg/plugins/project/489179/developer/ewinslow/minify-for-elgg-18
+
+
 INSTALLATION
 ------------
 1) Unzip hypeFramework into your mod/ folder

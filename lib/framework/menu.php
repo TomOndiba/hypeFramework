@@ -28,9 +28,9 @@
  */
 function hj_framework_entity_head_menu($hook, $type, $return, $params) {
 
-	if (elgg_in_context('print') || elgg_in_context('activity') || !elgg_is_logged_in()) {
-		return $return;
-	}
+//	if (elgg_in_context('print') || elgg_in_context('activity') || !elgg_is_logged_in()) {
+//		return $return;
+//	}
 	// Extract available parameters
 	$entity = elgg_extract('entity', $params);
 	$handler = elgg_extract('handler', $params);
@@ -50,12 +50,13 @@ function hj_framework_entity_head_menu($hook, $type, $return, $params) {
 			$fullview = array(
 				'name' => 'fullview',
 				'title' => elgg_echo('hj:framework:gallerytitle', array($entity->title)),
-				'text' => elgg_view_icon('hj hj-icon-zoom'),
+				'text' => elgg_echo('hj:framework:gallerytitle', array($entity->title)),
 				'href' => "action/framework/entities/view?e=$entity->guid",
-				'data-options' => $data,
+				'data-options' => htmlentities($data, ENT_QUOTES, 'UTF-8'),
 				'rel' => 'fancybox',
 				'class' => 'hj-ajaxed-view',
 				'priority' => 300,
+				'section' => 'dropdown'
 			);
 			$return[] = ElggMenuItem::factory($fullview);
 		}
@@ -68,11 +69,12 @@ function hj_framework_entity_head_menu($hook, $type, $return, $params) {
 			$download = array(
 				'name' => 'download',
 				'title' => elgg_echo('hj:framework:download'),
-				'text' => elgg_view_icon('hj hj-icon-download'),
+				'text' => elgg_echo('hj:framework:download'),
 				'id' => "hj-ajaxed-download-{$file_guid}",
 				'href' => "hj/file/download/{$file_guid}/",
 				'target' => '_blank',
 				'priority' => 500,
+				'section' => 'dropdown'
 			);
 			$return[] = ElggMenuItem::factory($download);
 		}
@@ -82,12 +84,13 @@ function hj_framework_entity_head_menu($hook, $type, $return, $params) {
 		$edit = array(
 			'name' => 'edit',
 			'title' => elgg_echo('hj:framework:edit'),
-			'text' => elgg_view_icon('hj hj-icon-edit'),
+			'text' => elgg_echo('hj:framework:edit'),
 			'rel' => 'fancybox',
 			'href' => "action/framework/entities/edit",
-			'data-options' => $data,
+			'data-options' => htmlentities($data, ENT_QUOTES, 'UTF-8'),
 			'class' => "hj-ajaxed-edit",
-			'priority' => 800
+			'priority' => 800,
+			'section' => 'dropdown'
 		);
 		$return[] = ElggMenuItem::factory($edit);
 
@@ -95,12 +98,13 @@ function hj_framework_entity_head_menu($hook, $type, $return, $params) {
 		$delete = array(
 			'name' => 'delete',
 			'title' => elgg_echo('hj:framework:delete'),
-			'text' => elgg_view_icon('hj hj-icon-delete'),
+			'text' => elgg_echo('hj:framework:delete'),
 			'href' => "action/framework/entities/delete?e=$entity->guid",
-			'data-options' => $data,
+			'data-options' => htmlentities($data, ENT_QUOTES, 'UTF-8'),
 			'class' => 'hj-ajaxed-remove',
 			'id' => "hj-ajaxed-remove-{$entity->guid}",
 			'priority' => 900,
+			'section' => 'dropdown'
 		);
 		$return[] = ElggMenuItem::factory($delete);
 	}
@@ -157,7 +161,7 @@ function hj_framework_segment_head_menu($hook, $type, $return, $params) {
 			'data-options' => $data,
 			'id' => "hj-ajaxed-addwidget-{$entity->guid}",
 			'class' => "hj-ajaxed-addwidget",
-			'target' => "#elgg-object-{$entity->guid}",
+			'target' => "elgg-object-{$entity->guid}",
 			'priority' => 100
 		);
 		$return[] = ElggMenuItem::factory($widget);
@@ -171,8 +175,9 @@ function hj_framework_segment_head_menu($hook, $type, $return, $params) {
 			'data-options' => $data,
 			'id' => "hj-ajaxed-edit-{$entity->guid}",
 			'class' => "hj-ajaxed-edit",
-			'target' => "#elgg-object-{$entity->guid}",
-			'priority' => 800
+			'target' => "elgg-object-{$entity->guid}",
+			'priority' => 800,
+				
 		);
 		$return[] = ElggMenuItem::factory($edit);
 
@@ -227,7 +232,7 @@ function hj_framework_segment_head_menu($hook, $type, $return, $params) {
 //            'target' => "#elgg-object-{$entity->guid}",
 //            'priority' => 300
 //        );
-	$return[] = ElggMenuItem::factory($email);
+//	$return[] = ElggMenuItem::factory($email);
 
 	return $return;
 }

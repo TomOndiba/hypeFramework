@@ -130,12 +130,14 @@ if (!$ajaxify) {
 	echo '</ul>';
 } else {
 	$count = elgg_extract('count', $vars, 0);
-	$limit = elgg_extract('limit', $vars, 0);
+	$limit = elgg_extract('limit', $vars, 10);
+	$limit_prev = elgg_extract('limit_prev', $vars, $limit);
 	$offset = elgg_extract('offset', $vars, 0);
-
-	if ($count <= $limit) {
+	$string = elgg_extract('string', $vars, '');
+	if ($count <= $limit_prev) {
 		return true;
 	}
+	
 	$data_options = elgg_clean_vars($vars);
 
 	if (isset($vars['baseurl']) && $vars['baseurl']) {
@@ -144,8 +146,11 @@ if (!$ajaxify) {
 		$data_options['baseurl'] = "hj/sync";
 	}
 
-	$data_options = htmlentities(json_encode($data_options), ENT_QUOTES, 'UTF-8');
-	
-	$load_more_string = elgg_echo('hj:framework:pagination:loadmore');
-	echo "<div class=\"hj-pagination-next\" rel=\"$list_id\" data-options=\"$data_options\">$load_more_string</div>";
+	if ($limit > 0) {
+		$load_more_string = elgg_echo('hj:framework:pagination:loadnext', array($limit));
+	} else {
+		$load_more_string = elgg_echo('hj:framework:pagination:loadmore', array($count, $string));
+	}
+	$context = elgg_get_context();
+	echo "<div class=\"hj-pagination-next hj-pagination-$context\" rel=\"$list_id\"><span>$load_more_string</span></div>";
 }

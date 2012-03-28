@@ -8,7 +8,7 @@ class hjFileFolder extends ElggObject {
         $this->attributes['subtype'] = "hjfilefolder";
     }
 
-    public function getContainedFiles($subtype = 'hjfile') {
+    public function getContainedFiles($subtype = 'hjfile', $count = false) {
         $files = hj_framework_get_entities_by_priority('object', $subtype, null, $this->guid);
         return $files;
     }

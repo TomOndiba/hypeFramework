@@ -1,16 +1,38 @@
 <?php
 
 if (elgg_is_xhr()) {
-	$last = get_entity(get_input('guid'));
-	$priority = $last->priority;
+	$data = get_input('listdata');
 
-	$options = get_input('options');
-	$pagination_options = get_input('pagination');
+	$sync = elgg_extract('sync', $data, 'new');
+	$guids = elgg_extract('items', $data, 0);
+
+	if (is_array($guids)) {
+		$priority = get_entity($guids[0])->priority;
+		foreach ($guids as $guid) {
+			$ent_priority = get_entity($guid)->priority;
+			if ($sync == 'new' && $ent_priority && $ent_priority < $priority) {
+				$priority = $ent_priority;
+			}
+			if ($sync !== 'new' && $ent_priority && $ent_priority > $priority) {
+				$priority = $ent_priority;
+			}
+		}
+	}
+	
+	$options = elgg_extract('options', $data, array());
+	array_walk_recursive($options, 'hj_framework_decode_options_array');
+
+	$limit = elgg_extract('limit', $data['pagination'], 10);
+	$offset = elgg_extract('offset', $data['pagination'], 0);
+	$inverse_order = elgg_extract('inverse_order', $data['pagination'], false);
+	if ($inverse_order == 'null') {
+		$inverse_order = false;
+	}
 
 	$db_prefix = elgg_get_config('dbprefix');
 	$defaults = array(
-		'offset' => (int) max(get_input('offset', 0), 0),
-		'limit' => (int) max(get_input('limit', 10), 0),
+		'offset' => (int) $offset,
+		'limit' => (int) $limit,
 		'class' => 'hj-syncable-list',
 		'joins' => array("JOIN {$db_prefix}metadata as mt on e.guid = mt.entity_guid
                       JOIN {$db_prefix}metastrings as msn on mt.name_id = msn.id
@@ -20,6 +42,9 @@ if (elgg_is_xhr()) {
 		'order_by' => "CAST(msv.string AS SIGNED) ASC"
 	);
 
+	if ($sync == 'new' || $inverse_order) {
+		$defaults['wheres'] = array("((msn.string = 'priority') AND (msv.string < $priority))");
+	}
 	$options = array_merge($defaults, $options);
 
 	$items = elgg_get_entities($options);
@@ -29,14 +54,15 @@ if (elgg_is_xhr()) {
 			$id = "elgg-{$item->getType()}-{$item->guid}";
 			$time = $item->time_created;
 
-			$html = "<li id=\"$id\" class=\"elgg-item\" data-timestamp=\"$time\">";
-			$html .= elgg_view_list_item($item, $vars);
+			$html = "<li id=\"$id\" class=\"elgg-item\">";
+			$html .= elgg_view_list_item($item, array('full_view' => $data['pagination']['full_view']));
 			$html .= '</li>';
 
-			$output[] = $html;
+			$output[] = array('guid' => $item->guid, 'html' => $html);
 		}
 	}
-	print(json_encode($output));
+	header('Content-Type: application/json');
+	print(json_encode(array('output' => $output)));
 	exit;
 }
 

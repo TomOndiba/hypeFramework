@@ -38,4 +38,8 @@ if (!$html) {
 
 elgg_pop_context();
 
-return true;
+if ($entity) {
+	forward($entity->getURL());
+} else {
+	forward($view);
+}

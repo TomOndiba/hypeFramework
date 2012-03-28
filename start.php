@@ -4,6 +4,7 @@
  *
  * @package hypeJunction
  * @subpackage hypeFramework
+ *
  * @author Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
  * @copyright Copyrigh (c) 2011, Ismayil Khayredinov
  */

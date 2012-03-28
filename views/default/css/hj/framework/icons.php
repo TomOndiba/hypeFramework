@@ -203,3 +203,40 @@ background-position:0 -512px;
 {
 background-position:0 -528px;
 }
+
+.elgg-icon-hjtoggler-down {
+	background:transparent url(<?php echo $graphics_url ?>hj-toggler-down.png) no-repeat 50% 50%;
+	float:right;
+	cursor:pointer;
+}
+
+.elgg-icon-hjtoggler-down:hover {
+	background:transparent url(<?php echo $graphics_url ?>hj-toggler-down-hover.png) no-repeat 50% 50%;
+}
+
+.elgg-icon-hjtoggler-up {
+	background:transparent url(<?php echo $graphics_url ?>hj-toggler-up.png) no-repeat 50% 50%;
+	cursor:pointer;
+}
+
+.elgg-icon-hjtoggler-up:hover {
+	background:transparent url(<?php echo $graphics_url ?>hj-toggler-up-hover.png) no-repeat 50% 50%;
+}
+
+.elgg-icon-hjtoggler-left {
+	background:transparent url(<?php echo $graphics_url ?>hj-toggler-left.png) no-repeat 50% 50%;
+	cursor:pointer;
+}
+
+.elgg-icon-hjtoggler-left:hover {
+	background:transparent url(<?php echo $graphics_url ?>hj-toggler-left-hover.png) no-repeat 50% 50%;
+}
+
+.elgg-icon-hjtoggler-right {
+	background:transparent url(<?php echo $graphics_url ?>hj-toggler-right.png) no-repeat 50% 50%;
+	cursor:pointer;
+}
+
+.elgg-icon-hjtoggler-right:hover {
+	background:transparent url(<?php echo $graphics_url ?>hj-toggler-right-hover.png) no-repeat 50% 50%;
+}

@@ -54,9 +54,12 @@ if ($full) {
             'segment' => $segment
                 ));
     } else {
+		if (!$num_columns = $segment->num_columns) {
+			$num_columns = 2;
+		}
         $content = elgg_view_layout('hj/widgets', array(
             'content' => $content,
-            'num_columns' => 2,
+            'num_columns' => $num_columns,
             'exact_match' => true,
             'show_add_widgets' => false,
             'segment' => $segment

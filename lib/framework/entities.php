@@ -5,7 +5,6 @@
  *
  * @package hypeJunction
  * @subpackage hypeFramework
- * @category Forms
  * @category Framework Entities Library
  */
 
@@ -17,7 +16,7 @@
  * @param ElggEntity $entity
  * @return bool
  */
-function hj_framework_set_entity_priority($entity, $priority = null) {
+function hj_framework_set_entity_priority(ElggEntity $entity, $priority = null) {
 	if ($priority) {
 		$entity->priority = $priority;
 		return true;
@@ -37,7 +36,7 @@ function hj_framework_set_entity_priority($entity, $priority = null) {
 }
 
 /**
- * Get a list of entities sorted by ElggEntity::$priority
+ * Get a list of entities sorted by priority
  *
  * @param string $type
  * @param string $subtype
@@ -46,7 +45,7 @@ function hj_framework_set_entity_priority($entity, $priority = null) {
  * @param int $limit
  * @return array An array of ElggEntity
  */
-function hj_framework_get_entities_by_priority($type, $subtype, $owner_guid = NULL, $container_guid = NULL, $limit = 0, $offset = 0) {
+function hj_framework_get_entities_by_priority($type = 'object', $subtype = null, $owner_guid = null, $container_guid = null, $limit = 0, $offset = 0) {
 	$db_prefix = elgg_get_config('dbprefix');
 	$entities = elgg_get_entities(array(
 		'type' => $type,
@@ -65,7 +64,7 @@ function hj_framework_get_entities_by_priority($type, $subtype, $owner_guid = NU
 	return $entities;
 }
 
-function hj_framework_get_entities_from_metadata_by_priority($type, $subtype, $owner_guid = NULL, $container_guid = NULL, $metadata_name_value_pairs = null, $limit = 0, $offset = 0, $count = false) {
+function hj_framework_get_entities_from_metadata_by_priority($type = 'object', $subtype = null, $owner_guid = NULL, $container_guid = null, $metadata_name_value_pairs = null, $limit = 0, $offset = 0, $count = false) {
 	if (is_array($metadata_name_value_pairs)) {
 		$db_prefix = elgg_get_config('dbprefix');
 		$entities = elgg_get_entities_from_metadata(array(
@@ -91,16 +90,15 @@ function hj_framework_get_entities_from_metadata_by_priority($type, $subtype, $o
 }
 
 /**
- * Get a DataPattern for a given hf entity
+ * Get a an hjForm (data pattern) associated with this entity
  *
  * @param string $type
  * @param string $subtype
+ * @param string $handler
+ *
  * @return hjForm
  */
 function hj_framework_get_data_pattern($type, $subtype, $handler = null) {
-	if ($container && elgg_instanceof($container)) {
-		$subtype = $container->getSubtype();
-	}
 	$forms = elgg_get_entities_from_metadata(array(
 		'type' => 'object',
 		'subtype' => 'hjform',
@@ -121,7 +119,15 @@ function hj_framework_get_data_pattern($type, $subtype, $handler = null) {
 	return $forms[0];
 }
 
-function hj_framework_extract_params_from_entity($entity, $params = array(), $context = null) {
+/**
+ * Extract commonly used parameters from an entity metadata
+ *
+ * @param ElggEntity $entity
+ * @param mixed $params
+ * @param string $context
+ * @return array
+ */
+function hj_framework_extract_params_from_entity(ElggEntity $entity, $params = array(), $context = null) {
 	$return = array();
 
 	if ($context) {
@@ -131,16 +137,14 @@ function hj_framework_extract_params_from_entity($entity, $params = array(), $co
 	}
 
 	if (elgg_instanceof($entity)) {
-
 		$container = $entity->getContainerEntity();
 		$owner = $entity->getOwnerEntity();
-//        $form_guid = get_input('f', $entity->data_pattern);
 		$form_guid = $entity->data_pattern;
 		$form = get_entity($form_guid);
 		if (elgg_instanceof($form)) {
-			$fields = $form->getFields();
 			$handler = $form->handler;
 		}
+
 		$widget = get_entity($entity->widget);
 
 		$entity_params = array(
@@ -162,6 +166,11 @@ function hj_framework_extract_params_from_entity($entity, $params = array(), $co
 	return $params;
 }
 
+/**
+ * Extract GET query params
+ *
+ * @return array
+ */
 function hj_framework_extract_params_from_url() {
 
 	if ($params = get_input('params')) {
@@ -216,9 +225,6 @@ function hj_framework_extract_params_from_url() {
 	if (!elgg_instanceof($form)) {
 		$form = hj_framework_get_data_pattern('object', $section, $handler);
 	}
-	if (elgg_instanceof($form)) {
-		$fields = $form->getFields();
-	}
 
 	$widget_guid = get_input('widget_guid');
 	$widget = get_entity($widget_guid);
@@ -238,7 +244,13 @@ function hj_framework_extract_params_from_url() {
 	return $params;
 }
 
-function hj_framework_extract_params_from_params($params) {
+/**
+ * Extract parameters from a given array
+ *
+ * @param array $params
+ * @return type
+ */
+function hj_framework_extract_params_from_params($params = array()) {
 
 	$context = $params['context'];
 	if (!empty($context)) {
@@ -283,9 +295,6 @@ function hj_framework_extract_params_from_params($params) {
 	$form = get_entity($form_guid);
 	if (!elgg_instanceof($form)) {
 		$form = hj_framework_get_data_pattern('object', $section, $handler);
-	}
-	if (elgg_instanceof($form)) {
-		$fields = $form->getFields();
 	}
 
 	$widget_guid = $params['widget_type'];

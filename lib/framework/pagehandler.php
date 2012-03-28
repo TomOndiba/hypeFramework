@@ -62,21 +62,31 @@ function hj_framework_page_handlers($page) {
 			set_input('guid', $page[1]);
 			set_input('size', $page[2]);
 			include "{$pages}icon/icon.php";
-			return true;
 			break;
 
 		case 'sync':
 			switch ($page[1]) {
 				default :
 					include "{$pages}sync/sync.php";
-					return true;
 					break;
 
 				case 'priority' :
 					include "{$pages}sync/sync_priority.php";
-					return true;
+					break;
+
+				case 'metadata' :
+					include "{$pages}sync/sync_metadata.php";
+					break;
+
+				case 'relationship' :
+					include "{$pages}sync/sync_relationship.php";
 					break;
 			}
+			break;
+
+		default :
+			return false;
+			break;
 	}
 	return true;
 }

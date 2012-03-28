@@ -2,7 +2,7 @@
 .elgg-menu-hjsegmenthead
 {
 float:right;
-margin-left:15px;
+margin-left:0px;
 }
 .elgg-menu-hjentityfoot,
 .elgg-menu-hjsectionfoot
@@ -17,15 +17,15 @@ margin-left:0;
 {
 color: #aaa;
 line-height: 20px;
-height: 16px;
 vertical-align:middle;
+margin-bottom: 5px;
 }
 .elgg-menu-hjentityhead > li,
 .elgg-menu-hjentityfoot > li,
 .elgg-menu-hjsegmenthead > li,
 .elgg-menu-hjsectionfoot > li
 {
-margin-left: 4px;
+margin-right: 12px;
 }
 .elgg-menu-hjentityhead > li > a,
 .elgg-menu-hjentityfoot > li > a,

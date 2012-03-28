@@ -53,6 +53,26 @@ class hjAnnotation extends ElggObject {
 		return $container;
 	}
 
+	public function depthToOriginalContainer() {
+		$check = true;
+		$container = $this;
+		$count = 1;
+		while ($check) {
+			if (!elgg_instanceof($container, 'object', 'hjannotation')) {
+				$check = false;
+			} else {
+				if (!$container->river_id) {
+					$container = $container->getContainerEntity();
+				} else {
+					$container = elgg_get_river(array('id' => $container->river_id));
+					$container = $container[0];
+				}
+				$count = $count + 1;
+			}
+		}
+		return $count;
+	}
+
 	public function findOriginalOwner() {
 		$container = $this->findOriginalContainer();
 		if ($container->getType() == 'river') {
@@ -84,14 +104,21 @@ class hjAnnotation extends ElggObject {
 
 		$type = $original_container->getType();
 		$subtype = $original_container->getSubtype();
+		if (empty($subtype)) {
+			$subtype = 'default';
+		}
 
 		if ($type == 'river') {
 			$subject = $original_container->getObjectEntity();
+			$subject_type = $subject->getType();
 			$subject_subtype = $subject->getSubtype();
+			if (empty($subject_subtype)) {
+				$subject_subtype = 'default';
+			}
 			$subject_name = elgg_view('output/url', array('href' => $subject->getURL(), 'text' => $subject->title));
 			$entity_title = elgg_echo('hj:comments:notify:activity', array(
 				elgg_echo("hj:comments:notify:activity_type:$original_container->action_type", array(
-					elgg_echo("item:object:$subject_subtype"),
+					elgg_echo("item:$subject_type:$subject_subtype"),
 					$subject_name
 				))
 					));
@@ -103,7 +130,7 @@ class hjAnnotation extends ElggObject {
 				$entity_title = $original_container->name;
 			}
 			$entity_url = $original_container->getURL();
-			$entity_subtype = elgg_echo("item:object:{$original_container->getSubtype()}");
+			$entity_subtype = elgg_echo("item:{$type}:{$subtype}");
 			$entity_title = elgg_view('output/url', array('href' => $entity_url, 'text' => $entity_title));
 			$entity_title = elgg_echo("hj:comments:notify:post", array($entity_subtype, $entity_title));
 			$river_id = null;

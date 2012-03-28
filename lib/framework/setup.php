@@ -56,7 +56,7 @@ function hj_framework_setup_filefolder_form() {
 }
 
 function hj_framework_setup_file_form() {
-//Setup Files Form
+	//Setup Files Form
     $form = new hjForm();
     $form->title = 'hypeFramework:fileupload';
     $form->label = 'File Upload Form';

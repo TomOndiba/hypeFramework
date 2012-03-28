@@ -1,7 +1,7 @@
 <?php
 if (elgg_is_xhr()) {
     $data = get_input('listdata');
-
+	
 	$sync = elgg_extract('sync', $data, 'new');
 	$guid = elgg_extract('items', $data, 0);
 	if (is_array($guid)) {
@@ -36,7 +36,7 @@ if (elgg_is_xhr()) {
 
     $options = array_merge($defaults, $options);
 
-    $items = elgg_get_entities($options);
+    $items = elgg_get_entities_from_relationship($options);
 
     if (is_array($items) && count($items) > 0) {
         foreach ($items as $key => $item) {

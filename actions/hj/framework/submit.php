@@ -108,7 +108,7 @@ if ($saved && is_array($fields)) {
                         $file = $_FILES[$field_name];
 
                         // Maybe someone doesn't want us to save the file in this particular way
-                        if (!empty($file['name']) && !trigger_plugin_hook('hj:framework:form:fileupload', 'all', array('entity' => $file), false)) {
+                        if (!empty($file['name']) && !elgg_trigger_plugin_hook('hj:framework:form:fileupload', 'all', array('entity' => $file), false)) {
                             $newfilefolder = get_input('newfilefolder');
                             $filefolder = get_input('filefolder');
 
@@ -209,6 +209,7 @@ if ($saved && is_array($fields)) {
                                     'full' => 1024,
                                 );
 
+								$thumb_sizes = elgg_trigger_plugin_hook('hj:framework:form:iconsizes', 'file', array('entity' => $formSubmission, 'field' => $field), $thumb_sizes);
                                 foreach ($thumb_sizes as $thumb_type => $thumb_size) {
                                     $square = false;
                                     if (in_array($thumb_type, array('tiny', 'small', 'medium', 'large'))) {
@@ -270,7 +271,8 @@ if ($saved) {
                 elgg_push_context('widgets');
             }
             $output['data'] = "<li id=\"elgg-{$newFormSubmission->getType()}-$newFormSubmission->guid\" class=\"elgg-item hj-view-entity elgg-state-draggable\">" . elgg_view_entity($newFormSubmission, $params) . "</li>";
-            if (elgg_in_context('widgets')) {
+            $output = elgg_trigger_plugin_hook('hj:framework:submit:output', 'all', $params, $output);
+			if (elgg_in_context('widgets')) {
                 elgg_pop_context();
             }
             elgg_set_ignore_access($access);
