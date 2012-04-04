@@ -133,8 +133,6 @@ function hj_framework_register_css() {
 	$hj_css_carousel = elgg_get_simplecache_url('css', 'vendors/carousel/rcarousel.css');
 	elgg_register_css('hj.framework.jquitheme', $hj_css_carousel);
 
-	elgg_extend_view('css/elements/navigation', 'css/hj/framework/entityhead');
-
 	return true;
 }
 
