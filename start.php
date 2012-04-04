@@ -10,7 +10,7 @@
  */
 
 // Initialize hypeFramework
-elgg_register_event_handler('init', 'system', 'hj_framework_init');
+elgg_register_event_handler('init', 'system', 'hj_framework_init', 501);
 
 function hj_framework_init() {
     $path = elgg_get_plugins_path();
