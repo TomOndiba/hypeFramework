@@ -1,3 +1,3 @@
 .elgg-state-draggable .elgg-head:hover {
-cursor:move;
+	cursor:move;
 }
