@@ -24,7 +24,7 @@ if (isset($vars['href'])) {
 
 $class = "class=\"elgg-photo {$vars['class']}\"";
 
-$id = "id = \"hj-entity-icon-{$entity->guid}\"";
+$id = "id=\"hj-entity-icon-{$entity->guid}\"";
 
 $img_src = $entity->getIconURL($vars['size']);
 $img_src = elgg_format_url($img_src);

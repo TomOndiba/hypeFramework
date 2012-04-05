@@ -194,6 +194,9 @@ function hj_framework_register_hooks() {
 
 	elgg_register_event_handler('create', 'object', 'hj_framework_widget_entity_list_update');
 	elgg_register_event_handler('update', 'object', 'hj_framework_widget_entity_list_update');
+
+	elgg_register_plugin_hook_handler('output', 'page', 'hj_framework_ajax_pageshell');
+	
 }
 
 /**

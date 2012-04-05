@@ -13,6 +13,7 @@
  */
 $view = get_input('e');
 $params = get_input('params');
+$params = hj_framework_decode_params_array($params);
 
 // Let's see if we need to render a view in a specific context
 $context = elgg_extract('push_context', $params, 'framework');

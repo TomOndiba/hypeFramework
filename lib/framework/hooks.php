@@ -231,3 +231,12 @@ function hj_framework_process_inputs($hook, $type, $return, $params) {
 	return true;
 }
 
+function hj_framework_ajax_pageshell($hook, $type, $return, $params) {
+
+	if (elgg_is_xhr()) {
+		$params['page_shell'] = 'ajax';
+		return elgg_view('page/ajax', $params);
+	}
+
+	return $return;
+}

@@ -47,6 +47,8 @@ function hj_framework_entity_head_menu($hook, $type, $return, $params) {
 
 	if (!$current_view || (elgg_is_xhr() && !elgg_in_context('fancybox'))) {
 		if (!isset($params['has_full_view']) || $params['has_full_view'] === true) {
+			$params['params']['full_view'] = true;
+			$data = hj_framework_json_query($params);
 			$fullview = array(
 				'name' => 'fullview',
 				'title' => elgg_echo('hj:framework:gallerytitle', array($entity->title)),

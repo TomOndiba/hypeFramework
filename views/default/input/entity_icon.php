@@ -1,6 +1,5 @@
 <?php
 
-echo elgg_view('input/file', array(
-    'name' => 'icon'
-));
+$vars['name'] = 'icon';
+echo elgg_view('input/file', $vars);
 

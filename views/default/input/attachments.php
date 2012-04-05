@@ -1,6 +1,4 @@
 <?php
-global $CONFIG;
-
 $extract = hj_framework_extract_params_from_url();
 $params = elgg_extract('params', $extract, array());
 

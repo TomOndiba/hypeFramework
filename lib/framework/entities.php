@@ -340,6 +340,17 @@ function hj_framework_json_query($params) {
 	return json_encode($url_params);
 }
 
+function hj_framework_decode_params_array($params) {
+	foreach ($params as $key => $param) {
+		if ($param == 'false') {
+			$params[$key] = false;
+		} else if ($params == 'true') {
+			$params[$key] = true;
+		}
+	}
+	return $params;
+}
+
 function hj_framework_get_email_url() {
 	$extract = hj_framework_extract_params_from_url();
 	$subject = elgg_extract('subject', $extract);
