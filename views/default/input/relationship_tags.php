@@ -27,9 +27,12 @@ $entities = elgg_get_entities_from_metadata(array(
 
 if (is_array($entities)) {
 	foreach ($entities as $entity) {
+		if (!$name = $entity->name) {
+			$name = $entity->title;
+		}
 		$result = array(
 			'icon' => $entity->getIconURL('tiny'),
-			'value' => $entity->title,
+			'value' => $name,
 			'guid' => $entity->guid,
 		);
 		$results[] = $result;
