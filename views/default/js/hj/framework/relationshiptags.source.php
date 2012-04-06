@@ -14,7 +14,8 @@ hj.framework.relationshiptags.init = function() {
         $(this).parents('li:first').remove();
     });
 
-    $('.hj-relationship-tags-autocomplete')
+
+   $('.hj-relationship-tags-autocomplete')
     .bind( "keydown", function( event ) {
         if ( event.keyCode === $.ui.keyCode.TAB &&
             $( this ).data( "autocomplete" ).menu.active ) {
