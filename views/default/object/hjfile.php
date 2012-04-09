@@ -25,8 +25,7 @@ $filesize = sprintf(elgg_echo('hj:framework:filesize'), $entity->filesize);
 $subtitle = "$filefolder <br />$filename  <br />$simpletype <br />$filesize";
 $short_description = elgg_get_excerpt($entity->description);
 
-if ($full) {
-    $header_menu = elgg_view_menu('hjentityhead', array(
+$header_menu = elgg_view_menu('hjentityhead', array(
         'entity' => $entity,
         'file_guid' => $entity->guid,
         'view_params' => $view_params,
@@ -36,6 +35,7 @@ if ($full) {
         'params' => $extract
             ));
 
+if ($full) {
     if ($entity->simpletype == 'image') {
         if ($view_params == 'gallery') {
             $preview = elgg_view_entity_icon($entity, 'full');
@@ -46,6 +46,11 @@ if ($full) {
 
     $fields_view = elgg_view('page/components/hj/fieldtable', array('entity' => $entity, 'fields' => $fields, 'view_params' => $view_params, 'intro' => $intro));
     $full_description = elgg_view('page/components/hj/fullview', array('entity' => $entity, 'content' => $preview . $fields_view, 'view_params' => $view_params, 'handler' => 'hjfile', 'extras' => array('file_guid' => $entity->guid)));
+} else if ($entity->simpletype == 'image') {
+	echo elgg_view_entity_icon($entity, $vars['icon_size'], array(
+		'class' => 'elgg-photo'
+	));
+	return true;
 }
 
 $content = <<<HTML

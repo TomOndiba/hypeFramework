@@ -35,12 +35,15 @@ if (elgg_is_xhr()) {
     );
 
     $options = array_merge($defaults, $options);
-
+	
     $items = elgg_get_entities($options);
 
     if (is_array($items) && count($items) > 0) {
-        foreach ($items as $key => $item) {
-            $id = "elgg-{$item->getType()}-{$item->guid}";
+        foreach ($items as $item) {
+			if (!elgg_instanceof($item)) {
+				$item = get_entity($item->guid);
+			}
+			$id = "elgg-{$item->getType()}-{$item->guid}";
             $html = "<li id=\"$id\" class=\"elgg-item\">";
             $html .= elgg_view_list_item($item, array('full_view' => $data['pagination']['full_view']));
             $html .= '</li>';

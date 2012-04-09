@@ -204,7 +204,16 @@ $english = array(
 
 	'hj:showpanel' => 'Show panel',
 	'hj:hidepanel' => 'Hide panel',
-	
+
+	'hj:label:form:new:hypeFramework:fileupload' => 'Upload a file',
+	'hj:label:form:edit:hypeFramework:fileupload' => 'Edit a file',
+	'hj:label:hjfile:title' => 'Title',
+    'hj:label:hjfile:description' => 'Description',
+    'hj:label:hjfile:tags' => 'Tags',
+    'hj:label:hjfile:filefolder' => 'File Folder',
+    'hj:label:hjfile:newfilefolder' => 'New Folder',
+    'hj:label:hjfile:fileupload' => 'File to Upload',
+    'hj:label:hjfile:access_id' => 'Visibility',
 );
 
 
