@@ -9,7 +9,9 @@
 		window.loader = '<div class="hj-ajax-loader hj-loader-circle"></div>';
 
 		$('.elgg-fancybox')
-		.fancybox();
+		.each(function() {
+			$(this).fancybox();
+		});
 
 		$('.hj-ajaxed-add')
 		.unbind('click')
