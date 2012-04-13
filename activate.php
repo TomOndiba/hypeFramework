@@ -1,12 +1,12 @@
 <?php
 
 $subtypes = array(
-	'hjform' => 'hjForm',
-	'hjfield' => 'hjField',
-	'hjfile' => 'hjFile',
-	'hjfilefolder' => 'hjFileFolder',
-	'hjsegment' => 'hjSegment',
-	'hjannotation' => 'hjAnnotation'
+	'hjform' => 'hjForm',  // form class
+	'hjfield' => 'hjField', // form fields class
+	'hjfile' => 'hjFile', // file class extention
+	'hjfilefolder' => 'hjFileFolder', // fill folder class
+	'hjsegment' => 'hjSegment', // content segment class
+	'hjannotation' => 'hjAnnotation' // annotation class
 );
 
 foreach ($subtypes as $subtype => $class) {

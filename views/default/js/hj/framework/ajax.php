@@ -8,6 +8,9 @@
 
 		window.loader = '<div class="hj-ajax-loader hj-loader-circle"></div>';
 
+		$('.elgg-fancybox')
+		.fancybox();
+
 		$('.hj-ajaxed-add')
 		.unbind('click')
 		.bind('click', hj.framework.ajax.base.view);

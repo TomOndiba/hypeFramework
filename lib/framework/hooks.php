@@ -1,5 +1,8 @@
 <?php
 
+/**
+ *  Generic handler of entity icons
+ */
 function hj_framework_entity_icons($hook, $type, $return, $params) {
 	$entity = $params['entity'];
 	$size = $params['size'];
