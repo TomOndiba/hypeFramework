@@ -148,6 +148,9 @@ if ($list_id) {
 			if (!window.hjdata) {
 				window.hjdata = new Object();
 			}
+			if (!window.hjdata.lists) {
+				window.hjdata.lists = new Object();
+			}
 			if (!window.hjdata.lists["$list_id"]) {
 				window.hjdata.lists["$list_id"] = new Object();
 				var init = true;
