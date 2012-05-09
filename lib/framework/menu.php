@@ -132,7 +132,7 @@ function hj_framework_entity_foot_menu($hook, $type, $return, $params) {
 }
 
 /**
- * Hook handler for menu:hjsectionhead
+ * Hook handler for menu:hjsegmenthead
  * Contains a sectional menu
  * By default, contains Add and Refresh
  *      Add button - loads a form to add a new element
@@ -159,13 +159,14 @@ function hj_framework_segment_head_menu($hook, $type, $return, $params) {
 		$widget = array(
 			'name' => 'widget',
 			'title' => elgg_echo('hj:framework:addwidget'),
-			'text' => elgg_view_icon('hj hj-icon-add'),
+			'text' => elgg_echo('hj:framework:addwidget'),
 			'href' => "action/framework/widget/add",
 			'data-options' => $data,
 			'id' => "hj-ajaxed-addwidget-{$entity->guid}",
 			'class' => "hj-ajaxed-addwidget",
 			'target' => "elgg-object-{$entity->guid}",
-			'priority' => 100
+			'priority' => 100,
+			'section' => 'dropdown'
 		);
 		$return[] = ElggMenuItem::factory($widget);
 
@@ -173,13 +174,14 @@ function hj_framework_segment_head_menu($hook, $type, $return, $params) {
 		$edit = array(
 			'name' => 'edit',
 			'title' => elgg_echo('hj:framework:edit'),
-			'text' => elgg_view_icon('hj hj-icon-edit'),
+			'text' => elgg_echo('hj:framework:edit'),
 			'href' => "action/framework/entities/edit",
 			'data-options' => $data,
 			'id' => "hj-ajaxed-edit-{$entity->guid}",
 			'class' => "hj-ajaxed-edit",
 			'target' => "elgg-object-{$entity->guid}",
 			'priority' => 800,
+			'section' => 'dropdown'
 				
 		);
 		$return[] = ElggMenuItem::factory($edit);
@@ -188,12 +190,13 @@ function hj_framework_segment_head_menu($hook, $type, $return, $params) {
 		$delete = array(
 			'name' => 'delete',
 			'title' => elgg_echo('hj:framework:delete'),
-			'text' => elgg_view_icon('hj hj-icon-delete'),
+			'text' => elgg_echo('hj:framework:delete'),
 			'href' => "action/framework/entities/delete?e=$entity->guid",
 			'data-options' => $data,
 			'id' => "hj-ajaxed-remove-{$entity->guid}",
 			'class' => 'hj-ajaxed-remove',
 			'priority' => 900,
+			'section' => 'dropdown'
 		);
 		$return[] = ElggMenuItem::factory($delete);
 	}
@@ -201,10 +204,11 @@ function hj_framework_segment_head_menu($hook, $type, $return, $params) {
 	$print = array(
 		'name' => 'print',
 		'title' => elgg_echo('hj:framework:print'),
-		'text' => elgg_view_icon('hj hj-icon-print'),
+		'text' => elgg_echo('hj:framework:print'),
 		'href' => "hj/print?{$url}",
 		'target' => "_blank",
-		'priority' => 200
+		'priority' => 200,
+		'section' => 'dropdown'
 	);
 	$return[] = ElggMenuItem::factory($print);
 
@@ -212,11 +216,12 @@ function hj_framework_segment_head_menu($hook, $type, $return, $params) {
 		$pdf = array(
 			'name' => 'pdf',
 			'title' => elgg_echo('hj:framework:pdf'),
-			'text' => elgg_view_icon('hj hj-icon-save'),
+			'text' => elgg_echo('hj:framework:pdf'),
 			'href' => "hj/pdf?{$url}",
 			//'is_action' => false,
 			'target' => "_blank",
-			'priority' => 300
+			'priority' => 300,
+			'section' => 'dropdown'
 		);
 		$return[] = ElggMenuItem::factory($pdf);
 	}

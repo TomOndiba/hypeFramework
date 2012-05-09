@@ -7,6 +7,10 @@ if (!$main && !$dropdown) {
 	return true;
 }
 
+if (elgg_in_context('print')) {
+	return true;
+}
+
 if (elgg_in_context('river') || elgg_in_context('widgets')) {
 	array_merge($main, $dropdown);
 	unset($vars['menu']['default']);

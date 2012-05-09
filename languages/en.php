@@ -104,7 +104,7 @@ $english = array(
     'hj:framework:edit' => 'Edit',
     'hj:framework:delete' => 'Delete',
     'hj:framework:email' => 'Send by email',
-    'hj:framework:print' => 'Printer-friendly version',
+    'hj:framework:print' => 'Print',
     'hj:framework:pdf' => 'Save as PDF',
     /**
      * Page Handlers
