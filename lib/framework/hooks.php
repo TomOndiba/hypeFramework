@@ -12,9 +12,7 @@ function hj_framework_entity_icons($hook, $type, $return, $params) {
 	}
 
 	switch ($entity->getSubtype()) {
-
 		case 'hjfile' :
-
 			if ($entity->simpletype == 'image') {
 				return "mod/hypeFramework/pages/file/icon.php?guid={$entity->guid}&size={$size}";
 			}
@@ -112,7 +110,6 @@ function hj_framework_container_permissions_check($hook, $type, $return, $params
 		return $container->canWriteToContainer();
 	}
 
-
 	return $return;
 }
 
@@ -136,6 +133,8 @@ function hj_framework_canannotate_check($hook, $type, $return, $params) {
 function hj_framework_inputs($hook, $type, $return, $params) {
 	$return[] = 'entity_icon';
 	$return[] = 'relationship_tags';
+	$return[] = 'multifile';
+
 	return $return;
 }
 
@@ -149,64 +148,35 @@ function hj_framework_process_inputs($hook, $type, $return, $params) {
 	$subtype = $entity->getSubtype();
 
 	switch ($field->input_type) {
+
+		case 'file' :
+			if (elgg_is_logged_in()) {
+				global $_FILES;
+				$field_name = $field->name;
+				$file = $_FILES[$field_name];
+
+				// Maybe someone doesn't want us to save the file in this particular way
+				if (!empty($file['name']) && !elgg_trigger_plugin_hook('hj:framework:form:fileupload', 'all', array('entity' => $file), false)) {
+					hj_framework_process_file_upload($file, $entity, $field_name);
+				}
+			}
+			break;
+
 		case 'entity_icon' :
 			$field_name = $field->name;
 
 			if ((isset($_FILES['icon'])) && (substr_count($_FILES['icon']['type'], 'image/'))) {
 
-				$icon_sizes = elgg_get_config('icon_sizes');
-
-				$prefix = "icons/" . $entity->guid;
-
-				$filehandler = new ElggFile();
-				$filehandler->owner_guid = elgg_get_logged_in_user_guid();
-				$filehandler->setFilename($prefix . ".jpg");
-				$filehandler->open("write");
-				$filehandler->write(get_uploaded_file('icon'));
-				$filehandler->close();
-
-				$thumbtiny = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), $icon_sizes['tiny']['w'], $icon_sizes['tiny']['h'], $icon_sizes['tiny']['square']);
-				$thumbsmall = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), $icon_sizes['small']['w'], $icon_sizes['small']['h'], $icon_sizes['small']['square']);
-				$thumbmedium = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), $icon_sizes['medium']['w'], $icon_sizes['medium']['h'], $icon_sizes['medium']['square']);
-				$thumblarge = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), $icon_sizes['large']['w'], $icon_sizes['large']['h'], $icon_sizes['large']['square']);
-				if ($thumbtiny) {
-
-					$thumb = new ElggFile();
-					$thumb->owner_guid = elgg_get_logged_in_user_guid();
-					$thumb->setMimeType('image/jpeg');
-
-					$thumb->setFilename($prefix . "tiny.jpg");
-					$thumb->open("write");
-					$thumb->write($thumbtiny);
-					$thumb->close();
-
-					$thumb->setFilename($prefix . "small.jpg");
-					$thumb->open("write");
-					$thumb->write($thumbsmall);
-					$thumb->close();
-
-					$thumb->setFilename($prefix . "medium.jpg");
-					$thumb->open("write");
-					$thumb->write($thumbmedium);
-					$thumb->close();
-
-					$thumb->setFilename($prefix . "large.jpg");
-					$thumb->open("write");
-					$thumb->write($thumblarge);
-					$thumb->close();
-
-					$entity->icontime = time();
-				}
+				hj_framework_generate_entity_icons($entity);
+				$entity->$field_name = null;
 			}
-			$entity->$field_name = null;
-
 			break;
 
 		case 'relationship_tags' :
 			$field_name = $field->name;
 			$tags = get_input('relationship_tag_guids');
 			$relationship_name = get_input('relationship_tags_name', 'tagged_in');
-			
+
 			$current_tags = elgg_get_entities_from_relationship(array(
 				'relationship' => $relationship_name,
 				'relationship_guid' => $entity->guid,
@@ -227,6 +197,11 @@ function hj_framework_process_inputs($hook, $type, $return, $params) {
 			}
 
 			$entity->$field_name = $tags;
+
+			break;
+
+		case 'multifile' :
+
 
 			break;
 	}

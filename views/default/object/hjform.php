@@ -20,7 +20,7 @@ elgg_load_js('hj.formbuilder.sortable');
 
 $fields = $form->getFields();
 
-$form_title = elgg_echo($form->getTitle($subject));
+$form_title = elgg_echo($form->getTitle($vars['subject_guid']));
 $form_description = elgg_echo($form->description);
 
 if (elgg_is_sticky_form($form->title)) {
@@ -74,15 +74,18 @@ if ($ajaxify) {
 	}
 }
 
-$form = elgg_view('input/form', array(
-	'body' => $form_fields,
-	'id' => "hj-form-entity-{$form->guid}",
-	'action' => $form->action,
-	'method' => $form->method,
-	'enctype' => $form->enctype,
-	'class' => "$form->class $class",
-	'js' => 'onsubmit="return hj.framework.fieldcheck.init($(this));"'
-		));
-
-$body = elgg_view_module('aside', $form_title, $form_description . $form);
-echo $body;
+if (!isset($vars['fields_only']) || $vars['fields_only'] === false) {
+	$form = elgg_view('input/form', array(
+		'body' => $form_fields,
+		'id' => "hj-form-entity-{$form->guid}",
+		'action' => $form->action,
+		'method' => $form->method,
+		'enctype' => $form->enctype,
+		'class' => "$form->class $class",
+		'js' => 'onsubmit="return hj.framework.fieldcheck.init($(this));"'
+			));
+	$body = elgg_view_module('aside', $form_title, $form_description . $form);
+	echo $body;
+} else {
+	echo $form_fields;
+}

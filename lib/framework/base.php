@@ -196,7 +196,6 @@ function hj_framework_register_hooks() {
 	elgg_register_event_handler('update', 'object', 'hj_framework_widget_entity_list_update');
 
 	elgg_register_plugin_hook_handler('output', 'page', 'hj_framework_ajax_pageshell');
-	
 }
 
 /**
@@ -268,4 +267,24 @@ function hj_framework_decode_options_array(&$item, $key) {
 	if ($item == 'true') {
 		$item = true;
 	}
+}
+
+function hj_framework_get_thumb_sizes() {
+	$thumb_sizes = elgg_get_config('icon_sizes');
+	$thumb_sizes['preview'] = array(
+		'w' => 250,
+		'h' => 250,
+		'square' => true
+	);
+	$thumb_sizes['master'] = array(
+		'w' => 600,
+		'h' => 600,
+		'square' => false
+	);
+	$thumb_sizes['full'] = array(
+		'w' => 1024,
+		'h' => 1024,
+		'square' => false
+	);
+	return $thumb_sizes;
 }
