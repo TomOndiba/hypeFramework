@@ -97,6 +97,12 @@ function hj_framework_register_js() {
 //        elgg_load_js('hj.framework.editor');
 //    }
 
+	$hj_js_uploadify = elgg_get_simplecache_url('js', 'vendors/uploadify/jquery.uploadify-3.1.min.js');
+	elgg_register_js('hj.framework.uploadify', $hj_js_uploadify);
+
+	$hj_js_uploadify_init = elgg_get_simplecache_url('js', 'vendors/uploadify/multifile.init');
+	elgg_register_js('hj.framework.multifile', $hj_js_uploadify_init);
+
 	elgg_load_js('jquery.form');
 
 	return true;
@@ -133,6 +139,10 @@ function hj_framework_register_css() {
 	$hj_css_carousel = elgg_get_simplecache_url('css', 'vendors/carousel/rcarousel.css');
 	elgg_register_css('hj.framework.jquitheme', $hj_css_carousel);
 
+	// PL Upload
+	$hj_css_uploadify = elgg_get_simplecache_url('css', 'vendors/uploadify/uploadify.css');
+	elgg_register_css('hj.framework.uploadify', $hj_css_uploadify);
+	
 	return true;
 }
 

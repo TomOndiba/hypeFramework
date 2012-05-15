@@ -134,7 +134,6 @@ function hj_framework_inputs($hook, $type, $return, $params) {
 	$return[] = 'entity_icon';
 	$return[] = 'relationship_tags';
 	$return[] = 'multifile';
-
 	return $return;
 }
 
@@ -156,7 +155,7 @@ function hj_framework_process_inputs($hook, $type, $return, $params) {
 				$file = $_FILES[$field_name];
 
 				// Maybe someone doesn't want us to save the file in this particular way
-				if (!empty($file['name']) && !elgg_trigger_plugin_hook('hj:framework:form:fileupload', 'all', array('entity' => $file), false)) {
+				if (!empty($file['name']) && !elgg_trigger_plugin_hook('hj:framework:form:fileupload', 'all', array('entity' => $entity, 'file' => $file, 'field_name' => $field_name), false)) {
 					hj_framework_process_file_upload($file, $entity, $field_name);
 				}
 			}
@@ -202,6 +201,18 @@ function hj_framework_process_inputs($hook, $type, $return, $params) {
 
 		case 'multifile' :
 
+			if (elgg_is_logged_in()) {
+				$values = get_input($field->name);
+				if (is_array($values)) {
+					foreach ($values as $value) {
+						create_metadata($entity->guid, $field->name, $value, '', $entity->owner_guid, $entity->access_id, true);
+						if (!elgg_trigger_plugin_hook('hj:framework:form:multifile', 'all', array('entity' => $entity, 'file_guid' => $value, 'field_name' => $field_name), false)) {
+							make_attachment($entity->guid, $value);
+						}
+					}
+				}
+
+			}
 
 			break;
 	}

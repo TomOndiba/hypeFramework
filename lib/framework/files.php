@@ -41,7 +41,7 @@ function hj_framework_allow_file_download($file_guid) {
 }
 
 function hj_framework_process_file_upload($file, $entity, $field_name) {
-	
+
 	$filefolder = hj_framework_process_filefolder_input($entity);
 
 	// Just in case we want to upload a newer version of the file in the future
@@ -161,4 +161,81 @@ function hj_framework_process_filefolder_input($entity) {
 		$filefolder = $entity;
 	}
 	return $filefolder;
+}
+
+function hj_framework_handle_multifile_upload($user_guid) {
+
+	if (!empty($_FILES)) {
+		$access = elgg_get_ignore_access();
+			elgg_set_ignore_access(true);
+		$file = $_FILES['Filedata'];
+
+		$filehandler = new hjFile();
+		$filehandler->owner_guid = (int)$user_guid;
+		$filehandler->container_guid = (int)$user_guid;
+		$filehandler->access_id = ACCESS_DEFAULT;
+		$filehandler->data_pattern = hj_framework_get_data_pattern('object', 'hjfile');
+		$filehandler->title = $file['name'];
+		$filehandler->description = '';
+
+		$prefix = "hjfile/";
+
+		$filestorename = elgg_strtolower($file['name']);
+
+		$filehandler->setFilename($prefix . $filestorename);
+		$filehandler->setMimeType($file['type']);
+		$filehandler->originalfilename = $file['name'];
+		$filehandler->simpletype = file_get_simple_type($file['type']);
+		$filehandler->filesize = round($file['size'] / (1024 * 1024), 2) . "Mb";
+
+		$filehandler->open("write");
+		$filehandler->close();
+		move_uploaded_file($file['tmp_name'], $filehandler->getFilenameOnFilestore());
+
+		$file_guid = $filehandler->save();
+
+		hj_framework_set_entity_priority($filehandler);
+		elgg_trigger_plugin_hook('hj:framework:file:process', 'object', array('entity' => $filehandler));
+
+		if ($file_guid) {
+			$meta_value = $filehandler->getGUID();
+		} else {
+			$meta_value = $filehandler->getFilenameOnFilestore();
+		}
+
+		if ($file_guid && $filehandler->simpletype == "image") {
+
+			$thumb_sizes = hj_framework_get_thumb_sizes();
+			$thumb_sizes = elgg_trigger_plugin_hook('hj:framework:form:iconsizes', 'file', array('entity' => $formSubmission, 'field' => $field), $thumb_sizes);
+
+			foreach ($thumb_sizes as $thumb_type => $thumb_size) {
+				$thumbnail = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), $thumb_size['w'], $thumb_size['h'], $thumb_size['square'], 0, 0, 0, 0, true);
+				if ($thumbnail) {
+					$thumb = new ElggFile();
+					$thumb->setMimeType($file['type']);
+
+					$thumb->setFilename("{$prefix}{$filehandler->getGUID()}{$thumb_type}.jpg");
+					$thumb->open("write");
+					$thumb->write($thumbnail);
+					$thumb->close();
+
+					$thumb_meta = "{$thumb_type}thumb";
+					$filehandler->$thumb_meta = $thumb->getFilename();
+					unset($thumbnail);
+				}
+			}
+		}
+		$response = array(
+			'status' => 'OK',
+			'value' => $meta_value
+		);
+	} else {
+		$response = array(
+			'status' => 'FAIL'
+		);
+	}
+
+	echo json_encode($response);
+	elgg_set_ignore_access($access);
+	return;
 }

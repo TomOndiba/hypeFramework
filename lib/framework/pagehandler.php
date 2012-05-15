@@ -84,6 +84,13 @@ function hj_framework_page_handlers($page) {
 			}
 			break;
 
+		case 'multifile' :
+			session_id(get_input('Elgg'));
+			global $_SESSION;
+			$_SESSION = json_decode(get_input('SESSION'), true);
+			hj_framework_handle_multifile_upload(get_input('userid'));
+			break;
+
 		default :
 			return false;
 			break;
