@@ -111,8 +111,7 @@ function hj_framework_process_file_upload($file, $entity, $field_name) {
 
 	if ($file_guid && $filehandler->simpletype == "image") {
 
-		$thumb_sizes = hj_framework_get_thumb_sizes();
-		$thumb_sizes = elgg_trigger_plugin_hook('hj:framework:form:iconsizes', 'file', array('entity' => $formSubmission, 'field' => $field), $thumb_sizes);
+		$thumb_sizes = hj_framework_get_thumb_sizes($entity->handler);
 
 		foreach ($thumb_sizes as $thumb_type => $thumb_size) {
 			$thumbnail = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), $thumb_size['w'], $thumb_size['h'], $thumb_size['square'], 0, 0, 0, 0, true);

@@ -142,7 +142,7 @@ function hj_framework_register_css() {
 	// PL Upload
 	$hj_css_uploadify = elgg_get_simplecache_url('css', 'vendors/uploadify/uploadify.css');
 	elgg_register_css('hj.framework.uploadify', $hj_css_uploadify);
-	
+
 	return true;
 }
 
@@ -279,7 +279,7 @@ function hj_framework_decode_options_array(&$item, $key) {
 	}
 }
 
-function hj_framework_get_thumb_sizes() {
+function hj_framework_get_thumb_sizes($handler = null) {
 	$thumb_sizes = elgg_get_config('icon_sizes');
 	$thumb_sizes['preview'] = array(
 		'w' => 250,
@@ -296,5 +296,7 @@ function hj_framework_get_thumb_sizes() {
 		'h' => 1024,
 		'square' => false
 	);
+
+	$thumb_sizes = elgg_trigger_plugin_hook('hj:framework:form:iconsizes', 'file', array('handler' => $handler), $thumb_sizes);
 	return $thumb_sizes;
 }
