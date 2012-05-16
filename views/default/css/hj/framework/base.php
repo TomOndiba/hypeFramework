@@ -250,3 +250,7 @@ textarea.hj-input-processing:hover
 .hj-overlay-sidebar-close {
 	float:right;
 }
+
+label[for="photos"] .hj-field-label {
+	display:none;
+}

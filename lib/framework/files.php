@@ -89,7 +89,7 @@ function hj_framework_process_file_upload($file, $entity, $field_name) {
 	$filehandler->setFilename($prefix . $filestorename);
 	$filehandler->setMimeType($file['type']);
 	$filehandler->originalfilename = $file['name'];
-	$filehandler->simpletype = file_get_simple_type($file['type']);
+	$filehandler->simpletype = hj_framework_get_simple_type($file['type']);
 	$filehandler->filesize = round($file['size'] / (1024 * 1024), 2) . "Mb";
 
 	$filehandler->open("write");
@@ -167,7 +167,8 @@ function hj_framework_handle_multifile_upload($user_guid) {
 
 	if (!empty($_FILES)) {
 		$access = elgg_get_ignore_access();
-			elgg_set_ignore_access(true);
+		elgg_set_ignore_access(true);
+
 		$file = $_FILES['Filedata'];
 
 		$filehandler = new hjFile();
@@ -182,10 +183,12 @@ function hj_framework_handle_multifile_upload($user_guid) {
 
 		$filestorename = elgg_strtolower($file['name']);
 
+		$mime = hj_framework_get_mime_type($file['name']);
+
 		$filehandler->setFilename($prefix . $filestorename);
-		$filehandler->setMimeType($file['type']);
+		$filehandler->setMimeType($mime);
 		$filehandler->originalfilename = $file['name'];
-		$filehandler->simpletype = file_get_simple_type($file['type']);
+		$filehandler->simpletype = hj_framework_get_simple_type($mime);
 		$filehandler->filesize = round($file['size'] / (1024 * 1024), 2) . "Mb";
 
 		$filehandler->open("write");
@@ -206,14 +209,13 @@ function hj_framework_handle_multifile_upload($user_guid) {
 		if ($file_guid && $filehandler->simpletype == "image") {
 
 			$thumb_sizes = hj_framework_get_thumb_sizes();
-			$thumb_sizes = elgg_trigger_plugin_hook('hj:framework:form:iconsizes', 'file', array('entity' => $formSubmission, 'field' => $field), $thumb_sizes);
 
 			foreach ($thumb_sizes as $thumb_type => $thumb_size) {
 				$thumbnail = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), $thumb_size['w'], $thumb_size['h'], $thumb_size['square'], 0, 0, 0, 0, true);
 				if ($thumbnail) {
 					$thumb = new ElggFile();
 					$thumb->setMimeType($file['type']);
-
+					$thumb->owner_guid = $user_guid;
 					$thumb->setFilename("{$prefix}{$filehandler->getGUID()}{$thumb_type}.jpg");
 					$thumb->open("write");
 					$thumb->write($thumbnail);
@@ -238,4 +240,74 @@ function hj_framework_handle_multifile_upload($user_guid) {
 	echo json_encode($response);
 	elgg_set_ignore_access($access);
 	return;
+}
+
+function hj_framework_get_simple_type($mimetype) {
+
+	switch ($mimetype) {
+		case "application/msword":
+			return "document";
+			break;
+		case "application/pdf":
+			return "document";
+			break;
+	}
+
+	if (substr_count($mimetype, 'text/')) {
+		return "document";
+	}
+
+	if (substr_count($mimetype, 'audio/')) {
+		return "audio";
+	}
+
+	if (substr_count($mimetype, 'image/')) {
+		return "image";
+	}
+
+	if (substr_count($mimetype, 'video/')) {
+		return "video";
+	}
+
+	if (substr_count($mimetype, 'opendocument')) {
+		return "document";
+	}
+
+	return "general";
+}
+
+function hj_framework_get_mime_type($filename) {
+
+        // our list of mime types
+        $mime_types = array(
+                "pdf"=>"application/pdf"
+                ,"exe"=>"application/octet-stream"
+                ,"zip"=>"application/zip"
+                ,"docx"=>"application/msword"
+                ,"doc"=>"application/msword"
+                ,"xls"=>"application/vnd.ms-excel"
+                ,"ppt"=>"application/vnd.ms-powerpoint"
+                ,"gif"=>"image/gif"
+                ,"png"=>"image/png"
+                ,"jpeg"=>"image/jpg"
+                ,"jpg"=>"image/jpg"
+                ,"mp3"=>"audio/mpeg"
+                ,"wav"=>"audio/x-wav"
+                ,"mpeg"=>"video/mpeg"
+                ,"mpg"=>"video/mpeg"
+                ,"mpe"=>"video/mpeg"
+                ,"mov"=>"video/quicktime"
+                ,"avi"=>"video/x-msvideo"
+                ,"3gp"=>"video/3gpp"
+                ,"css"=>"text/css"
+                ,"jsc"=>"application/javascript"
+                ,"js"=>"application/javascript"
+                ,"php"=>"text/html"
+                ,"htm"=>"text/html"
+                ,"html"=>"text/html"
+        );
+
+        $extension = strtolower(end(explode('.',$filename)));
+
+        return $mime_types[$extension];
 }
