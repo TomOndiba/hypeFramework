@@ -97,7 +97,7 @@ function hj_framework_register_js() {
 //        elgg_load_js('hj.framework.editor');
 //    }
 
-	$hj_js_uploadify = elgg_get_simplecache_url('js', 'vendors/uploadify/jquery.uploadify-3.1.min.js');
+	$hj_js_uploadify = elgg_get_simplecache_url('js', 'vendors/uploadify/jquery.uploadify');
 	elgg_register_js('hj.framework.uploadify', $hj_js_uploadify);
 
 	$hj_js_uploadify_init = elgg_get_simplecache_url('js', 'vendors/uploadify/multifile.init');
@@ -281,6 +281,12 @@ function hj_framework_decode_options_array(&$item, $key) {
 
 function hj_framework_get_thumb_sizes($handler = null) {
 	$thumb_sizes = elgg_get_config('icon_sizes');
+
+	$thumb_sizes['large'] = array(
+		'w' => 100,
+		'h' => 100,
+		'square' => true
+	);
 	$thumb_sizes['preview'] = array(
 		'w' => 250,
 		'h' => 250,

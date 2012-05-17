@@ -10,6 +10,9 @@ class hjFileFolder extends ElggObject {
 
     public function getContainedFiles($subtype = 'hjfile', $count = false) {
         $files = hj_framework_get_entities_by_priority('object', $subtype, null, $this->guid);
+		if ($count) {
+			$files = sizeof($files);
+		}
         return $files;
     }
 

@@ -1,9 +1,9 @@
 <?php
 
-$main = elgg_extract('default', $vars['menu'], null);
-$dropdown = elgg_extract('dropdown', $vars['menu'], null);
+$main = elgg_extract('default', $vars['menu'], array());
+$dropdown = elgg_extract('dropdown', $vars['menu'], array());
 
-if (!$main && !$dropdown) {
+if (empty($main) && empty($dropdown)) {
 	return true;
 }
 

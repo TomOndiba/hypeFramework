@@ -446,18 +446,26 @@
 
 	}
 
-	hj.framework.ajax.base.initSlideshow = function() {
-
-		$('.hj-carousel-wrapper')
-		.each(function() {
-			hj.framework.ajax.base.paginate($(this));
-		});
+	hj.framework.ajax.base.initSlideshow = function(name, type, params, value) {
+		if (params && params['list_id']) {
+			$('.hj-carousel-wrapper')
+			.each(function() {
+				var target = $(this).find('.hj-carousel').last().attr('id');
+				if (target == params['list_id']) {
+					hj.framework.ajax.base.paginate(target);
+				}
+			});
+		} else if (name == 'success' && type == 'hj:framework:ajax' && !window.slider && $('.hj-carousel-wrapper').length) {
+			$('.hj-carousel-wrapper')
+			.each(function() {
+				var target = $(this).find('.hj-carousel').last().attr('id');
+				hj.framework.ajax.base.paginate(target);
+			});
+		}
 	}
 
-	hj.framework.ajax.base.paginate = function(selector) {
-
-		var target = selector.find('.hj-carousel').last().attr('id');
-		var wrapper = '#' + selector.attr('id');
+	hj.framework.ajax.base.paginate = function(target) {
+		var wrapper = '#' + $('#' + target).closest('.hj-carousel-wrapper').attr('id');
 
 		if (!window.slider) {
 			window.slider = new Object();
@@ -517,6 +525,7 @@
 	elgg.register_hook_handler('success', 'hj:framework:ajax', hj.framework.ajax.base.triggerRefresh);
 
 	elgg.register_hook_handler('init', 'system', hj.framework.ajax.base.initSlideshow);
+	elgg.register_hook_handler('new_lists', 'hj:framework:ajax', hj.framework.ajax.base.initSlideshow);
 	elgg.register_hook_handler('success', 'hj:framework:ajax', hj.framework.ajax.base.initSlideshow);
 
 <?php if (FALSE) : ?></script><?php

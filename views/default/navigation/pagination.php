@@ -17,6 +17,9 @@ $list_id = elgg_extract('list_id', $vars, false);
 unset($vars['ajaxify']);
 unset($vars['list_id']);
 
+if ($vars['limit'] === 0) {
+	return true;
+}
 if (!$ajaxify) {
 	if (elgg_in_context('widget')) {
 		// widgets do not show pagination
