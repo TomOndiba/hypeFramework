@@ -164,9 +164,9 @@ function hj_framework_process_inputs($hook, $type, $return, $params) {
 		case 'entity_icon' :
 			$field_name = $field->name;
 
-			if ((isset($_FILES['icon'])) && (substr_count($_FILES['icon']['type'], 'image/'))) {
-
-				hj_framework_generate_entity_icons($entity);
+			global $_FILES;
+			if ((isset($_FILES[$field_name])) && (substr_count($_FILES[$field_name]['type'], 'image/'))) {
+				hj_framework_generate_entity_icons($entity, $field_name);
 				$entity->$field_name = null;
 			}
 			break;

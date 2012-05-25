@@ -254,3 +254,7 @@ textarea.hj-input-processing:hover
 label[for="photos"] .hj-field-label {
 	display:none;
 }
+
+.elgg-plugin-category-hypeJunction {
+	border:2px solid #8A2BE2;
+}

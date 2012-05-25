@@ -283,13 +283,13 @@ function hj_framework_get_thumb_sizes($handler = null) {
 	$thumb_sizes = elgg_get_config('icon_sizes');
 
 	$thumb_sizes['large'] = array(
-		'w' => 100,
-		'h' => 100,
+		'w' => 200,
+		'h' => 200,
 		'square' => true
 	);
 	$thumb_sizes['preview'] = array(
-		'w' => 250,
-		'h' => 250,
+		'w' => 400,
+		'h' => 400,
 		'square' => true
 	);
 	$thumb_sizes['master'] = array(

@@ -24,7 +24,7 @@ if (!elgg_is_logged_in()) {
 // Get params array
 // Make sure strings are converted to bool
 $params = json_decode(get_input('params'), true);
-hj_framework_decode_params_array($params);
+$params = hj_framework_decode_params_array($params);
 
 $subject = get_entity($params['subject_guid']);
 $container = get_entity($params['container_guid']);

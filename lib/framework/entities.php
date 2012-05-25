@@ -362,9 +362,9 @@ function hj_framework_get_email_url() {
 	}
 }
 
-function hj_framework_generate_entity_icons($entity) {
+function hj_framework_generate_entity_icons($entity, $field_name = 'icon') {
 
-	$icon_sizes = elgg_get_config('icon_sizes');
+	$icon_sizes = hj_framework_get_thumb_sizes($entity->handler);
 
 	$prefix = "icons/" . $entity->guid;
 
@@ -372,11 +372,11 @@ function hj_framework_generate_entity_icons($entity) {
 	$filehandler->owner_guid = elgg_get_logged_in_user_guid();
 	$filehandler->setFilename($prefix . ".jpg");
 	$filehandler->open("write");
-	$filehandler->write(get_uploaded_file('icon'));
+	$filehandler->write(get_uploaded_file($field_name));
 	$filehandler->close();
 
 	foreach ($icon_sizes as $size => $values) {
-		$thumb_resized = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), $value['w'], $value['h'], $value['square']);
+		$thumb_resized = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), $values['w'], $values['h'], $values['square']);
 
 		if ($thumb_resized) {
 			$thumb = new ElggFile();
@@ -385,7 +385,7 @@ function hj_framework_generate_entity_icons($entity) {
 
 			$thumb->setFilename($prefix . "$size.jpg");
 			$thumb->open("write");
-			$thumb->write($thum_resized);
+			$thumb->write($thumb_resized);
 			$thumb->close();
 			$icontime = true;
 		}

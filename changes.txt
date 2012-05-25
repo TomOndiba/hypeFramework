@@ -24,6 +24,8 @@ Added additional parameters handled by the js, including 'dom_order' (append|pre
 - Moved hjAnnotation class from hypeAlive to hypeFramework
 - Introduced ajaxed pagination (show more) mechanism
 
-
-
-
+1.8.5 - 1.8.6
+- New framework for handling lists - client-side JS json objects
+- Refactored functions, views, actions
+- Refined JS
+- New vendor libraries
