@@ -38,6 +38,9 @@ if (elgg_is_xhr()) {
 	
     $items = elgg_get_entities($options);
 
+	$item_view_params = elgg_extract('item_view_params', $data['pagination'], array());
+	array_walk_recursive($item_view_params, 'hj_framework_decode_options_array');
+
     if (is_array($items) && count($items) > 0) {
         foreach ($items as $item) {
 			if (!elgg_instanceof($item)) {
@@ -45,7 +48,7 @@ if (elgg_is_xhr()) {
 			}
 			$id = "elgg-{$item->getType()}-{$item->guid}";
             $html = "<li id=\"$id\" class=\"elgg-item\">";
-            $html .= elgg_view_list_item($item, array('full_view' => $data['pagination']['full_view']));
+            $html .= elgg_view_list_item($item, $item_view_params);
             $html .= '</li>';
 
             $output[] = array('guid' => $item->guid, 'html' => $html);

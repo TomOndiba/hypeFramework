@@ -68,9 +68,11 @@ $pagination_options = array(
 	'string' => $pagination_str, // comes in handy when rendering a language string for show all/ show next
 	'offset_key' => $offset_key,
 	'list_id' => $list_id,
-	'inverse_order' => $inverse_order,
-	'full_view' => $full_view
+	'inverse_order' => $inverse_order
 );
+
+$pagination_options['item_view_params'] = elgg_extract('item_view_params', $vars, array());
+$pagination_options['item_view_params']['full_view'] = $full_view;
 
 if ($pagination && $count) {
 	$pagination_options['ajaxify'] = false;
@@ -84,7 +86,7 @@ if ($pagination && $count) {
 $before = elgg_view('page/components/list/prepend', $vars);
 $after = elgg_view('page/components/list/append', $vars);
 
-$list_params = array('items', 'offset', 'limit', 'count', 'base_url', 'pagination', 'offset_key', 'position', 'gallery_class', 'list_id', 'data-options');
+$list_params = array('items', 'offset', 'limit', 'count', 'base_url', 'pagination', 'offset_key', 'position', 'gallery_class', 'list_id', 'data-options', 'item_view_params');
 foreach ($list_params as $list_param) {
 	if (isset($vars[$list_param])) {
 		unset($vars[$list_param]);

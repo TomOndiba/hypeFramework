@@ -140,14 +140,6 @@ if (!$ajaxify) {
 	if ($count <= $limit_prev) {
 		return true;
 	}
-	
-	$data_options = elgg_clean_vars($vars);
-
-	if (isset($vars['baseurl']) && $vars['baseurl']) {
-		$data_options['baseurl'] = $vars['baseurl'];
-	} else {
-		$data_options['baseurl'] = "hj/sync";
-	}
 
 	if ($limit > 0) {
 		$load_more_string = elgg_echo('hj:framework:pagination:loadnext', array($limit));
