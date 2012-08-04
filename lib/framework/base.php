@@ -137,7 +137,7 @@ function hj_framework_register_css() {
 
 	// Carousel
 	$hj_css_carousel = elgg_get_simplecache_url('css', 'vendors/carousel/rcarousel.css');
-	elgg_register_css('hj.framework.jquitheme', $hj_css_carousel);
+	elgg_register_css('hj.framework.carousel', $hj_css_carousel);
 
 	// PL Upload
 	$hj_css_uploadify = elgg_get_simplecache_url('css', 'vendors/uploadify/uploadify.css');

@@ -32,8 +32,10 @@ if (is_array($fields)) {
 	foreach ($fields as $field) {
 		if ($field->input_type == 'file' || $field->input_type == 'entity_icon') {
 			$multipart = true;
-		}
-		if (!$multipart || elgg_is_logged_in()) {
+			if (elgg_is_logged_in()) {
+				$form_fields .= elgg_view_entity($field, $vars);
+			}
+		} else {
 			$form_fields .= elgg_view_entity($field, $vars);
 		}
 	}

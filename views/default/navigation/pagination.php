@@ -17,7 +17,7 @@ $list_id = elgg_extract('list_id', $vars, false);
 unset($vars['ajaxify']);
 unset($vars['list_id']);
 
-if ($vars['limit'] === 0) {
+if (($ajaxify && $vars['limit_prev'] === 0) || (!$ajaxify && $vars['limit'] === 0)) {
 	return true;
 }
 if (!$ajaxify) {
@@ -137,6 +137,7 @@ if (!$ajaxify) {
 	$limit_prev = elgg_extract('limit_prev', $vars, $limit);
 	$offset = elgg_extract('offset', $vars, 0);
 	$string = elgg_extract('string', $vars, '');
+
 	if ($count <= $limit_prev) {
 		return true;
 	}

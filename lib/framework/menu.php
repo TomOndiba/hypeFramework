@@ -111,6 +111,17 @@ function hj_framework_entity_head_menu($hook, $type, $return, $params) {
 		);
 		$return[] = ElggMenuItem::factory($delete);
 	}
+
+	// access
+	$access = elgg_view('output/access', array('entity' => $entity));
+	$options = array(
+		'name' => 'access',
+		'text' => $access,
+		'href' => false,
+		'priority' => 100,
+	);
+	$return[] = ElggMenuItem::factory($options);
+
 	return $return;
 }
 

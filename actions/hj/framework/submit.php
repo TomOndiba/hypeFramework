@@ -120,7 +120,7 @@ if ($saved) {
 			elgg_pop_context();
 		}
 		if ($formSubmission->add_to_river) {
-			$view = "river/$formSubmission->type/$formSubmission->subtype/$event";
+			$view = "river/{$formSubmission->getType()}/{$formSubmission->getSubtype()}/$event";
 			if (!elgg_view_exists($view)) {
 				$view = "river/object/hjformsubmission/create";
 			}
@@ -158,6 +158,9 @@ if ($saved) {
 			$url = "{$container->getURL()}&sg={$formSubmission->guid}";
 		} else {
 			$url = $formSubmission->getURL();
+		}
+		if (!empty($form->forward_url)) {
+			$url = $form->forward_url;
 		}
 		if (!elgg_is_logged_in() && $formSubmission->access_id !== ACCESS_PUBLIC) {
 			$url = '';

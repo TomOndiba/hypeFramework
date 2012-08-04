@@ -48,7 +48,7 @@ if ($full) {
     $full_description = elgg_view('page/components/hj/fullview', array('entity' => $entity, 'content' => $preview . $fields_view, 'view_params' => $view_params, 'handler' => 'hjfile', 'extras' => array('file_guid' => $entity->guid)));
 } else if ($entity->simpletype == 'image') {
 	echo elgg_view_entity_icon($entity, $vars['icon_size'], array(
-		'class' => 'elgg-photo'
+		'class' => 'elgg-photo elgg-photo-attachment'
 	));
 	return true;
 }

@@ -60,6 +60,8 @@
 			elgg.ui.initDatePicker();
 		}
 
+		$('.elgg-widgets-add-panel li.elgg-state-available').unbind('click').click(elgg.ui.widgets.add);
+		
 		$('.hj-ajaxed-cancel-form')
 		.unbind('click')
 		.bind('click', function(event) {
@@ -367,7 +369,7 @@
 					params.data = output.output;
 					elgg.trigger_hook('new_lists', 'hj:framework:ajax', params, true);
 				}
-				if (!output.output || window.hjdata.lists[list_id].items.length >= pagination_data.count || (output.output && pagination_data.limit == 0)) {
+				if ((!output.output) || (window.hjdata.lists[list_id].items.length >= pagination_data.count) || (output.output && pagination_data.limit == 0)) {
 					$(window).data('ajaxready', true);
 					button.hide();
 				}
@@ -379,7 +381,7 @@
 		if (!window.hjdata) {
 			return;
 		}
-		var time = 60000;
+		var time = 30000; // frequency at which lists on the page are refreshed
 	
 		var time_current = new Date().getTime();
 		if (time_current - window.hjLastUpdate >= time) {
@@ -520,7 +522,9 @@
 
 	elgg.register_hook_handler('init', 'system', hj.framework.ajax.base.init);
 	//elgg.register_hook_handler('success', 'hj:framework:ajax', elgg.security.refreshToken, 1);
-	elgg.register_hook_handler('success', 'hj:framework:ajax', elgg.ui.widgets.init);
+
+	// disabled as it was causing propagation
+	//elgg.register_hook_handler('success', 'hj:framework:ajax', elgg.ui.widgets.init);
 	elgg.register_hook_handler('success', 'hj:framework:ajax', hj.framework.ajax.base.init);
 	elgg.register_hook_handler('success', 'hj:framework:ajax', hj.framework.ajax.base.triggerRefresh);
 

@@ -34,7 +34,7 @@ $base_url = elgg_extract('base_url', $vars, '');
 $pagination = elgg_extract('pagination', $vars, true);
 $offset_key = elgg_extract('offset_key', $vars, 'offset');
 $position = elgg_extract('position', $vars, 'after');
-$gallery_class = 'elgg-list';
+$gallery_class = 'elgg-gallery';
 $list_id = elgg_extract('list_id', $vars, null);
 $inverse_order = elgg_extract('inverse_order', $vars, null);
 $data_options = elgg_extract('data-options', $vars, false);
@@ -107,9 +107,11 @@ if (is_array($items) && count($items) > 0) {
 			$data_options_list_items[] = $item->id;
 		}
 
+		elgg_push_context('gallery');
 		$html .= "<li id=\"$id\" class=\"$item_class\">";
 		$html .= elgg_view_list_item($item, $vars);
 		$html .= '</li>';
+		elgg_pop_context();
 	}
 }
 

@@ -104,6 +104,7 @@ text-decoration:none;
 	position:relative;
 	float:right;
 	display:block;
+	margin-left:5px;
 }
 
 #fancybox-content .hj-hover-menu-block {
