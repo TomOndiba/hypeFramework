@@ -67,31 +67,39 @@ function hj_framework_register_js() {
 	$hj_js_ajax = elgg_get_simplecache_url('js', 'hj/framework/ajax');
 	elgg_register_js('hj.framework.ajax', $hj_js_ajax);
 	elgg_load_js('hj.framework.ajax');
+	elgg_register_simplecache_view('js/hj/framework/ajax');
 
 	$hj_js_tabs = elgg_get_simplecache_url('js', 'hj/framework/tabs');
 	elgg_register_js('hj.framework.tabs', $hj_js_tabs);
+	elgg_register_simplecache_view('js/hj/framework/tabs');
 
 	$hj_js_sortable_tabs = elgg_get_simplecache_url('js', 'hj/framework/tabs.sortable');
 	elgg_register_js('hj.framework.tabs.sortable', $hj_js_sortable_tabs);
+	elgg_register_simplecache_view('js/hj/framework/tabs/sortable');
 
 	$hj_js_sortable_list = elgg_get_simplecache_url('js', 'hj/framework/list.sortable');
 	elgg_register_js('hj.framework.list.sortable', $hj_js_sortable_list);
+	elgg_register_simplecache_view('js/hj/framework/list.sortable');
 
 	// JS to check mandatory fields
 	$hj_js_relationshiptags = elgg_get_simplecache_url('js', 'hj/framework/relationshiptags');
 	elgg_register_js('hj.framework.relationshiptags', $hj_js_relationshiptags);
+	elgg_register_simplecache_view('js/hj/framework/relationshiptags');
 
 	// JS for colorpicker
 	$hj_js_colorpicker = elgg_get_simplecache_url('js', 'vendors/colorpicker/colorpicker');
 	elgg_register_js('hj.framework.colorpicker', $hj_js_colorpicker);
+	elgg_register_simplecache_view('js/vendors/colorpicker/colorpicker');
 
 	// JS for filetree
 	$hj_js_tree = elgg_get_simplecache_url('js', 'vendors/jstree/tree');
 	elgg_register_js('hj.framework.tree', $hj_js_tree);
+	elgg_register_simplecache_view('js/vendors/jstree/tree');
 
 	// JS for CLEditor
 	$hj_js_editor = elgg_get_simplecache_url('js', 'vendors/editor/editor');
 	elgg_register_js('hj.framework.editor', $hj_js_editor);
+	elgg_register_simplecache_view('js/vendors/editor/editor');
 
 //    if (elgg_get_plugin_setting('cleditor', 'hypeFramework') == 'on') {
 //        elgg_load_js('hj.framework.editor');
@@ -99,9 +107,11 @@ function hj_framework_register_js() {
 
 	$hj_js_uploadify = elgg_get_simplecache_url('js', 'vendors/uploadify/jquery.uploadify');
 	elgg_register_js('hj.framework.uploadify', $hj_js_uploadify);
+	elgg_register_simplecache_view('js/vendors/uploadify/jquery.uploadify');
 
 	$hj_js_uploadify_init = elgg_get_simplecache_url('js', 'vendors/uploadify/multifile.init');
 	elgg_register_js('hj.framework.multifile', $hj_js_uploadify_init);
+	elgg_register_simplecache_view('js/vendors/uploadify/multifile.init');
 
 	elgg_load_js('jquery.form');
 
@@ -126,22 +136,27 @@ function hj_framework_register_css() {
 	if (!elgg_is_active_plugin('profile')) {
 		$hj_css_profile = elgg_get_simplecache_url('css', 'hj/framework/profile');
 		elgg_register_css('hj.framework.profile', $hj_css_profile);
+		elgg_register_simplecache_view('css/hj/framework/profile');
 	}
 	// CSS for colorpicker
 	$hj_css_colorpicker = elgg_get_simplecache_url('css', 'vendors/colorpicker/colorpicker.css');
 	elgg_register_css('hj.framework.colorpicker', $hj_css_colorpicker);
+	elgg_register_simplecache_view('css/vendors/colorpicker/colorpicker.css');
 
 	// jQuery UI
 	$hj_css_jq = elgg_get_simplecache_url('css', 'vendors/jquery/ui/theme');
 	elgg_register_css('hj.framework.jquitheme', $hj_css_jq);
+	elgg_register_simplecache_view('css/vendors/jquery/ui/theme');
 
 	// Carousel
 	$hj_css_carousel = elgg_get_simplecache_url('css', 'vendors/carousel/rcarousel.css');
 	elgg_register_css('hj.framework.carousel', $hj_css_carousel);
+	elgg_register_simplecache_view('css/vendors/carousel/rcarousel.css');
 
 	// PL Upload
 	$hj_css_uploadify = elgg_get_simplecache_url('css', 'vendors/uploadify/uploadify.css');
 	elgg_register_css('hj.framework.uploadify', $hj_css_uploadify);
+	elgg_register_simplecache_view('css/vendors/uploadify/uploadify.css');
 
 	return true;
 }
