@@ -18,7 +18,6 @@
  * @uses $vars['inverse_order']  Is this list in an inversed order in relation to data_options
  * $uses $vars['data-options'] An array of options that was used to render the items
  */
-
 $items = $vars['items'];
 $offset = elgg_extract('offset', $vars);
 $limit = elgg_extract('limit', $vars);
@@ -104,6 +103,9 @@ if (is_array($items) && count($items) > 0) {
 			$id = "item-{$item->getType()}-{$item->id}";
 			$time = $item->posted;
 			$data_options_list_items[] = $item->id;
+			$instance = true;
+		} elseif ($item instanceof ElggAnnotation) { // Thanks to Matt Beckett for the fix
+			$id = "item-{$item->name}-{$item->id}";
 			$instance = true;
 		}
 
