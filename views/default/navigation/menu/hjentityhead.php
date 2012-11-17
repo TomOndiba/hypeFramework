@@ -7,7 +7,7 @@ if (empty($main) && empty($dropdown)) {
 	return true;
 }
 
-if (elgg_in_context('print') || elgg_in_context('activity')) {
+if (elgg_in_context('print')) {
 	return true;
 }
 
