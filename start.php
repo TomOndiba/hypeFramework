@@ -12,8 +12,8 @@
 
 require 'CONFIG.INC.php'; // global path and var definitions
 
-elgg_register_event_handler('init', 'system', 'hj_framework_init');
-elgg_register_event_handler('init', 'system', 'hj_framework_forms_init');
+elgg_register_event_handler('init', 'system', 'hj_framework_init', 100);
+elgg_register_event_handler('init', 'system', 'hj_framework_forms_init', 100);
 
 function hj_framework_init() {
 
@@ -78,7 +78,7 @@ function hj_framework_init() {
 	elgg_register_library('hj:interface:media', HYPEFRAMEWORK_PATH_LIBRARIES . 'interfaces/media.php');
 	elgg_load_library('hj:interface:media');
 
-	// File management
+	// Relationship management
 	elgg_register_library('hj:interface:relationships', HYPEFRAMEWORK_PATH_LIBRARIES . 'interfaces/relationships.php');
 	elgg_load_library('hj:interface:relationships');
 

@@ -4,7 +4,12 @@ define('HYPEFRAMEWORK_PLUGINNAME', 'hypeFramework');
 define('HYPEFRAMEWORK_RELEASE', 1349960132);
 
 // global page handler namespace
-define('HYPEFRAMEWORK_PAGEHANDLER', 'framework');
+$pagehandler = elgg_get_plugin_setting('global_pagehandler', 'hypeFramework');
+if (!$pagehandler) {
+	$pagehandler = 'framework';
+	elgg_set_plugin_setting('global_pagehandler', $pagehandler, 'hypeFramework');
+}
+define('HYPEFRAMEWORK_PAGEHANDLER', $pagehandler);
 
 define('HYPEFRAMEWORK_PATH', 'mod/' . HYPEFRAMEWORK_PLUGINNAME . '/');
 define('HYPEFRAMEWORK_PATH_ACTIONS', elgg_get_root_path() . HYPEFRAMEWORK_PATH . 'actions/');

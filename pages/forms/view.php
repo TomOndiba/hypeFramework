@@ -25,7 +25,7 @@ if (elgg_instanceof($container, 'group')) {
 	$page_owner_guid = $user->guid;
 }
 
-$content = hj_forms_view_form("$type/$subtype/$handler/edit", array(), array(
+$content = hj_framework_view_form("$type/$subtype/$handler/edit", array(), array(
 	'entity' => $entity
 		));
 
