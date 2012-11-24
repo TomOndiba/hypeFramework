@@ -14,8 +14,6 @@
  */
 ?><?php
 
-elgg_load_library('hj:framework:forms');
-
 elgg_push_context('print');
 
 $entity_guid = elgg_extract('entity_guid', $vars);

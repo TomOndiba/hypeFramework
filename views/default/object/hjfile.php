@@ -17,10 +17,10 @@ $owner = $obj_params['owner'];
 
 $title = $entity->title;
 
-$filefolder = sprintf(elgg_echo('hj:framework:filefolder'), $filefolder->title);
-$filename = sprintf(elgg_echo('hj:framework:filename'), $entity->originalfilename);
-$simpletype = sprintf(elgg_echo('hj:framework:simpletype'), $entity->simpletype);
-$filesize = sprintf(elgg_echo('hj:framework:filesize'), $entity->filesize);
+$filefolder = sprintf(elgg_echo('framework:filefolder'), $filefolder->title);
+$filename = sprintf(elgg_echo('framework:filename'), $entity->originalfilename);
+$simpletype = sprintf(elgg_echo('framework:simpletype'), $entity->simpletype);
+$filesize = sprintf(elgg_echo('framework:filesize'), $entity->filesize);
 
 $subtitle = "$filefolder <br />$filename  <br />$simpletype <br />$filesize";
 $short_description = elgg_get_excerpt($entity->description);
@@ -44,8 +44,8 @@ if ($full) {
         }
     }
 
-    $fields_view = elgg_view('page/components/hj/fieldtable', array('entity' => $entity, 'fields' => $fields, 'view_params' => $view_params, 'intro' => $intro));
-    $full_description = elgg_view('page/components/hj/fullview', array('entity' => $entity, 'content' => $preview . $fields_view, 'view_params' => $view_params, 'handler' => 'hjfile', 'extras' => array('file_guid' => $entity->guid)));
+    $fields_view = elgg_view('page/components/framework/fieldtable', array('entity' => $entity, 'fields' => $fields, 'view_params' => $view_params, 'intro' => $intro));
+    $full_description = elgg_view('page/components/framework/fullview', array('entity' => $entity, 'content' => $preview . $fields_view, 'view_params' => $view_params, 'handler' => 'hjfile', 'extras' => array('file_guid' => $entity->guid)));
 } else if ($entity->simpletype == 'image') {
 	echo elgg_view_entity_icon($entity, $vars['icon_size'], array(
 		'class' => 'elgg-photo elgg-photo-attachment'

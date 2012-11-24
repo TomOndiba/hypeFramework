@@ -11,7 +11,7 @@ $obj_params = hj_framework_extract_params_from_entity($entity);
 
 $files = $entity->getContainedFiles();
 $file_count = count($files);
-$file_count_text = elgg_echo('hj:framework:filecount');
+$file_count_text = elgg_echo('framework:filecount');
 
 $title = $entity->title;
 $subtitle = "<b>$file_count_text</b>  $file_count";
@@ -27,7 +27,7 @@ if ($full) {
             ));
 
     $file_view = elgg_view_entity_list($files);
-    $full_description = elgg_view('page/components/hj/fullview', array('entity' => $entity, 'content' => $files));
+    $full_description = elgg_view('page/components/framework/fullview', array('entity' => $entity, 'content' => $files));
 }
 
 $content = <<<HTML

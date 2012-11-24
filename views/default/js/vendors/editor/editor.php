@@ -2,9 +2,9 @@
 	<script type="text/javascript">
 <?php endif; ?>
     
-	elgg.provide('hj.framework.editor');
+	elgg.provide('framework.editor');
        
-	hj.framework.editor.init = function() {
+	framework.editor.init = function() {
 		$('.elgg-input-longtext')
 		.live('focus', function(event) {
 			event.stopPropagation();
@@ -13,8 +13,8 @@
 		});
 	};
     
-	elgg.register_hook_handler('init', 'system', hj.framework.editor.init);
-	elgg.register_hook_handler('success', 'hj:framework:ajax', hj.framework.editor.init);
+	elgg.register_hook_handler('init', 'system', framework.editor.init);
+	elgg.register_hook_handler('success', 'ajax', framework.editor.init);
     
 	elgg.provide('elgg.embed');
 

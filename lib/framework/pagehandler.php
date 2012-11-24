@@ -1,15 +1,15 @@
 <?php
 
 function hj_framework_entity_url_forwarder($entity) {
-	return 'hj/';
+	return 'framework/';
 }
 
 function hj_framework_segment_url_forwarder($entity) {
 	if (elgg_instanceof($entity, 'object', 'hjsegment')) {
 		$container = $entity->getContainerEntity();
-		return $container->getURL();
+		return $container->getURL() . '/' . $entity->guid;
 	}
-	return 'hj/';
+	return 'framework/';
 }
 
 /**
@@ -32,8 +32,10 @@ function hj_framework_page_handlers($page) {
 	if (!isset($page[0])) {
 		forward();
 	}
-	
+
 	switch ($page[0]) {
+
+
 		case 'file' :
 			if (!isset($page[1]))
 				forward();

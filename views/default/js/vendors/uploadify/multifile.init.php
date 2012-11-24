@@ -2,16 +2,16 @@
 	<script type="text/javascript">
 <?php endif; ?>
 
-	elgg.provide('hj.framework.uploadify');
+	elgg.provide('framework.uploadify');
 
-	hj.framework.uploadify.init = function() {
+	framework.uploadify.init = function() {
 
 		$(function() {
 			$container = $('#hj-multifile-upload');
 			var input_name = $('input[name="hj-multifile-upload-fieldname"]').val();
 			$container.uploadify({
-				'swf'      : elgg.get_site_url() + 'mod/hypeFramework/views/default/js/vendors/uploadify/uploadify.swf',
-				'uploader' : elgg.security.addToken(elgg.get_site_url() + 'hj/multifile'),
+				'swf'      : <?php echo HYPEFRAMEWROK_PATH_VIEWS ?> + 'js/vendors/uploadify/uploadify.swf',
+				'uploader' : elgg.security.addToken(elgg.get_site_url() + '<?php echo HYPEFRAMEWROK_PAGEHANDLER ?>/multifile'),
 				'removeCompleted' : false,
 				'onUploadSuccess' : function(file, data, response) {
 					var json = $.parseJSON(data);
@@ -32,8 +32,8 @@
 	}
 
 
-	elgg.register_hook_handler('init', 'system', hj.framework.uploadify.init);
-	elgg.register_hook_handler('success', 'hj:framework:ajax', hj.framework.uploadify.init);
+	elgg.register_hook_handler('init', 'system', framework.uploadify.init);
+	elgg.register_hook_handler('success', 'ajax', framework.uploadify.init);
 
 <?php if (FALSE) : ?></script><?php
 endif;

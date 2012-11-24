@@ -1,27 +1,12 @@
 <?php
 
-$form = $vars['entity'];
+$form = elgg_extract('entity', $vars);
 
-if (!elgg_instanceof($form)) {
+if (!elgg_instanceof($form, 'object', 'hjform')) {
 	return true;
 }
-
-$view = "hj/forms/$form->subject_entity_type/$form->subject_entity_subtype";
-if (elgg_view_exists($view)) {
-	elgg_view($view, $vars);
-	return true;
-}
-
-elgg_load_library('hj:framework:forms');
-elgg_load_library('hj:framework:knowledge');
-
-elgg_load_js('hj.formbuilder.sortable');
-
 
 $fields = $form->getFields();
-
-$form_title = elgg_echo($form->getTitle($vars['subject_guid']));
-$form_description = elgg_echo($form->description);
 
 if (elgg_is_sticky_form($form->title)) {
 	extract(elgg_get_sticky_values($form->title));
@@ -57,7 +42,7 @@ if (!isset($vars['ajaxify']) || $vars['ajaxify'] === true) {
 }
 if ($multipart && $ajaxify) {
 	// a hack to return json values on form submit when sending files via get/post in ajaxsubmit
-	$form_fields .= elgg_view('input/hidden', array('value' => true, 'name' => 'xhr'));
+	$form_fields .= elgg_view('input/hidden', array('value' => true, 'name' => 'xhr_mode'));
 }
 
 $form_fields .= elgg_view('input/submit', array(
@@ -83,8 +68,7 @@ if (!isset($vars['fields_only']) || $vars['fields_only'] === false) {
 		'action' => $form->action,
 		'method' => $form->method,
 		'enctype' => $form->enctype,
-		'class' => "$form->class $class",
-		'js' => 'onsubmit="return hj.framework.fieldcheck.init($(this));"'
+		'class' => "$form->class $class"
 			));
 	$body = elgg_view_module('aside', $form_title, $form_description . $form);
 	echo $body;

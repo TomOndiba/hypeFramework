@@ -4,9 +4,9 @@ echo elgg_view('js/vendors/jstree/jquery.jstree.js');
 <?php if (FALSE) : ?>
     <script type="text/javascript">
 <?php endif; ?>
-    elgg.provide('hj.framework.tree');
+    elgg.provide('framework.tree');
 
-    hj.framework.tree.init = function() {
+    framework.tree.init = function() {
         $('.hj-list-tree')
         .each(function() {
 
@@ -33,6 +33,6 @@ echo elgg_view('js/vendors/jstree/jquery.jstree.js');
         });
     };
 
-    elgg.register_hook_handler('init', 'system', hj.framework.tree.init);
-    elgg.register_hook_handler('success', 'hj:framework:ajax', hj.framework.tree.init);
+    elgg.register_hook_handler('init', 'system', framework.tree.init);
+    elgg.register_hook_handler('success', 'ajax', framework.tree.init);
 <?php if (FALSE) : ?></script><?php endif; ?>

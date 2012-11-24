@@ -72,7 +72,7 @@
 /* workarounds */
 * html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
 
-.ui-autocomplete-loading { background: transparent url('<?php echo elgg_get_site_url() ?>mod/hypeFramework/graphics/loader/indicator.gif') right center no-repeat;}
+.ui-autocomplete-loading { background: transparent url('<?php echo HYPEFRAMEWROK_PATH_GRAPHICS ?>loader/indicator.gif') right center no-repeat;}
 
 /*
  * jQuery UI Menu 1.8.16

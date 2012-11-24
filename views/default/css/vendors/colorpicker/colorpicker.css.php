@@ -1,5 +1,5 @@
 <?php
-    $path = elgg_get_config('url') . 'mod/hypeFramework/graphics/vendors/colorpicker/';
+    $path = HYPEFRAMEWROK_PATH_GRAPHICS . 'vendors/colorpicker/';
 ?>
 input.hj-color-picker {
 width:auto;

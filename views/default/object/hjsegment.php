@@ -11,8 +11,6 @@
  * @return string HTML
  */
 
-elgg_load_library('hj:framework:forms');
-
 $segment = elgg_extract('entity', $vars, false);
 $full = elgg_extract('full_view', $vars, true);
 
@@ -49,7 +47,7 @@ if ($full) {
     $content = elgg_view_module('main', $header . $menu, $body);
 
     if ($segment->display == 'sections') {
-        $content = elgg_view_layout('hj/sections', array(
+        $content = elgg_view_layout('framework/sections', array(
             'content' => $content,
             'segment' => $segment
                 ));
@@ -57,7 +55,7 @@ if ($full) {
 		if (!$num_columns = $segment->num_columns) {
 			$num_columns = 2;
 		}
-        $content = elgg_view_layout('hj/widgets', array(
+        $content = elgg_view_layout('framework/widgets', array(
             'content' => $content,
             'num_columns' => $num_columns,
             'exact_match' => true,
@@ -73,8 +71,8 @@ if ($full) {
     $header = $segment->title;
 
     $sections = $segment->getSections();
-
-    if (is_array($sections)) {
+	
+   if (is_array($sections)) {
         $subtitle = '<div class="clearfix">';
         foreach ($sections as $section) {
             $count = elgg_get_entities(array(

@@ -1,8 +1,8 @@
 <?php
-elgg_load_js('hj.framework.uploadify');
-elgg_load_js('hj.framework.multifile');
+elgg_load_js('framework.uploadify');
+elgg_load_js('framework.multifile');
 
-elgg_load_css('hj.framework.uploadify');
+elgg_load_css('framework.uploadify');
 
 echo elgg_view('input/file', array(
 	'id' => 'hj-multifile-upload',

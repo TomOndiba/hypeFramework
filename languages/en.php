@@ -1,30 +1,55 @@
 <?php
 
 $english = array(
-    /**
-     *  Admin menu elements
-     */
-    'admin:hj' => 'Manage hJ',
-    'admin:hj:approve' => 'Approve',
-    'admin:hj:categories' => 'Categories',
-    'admin:hj:comments' => 'Comments',
-    'admin:hj:companies' => 'Companies',
-    'admin:hj:connections' => 'Connections',
-    'admin:hj:formbuilder' => 'FormBuilder',
-    'admin:hj:framework' => 'Framework',
-    'admin:hj:jobs' => 'Jobs',
-    'admin:hj:linkedinservice' => 'LinkedInService',
-    'admin:hj:livesearch' => 'LiveSearch',
-    'admin:hj:portfolio' => 'Portfolio',
-    'admin:hj:styler' => 'Styler',
-    /**
-     * Subtype names
-     */
-    'item:object:hjform' => 'Form',
-	'items:object:hjform' => 'Forms',
 
-    'item:object:hjfield' => 'Form Field',
-	'items:object:hjfield' => 'Form Fields',
+	'options' => 'Options',
+
+	'list_type:list' => 'List',
+	'list_type:table' => 'Table',
+	'list_type:gallery' => 'Gallery',
+
+	'list_type:list:tooltip' => 'List View',
+	'list_type:table:tooltip' => 'Table View',
+	'list_type:gallery:tooltip' => 'Gallery View',
+
+	'framework:toggle_filter' => 'Filter',
+	'framework:filter:query' => 'Keyword search',
+	'framework:filter:search_in' => 'Search scope',
+	'framework:filter:order_by' => 'Order by',
+	'framework:filter:direction' => 'Sort',
+	'framework:filter:limit' => 'Items to show',
+	
+	'framework:filter:order_by:e.time_created' => 'Time Created',
+	'framework:filter:order_by:oe.title' => 'Title',
+	'framework:filter:order_by:ue.last_login' => 'Last Login',
+	'framework:filter:order_by:ue.name' => 'Name',
+	'framework:filter:order_by:ue.username' => 'Username',
+	'framework:filter:order_by:ge.name' => 'Group Name',
+	'framework:filter:order_by:md.featured_group' => 'Featured',
+	'framework:filter:order_by:distance' => 'Distance',
+
+	'framework:filter:search_in:all:tags' => 'Tags',
+	'framework:filter:search_in:objects:all' => 'Everywhere',
+	'framework:filter:search_in:objects:attributes' => 'Title & description',
+	'framework:filter:search_in:objects:tags' => 'Tags',
+	'framework:filter:search_in:objects:location' => 'Location',
+	'framework:filter:search_in:users:all' => 'Everywhere',
+	'framework:filter:search_in:users:attributes' => 'Name, username & email',
+	'framework:filter:search_in:users:tags' => 'Tags',
+	'framework:filter:search_in:groups:all' => 'Everywhere',
+	'framework:filter:search_in:groups:attributes' => 'Name',
+	'framework:filter:search_in:groups:tags' => 'Tags',
+	'framework:filter:context' => 'Created by',
+	
+	'framework:filter:fieldset:search' => 'Keyword Search',
+	'framework:filter:fieldset:sorting' => 'Sorting',
+	'framework:filter:fieldset:context' => 'Context',
+	
+	'framework:ajax:loading_form' => 'Loading Form...',
+
+	'framework:filter:direction:asc' => 'Ascending',
+	'framework:filter:direction:desc' => 'Descending',
+
 
     'item:object:hjformsubmission' => 'Form Submission',
 	'items:object:hjformsubmission' => 'Form Submissions',
@@ -64,7 +89,7 @@ $english = array(
     'hj:formbuilder:form:saveerror' => 'Your form could not be saved',
     'hj:formbuilder:form:delete:success' => 'Form was successfully deleted',
     'hj:formbuilder:form:delete:error' => 'Form could not be deleted',
-    'hf:formcheck:fieldmissing' => 'One or more of the mandatory fields is missing',
+    'hf:formcheck:fieldmissing' => 'One or more of the required fields is missing',
     'hj:formbuilder:field:savesuccess' => 'Field was successfully saved',
     'hj:formbuilder:field:delete:success' => 'Field was successfully deleted',
     'hj:formbuilder:field:delete:error' => 'There was a problem deleting this form',
@@ -75,76 +100,66 @@ $english = array(
     'hj:formbuilder:formsubmission:subject' => 'New form submission: %s',
     'hj:formbuilder:formsubmission:body' => 'The submission contained the following details: <br /><br /> %s <br /><br />View all submissions for this form at: %s',
     'hj:formbuilder:field:protected' => 'This field is protected and can not be deleted',
-    'hj:framework:formcheck:fieldmissing' => 'At least one mandatory field is missing. Please complete all the required fields marked with a red star',
+    'framework:formcheck:fieldmissing' => 'At least one required field is missing. Please complete all the required fields marked with a red star',
     /**
      * AJAX interface
      */
-    'hj:framework:denied' => 'Access Denied',
-    'hj:framework:ajax:noentity' => 'There is currently nothing to show',
-    'hj:framework:ajax:empty' => 'Sorry, we could not find the information you are looking for',
+    'framework:denied' => 'Access Denied',
+    'framework:ajax:noentity' => 'There is currently nothing to show',
+    'framework:ajax:empty' => 'Sorry, we could not find the information you are looking for',
     /**
      * Actions
      */
-    'hj:framework:entity:delete:success' => 'Successfully completed',
-    'hj:framework:entity:delete:error' => 'There was an error deleting this instance',
-    'hj:framework:widget:add:success' => 'Section added. Please update section settings',
-    'hj:framework:widget:add:failure' => "We couldn't add the section",
+    'framework:entity:delete:success' => 'Successfully completed',
+    'framework:entity:delete:error' => 'There was an error deleting this instance',
+    'framework:widget:add:success' => 'Section added. Please update section settings',
+    'framework:widget:add:failure' => "We couldn't add the section",
 
     /**
      * UI
      */
-    'hj:framework:fullview' => 'See more',
-    'hj:framework:download' => 'Download',
-    'hj:framework:addnew' => 'Add',
-    'hj:framework:refresh' => 'Refresh',
-    'hj:framework:gallery' => 'Gallery View',
-    'hj:framework:gallerytitle' => "Preview",
-    'hj:framework:addwidget' => 'Add Section',
-    'hj:framework:download' => 'Download',
-    'hj:framework:edit' => 'Edit',
-    'hj:framework:delete' => 'Delete',
-    'hj:framework:email' => 'Send by email',
-    'hj:framework:print' => 'Print',
-    'hj:framework:pdf' => 'Save as PDF',
+    'framework:fullview' => 'See more',
+    'framework:download' => 'Download',
+    'framework:addnew' => 'Add',
+    'framework:refresh' => 'Refresh',
+    'framework:gallery' => 'Gallery View',
+    'framework:gallerytitle' => "Preview",
+    'framework:addwidget' => 'Add Section',
+    'framework:download' => 'Download',
+    'framework:edit' => 'Edit',
+    'framework:delete' => 'Delete',
+    'framework:email' => 'Send by email',
+    'framework:print' => 'Print',
+    'framework:pdf' => 'Save as PDF',
     /**
      * Page Handlers
      */
-    'hj:framework:denied' => 'Sorry, we can\'t show you this page',
-    'hj:framework:print:title' => 'Print: %s',
-    'hj:framework:pdf:title' => 'PDF export of %s',
+    'framework:denied' => 'Sorry, we can\'t show you this page',
+    'framework:print:title' => 'Print: %s',
+    'framework:pdf:title' => 'PDF export of %s',
     /**
      * Files
      */
-    'hj:framework:newfolder' => 'New Folder',
-    'hj:framework:filefolder' => '<b>Folder:</b> %s',
-    'hj:framework:filename' => '<b>Filename:</b>  %s',
-    'hj:framework:simpletype' => '<b>Type:</b> %s',
-    'hj:framework:filesize' => '<b>Size:</b> %s',
+    'framework:newfolder' => 'New Folder',
+    'framework:filefolder' => '<b>Folder:</b> %s',
+    'framework:filename' => '<b>Filename:</b>  %s',
+    'framework:simpletype' => '<b>Type:</b> %s',
+    'framework:filesize' => '<b>Size:</b> %s',
 
     /**
      * hypeJunction
      */
-    'hj:framework:disabled' => '%s was disabled to avoid inconsistencies in site operations. Please enable hypeFramework before activating %s',
+    'framework:disabled' => '%s was disabled to avoid inconsistencies in site operations. Please enable hypeFramework before activating %s',
 
     /**
      * Forms
      */
-	'hj:framework:from:error:fieldexists' => 'Field names must be unique',
+	'framework:from:error:fieldexists' => 'Field names must be unique',
 	
-    'hj:label:hjportfoliofile:title' => 'Title',
-    'hj:label:hjportfoliofile:description' => 'Description',
-    'hj:label:hjportfoliofile:tags' => 'Tags',
-    'hj:label:hjportfoliofile:filefolder' => 'File Folder',
-    'hj:label:hjportfoliofile:newfilefolder' => 'New Folder',
-    'hj:label:hjportfoliofile:fileupload' => 'File to Upload',
-    'hj:label:hjportfoliofile:access_id' => 'Visibility',
 
-    'hj:label:hjlanguage:language' => 'Language',
-    'hj:label:hjlanguage:proficiency' => 'Language Proficiency',
-    'hj:label:hjlanguage:access_id' => 'Visibility',
-
-    'hj:label:hjskill:title' => 'Skill',
-    'hj:label:hjskill:access_id' => 'Visibility',
+	// System Messages
+	'framework:error:plugin_order' => '%s can not activate. Please check that hypeFramework is enabled and has higher priority position in the plugin list',
+	'framework:erorr:cannotcreateentity' => 'An error occurred while trying to create a new entity',
 
     'hj:label:hjeducation:title' => 'Degree',
     'hj:label:hjeducation:schoolname' => 'School',
@@ -168,11 +183,11 @@ $english = array(
     'hj:label:hjsegment:description' => 'Description',
     'hj:label:hjsegment:access_id' => 'Visibility',
 
-    'hj:framework:embed:options' => 'Embed Options',
-    'hj:framework:embed:type' => 'Type:  ',
-    'hj:framework:embed:float' => 'Float:  ',
-    'hj:framework:embed:float' => 'Link to attach:  ',
-    'hj:framework:embed:url' => 'Link to follow:  ',
+    'framework:embed:options' => 'Embed Options',
+    'framework:embed:type' => 'Type:  ',
+    'framework:embed:float' => 'Float:  ',
+    'framework:embed:float' => 'Link to attach:  ',
+    'framework:embed:url' => 'Link to follow:  ',
 
     'hj:embed:link' => 'Inline Link',
     'hj:embed:small' => 'Small',
@@ -186,21 +201,21 @@ $english = array(
     /**
      * AJAX / JS
      */
-    'hj:framework:processing' => 'Processing...',
-    'hj:framework:success' => 'Successfully completed',
-    'hj:framework:error' => 'Something went wrong',
+    'framework:processing' => 'Processing...',
+    'framework:success' => 'Successfully completed',
+    'framework:error' => 'Something went wrong',
 
-	'hj:framework:pagination:loadmore' => 'Show all %s %s',
-	'hj:framework:pagination:loadnext' => 'Load more',
+	'framework:pagination:loadmore' => 'Show all %s %s',
+	'framework:pagination:loadnext' => 'Load more',
 
 	/**
 	 * List Types
 	 */
 
-	'hj:framework:list:type' => 'List Type',
-	'hj:framework:list:list' => 'List',
-	'hj:framework:list:gallery' => 'Gallery',
-	'hj:framework:list:carousel' => 'Slider',
+	'framework:list:type' => 'List Type',
+	'framework:list:list' => 'List',
+	'framework:list:gallery' => 'Gallery',
+	'framework:list:carousel' => 'Slider',
 
 	'hj:showpanel' => 'Show panel',
 	'hj:hidepanel' => 'Hide panel',
@@ -214,6 +229,16 @@ $english = array(
     'hj:label:hjfile:newfilefolder' => 'New Folder',
     'hj:label:hjfile:fileupload' => 'File to Upload',
     'hj:label:hjfile:access_id' => 'Visibility',
+
+	'framework:error:plugin_order' => '%s can not be activated. Please check your plugin order and ensure that it\'s below hypeFramework in the plugin list',
+
+	'framework:geocode:error' => 'There was a problem with geocoding the location field. The item will not appear on maps or other interfaces that rely on coordinates',
+
+	'framework:list:empty' => 'There are no items to show',
+
+	'range:from' => 'From',
+	'range:to' => 'To',
+	
 );
 
 

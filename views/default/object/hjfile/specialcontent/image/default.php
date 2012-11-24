@@ -3,9 +3,9 @@
  * Display an image
  */
 
-$image_url = elgg_get_site_url() . "mod/hypeFramework/pages/file/icon.php?guid={$vars['entity']->getGUID()}&size=preview";
+$image_url = HYPEFRAMEWORK_PATH . "pages/file/icon.php?guid={$vars['entity']->getGUID()}&size=preview";
 $image_url = elgg_format_url($image_url);
-$download_url = elgg_get_site_url() . "mod/hypeFramework/pages/file/icon.php?guid={$vars['entity']->getGUID()}";
+$download_url = HYPEFRAMEWORK_PATH . "pages/file/icon.php?guid={$vars['entity']->getGUID()}";
 
 if ($vars['full_view'] && $smallthumb = $vars['entity']->smallthumb) {
 	echo <<<HTML

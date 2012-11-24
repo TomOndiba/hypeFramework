@@ -71,7 +71,7 @@ Released under the MIT License <http://www.opensource.org/licenses/mit-license.p
 	background-color: #FDE5DD !important;
 }
 .uploadify-queue-item .cancel a {
-	background: url('<?php echo elgg_get_site_url() . 'mod/hypeFramework/graphics/uploadify-cancel.png' ?>') 0 0 no-repeat;
+	background: url('<?php echo HYPEFRAMEWROK_PATH_GRAPHICS . 'uploadify-cancel.png' ?>') 0 0 no-repeat;
 	float: right;
 	height:	16px;
 	text-indent: -9999px;

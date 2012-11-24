@@ -10,19 +10,23 @@ $options = elgg_extract('options', $vars);
 $types = elgg_extract('types', $options, null);
 $subtypes = elgg_extract('subtypes', $options, null);
 $relationship = elgg_extract('relationship_name', $options, 'tagged_in');
+$relationship_guid = elgg_extract('relationship_guid', $options, elgg_get_logged_in_user_guid());
 $metadata = elgg_extract('metadata', $options, null);
 $wheres = elgg_extract('wheres', $options, null);
 $joins = elgg_extract('joins', $options, null);
 $selects = elgg_extract('selects', $options, null);
 
-$entities = elgg_get_entities_from_metadata(array(
+
+$entities = elgg_get_entities_from_relationship(array(
 	'types' => $types,
 	'subtypes' => $subtypes,
 	'metadata_name_value_pairs' => $metadata,
 	'where' => $wheres,
 	'joins' => $joins,
 	'selects' => $selects,
-	'limit' => 0
+	'limit' => 0,
+	'relationship' => $relationship,
+	'relationship_guid' => $relationship_guid
 		));
 
 if (is_array($entities)) {
@@ -43,8 +47,8 @@ if ($results) {
 	$results = json_encode($results);
 	?>
 	<script type="text/javascript">
-	    elgg.provide('hj.framework.relationshiptags');
-	    hj.framework.relationshiptags.sourceentities = <?php echo $results ?>;
+	    elgg.provide('framework.relationshiptags');
+	    framework.relationshiptags.sourceentities = <?php echo $results ?>;
 	</script>
 	<?php
 	$guids = $vars['value'];
@@ -52,7 +56,7 @@ if ($results) {
 	$vars['data-options'] = $vars['options'];
 	unset($vars['options']);
 
-	elgg_load_js('hj.framework.relationshiptags');
+	elgg_load_js('framework.relationshiptags');
 	?>
 	<input type="text" <?php echo elgg_format_attributes($vars); ?> />
 	<input type="hidden" name="relationship_tags_name" value="<?php echo $relationship ?>" />
@@ -79,5 +83,5 @@ if ($results) {
 	}
 	echo '</ul>';
 } else {
-	echo elgg_echo("hj:framework:relationship_tags:no$relationship");
+	echo elgg_echo("framework:relationship_tags:no$relationship");
 }

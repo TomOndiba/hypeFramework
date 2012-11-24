@@ -1,5 +1,6 @@
 <?php
 
+/** @todo: remove hjForm & hjField */
 $subtypes = array(
 	'hjform' => 'hjForm',  // form class
 	'hjfield' => 'hjField', // form fields class

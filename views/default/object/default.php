@@ -1,8 +1,5 @@
 <?php
 
-elgg_load_js('hj.framework.ajax');
-
-
 $entity = elgg_extract('entity', $vars);
 
 if (elgg_instanceof($entity)) {
@@ -30,8 +27,8 @@ if (elgg_instanceof($entity)) {
             $section = elgg_echo('hj:hjportfolio:hjexperience');
             $intro = elgg_view_title("{$owner->name} - $section");
 
-            $fields_view = elgg_view('page/components/hj/fieldtable', array('entity' => $entity, 'fields' => $fields, 'view_params' => $view_params, 'intro' => $intro));
-            $full_description = elgg_view('page/components/hj/fullview', array('entity' => $entity, 'content' => $fields_view, 'view_params' => $view_params));
+            $fields_view = elgg_view('page/components/framework/fieldtable', array('entity' => $entity, 'fields' => $fields, 'view_params' => $view_params, 'intro' => $intro));
+            $full_description = elgg_view('page/components/framework/fullview', array('entity' => $entity, 'content' => $fields_view, 'view_params' => $view_params));
         }
 
         $content = <<<HTML

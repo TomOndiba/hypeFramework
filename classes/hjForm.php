@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @deprecated 1.8.6
+ */
 /**
  * Creates hjForm class to manage forms
  */
@@ -88,7 +90,7 @@ class hjForm extends ElggObject {
 
 	public function save() {
 		$result = parent::save();
-		elgg_set_plugin_setting("hj:form:$this->subject_entity_type:$this->subject_entity_subtype", $this->guid, 'hypeFramework');
+		elgg_set_plugin_setting("hj:form:$this->subject_entity_type:$this->subject_entity_subtype", $this->guid, HYPEFRAMEWORK_PLUGINNAME);
 		return $result;
 	}
 
@@ -102,7 +104,7 @@ class hjForm extends ElggObject {
 	}
 
 	public function getFieldTypes() {
-		$types = hj_formbuilder_get_input_types_array();
+		$types = hj_framework_forms_input_types();
 		return $types;
 	}
 

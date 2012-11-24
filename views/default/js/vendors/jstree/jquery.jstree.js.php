@@ -1416,7 +1416,7 @@
 (function ($) {
 	var themes_loaded = [];
 	// this variable stores the path to the themes folder - if left as false - it will be autodetected
-	$.jstree._themes = '<?php echo elgg_get_config('url') . "mod/hypeFramework/views/default/js/vendors/jstree/themes/" ?>';
+	$.jstree._themes = '<?php echo HYPEFRAMEWROK_PATH_VIEWS . "js/vendors/jstree/themes/" ?>';
 	$.jstree.plugin("themes", {
 		__init : function () {
 			this.get_container()

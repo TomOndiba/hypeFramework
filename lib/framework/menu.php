@@ -1,5 +1,8 @@
 <?php
 
+function hj_framework_view_icon($icon) {
+	return "<span class=\"framework-ui-icon framework-ui-icon-$icon\"></span>";
+}
 /**
  * Various Menu Hook Handlers
  *
@@ -52,8 +55,8 @@ function hj_framework_entity_head_menu($hook, $type, $return, $params) {
 			$data = hj_framework_json_query($params);
 			$fullview = array(
 				'name' => 'fullview',
-				'title' => elgg_echo('hj:framework:gallerytitle', array($entity->title)),
-				'text' => elgg_echo('hj:framework:gallerytitle', array($entity->title)),
+				'title' => elgg_echo('framework:gallerytitle', array($entity->title)),
+				'text' => elgg_echo('framework:gallerytitle', array($entity->title)),
 				'href' => "action/framework/entities/view?e=$entity->guid",
 				'data-options' => htmlentities($data, ENT_QUOTES, 'UTF-8'),
 				'rel' => 'fancybox',
@@ -71,10 +74,10 @@ function hj_framework_entity_head_menu($hook, $type, $return, $params) {
 		if (hj_framework_allow_file_download($file_guid)) {
 			$download = array(
 				'name' => 'download',
-				'title' => elgg_echo('hj:framework:download'),
-				'text' => elgg_echo('hj:framework:download'),
+				'title' => elgg_echo('framework:download'),
+				'text' => elgg_echo('framework:download'),
 				'id' => "hj-ajaxed-download-{$file_guid}",
-				'href' => "hj/file/download/{$file_guid}/",
+				'href' => "framework/file/download/{$file_guid}/",
 				'target' => '_blank',
 				'priority' => 500,
 				'section' => 'dropdown'
@@ -86,10 +89,10 @@ function hj_framework_entity_head_menu($hook, $type, $return, $params) {
 	if ($entity && elgg_instanceof($entity) && $entity->canEdit()) {
 		$edit = array(
 			'name' => 'edit',
-			'title' => elgg_echo('hj:framework:edit'),
-			'text' => elgg_echo('hj:framework:edit'),
+			'title' => elgg_echo('framework:edit'),
+			'text' => elgg_echo('framework:edit'),
 			'rel' => 'fancybox',
-			'href' => "action/framework/entities/edit",
+			'href' => "framework/edit/$entity->guid",
 			'data-options' => htmlentities($data, ENT_QUOTES, 'UTF-8'),
 			'class' => "hj-ajaxed-edit",
 			'priority' => 800,
@@ -100,8 +103,8 @@ function hj_framework_entity_head_menu($hook, $type, $return, $params) {
 		// AJAXed Delete Button
 		$delete = array(
 			'name' => 'delete',
-			'title' => elgg_echo('hj:framework:delete'),
-			'text' => elgg_echo('hj:framework:delete'),
+			'title' => elgg_echo('framework:delete'),
+			'text' => elgg_echo('framework:delete'),
 			'href' => "action/framework/entities/delete?e=$entity->guid",
 			'data-options' => htmlentities($data, ENT_QUOTES, 'UTF-8'),
 			'class' => 'hj-ajaxed-remove',
@@ -169,8 +172,8 @@ function hj_framework_segment_head_menu($hook, $type, $return, $params) {
 		// Add widget
 		$widget = array(
 			'name' => 'widget',
-			'title' => elgg_echo('hj:framework:addwidget'),
-			'text' => elgg_echo('hj:framework:addwidget'),
+			'title' => elgg_echo('framework:addwidget'),
+			'text' => elgg_echo('framework:addwidget'),
 			'href' => "action/framework/widget/add",
 			'data-options' => $data,
 			'id' => "hj-ajaxed-addwidget-{$entity->guid}",
@@ -184,8 +187,8 @@ function hj_framework_segment_head_menu($hook, $type, $return, $params) {
 		// AJAXed Edit Button
 		$edit = array(
 			'name' => 'edit',
-			'title' => elgg_echo('hj:framework:edit'),
-			'text' => elgg_echo('hj:framework:edit'),
+			'title' => elgg_echo('framework:edit'),
+			'text' => elgg_echo('framework:edit'),
 			'href' => "action/framework/entities/edit",
 			'data-options' => $data,
 			'id' => "hj-ajaxed-edit-{$entity->guid}",
@@ -200,8 +203,8 @@ function hj_framework_segment_head_menu($hook, $type, $return, $params) {
 		// AJAXed Delete Button
 		$delete = array(
 			'name' => 'delete',
-			'title' => elgg_echo('hj:framework:delete'),
-			'text' => elgg_echo('hj:framework:delete'),
+			'title' => elgg_echo('framework:delete'),
+			'text' => elgg_echo('framework:delete'),
 			'href' => "action/framework/entities/delete?e=$entity->guid",
 			'data-options' => $data,
 			'id' => "hj-ajaxed-remove-{$entity->guid}",
@@ -214,9 +217,9 @@ function hj_framework_segment_head_menu($hook, $type, $return, $params) {
 
 	$print = array(
 		'name' => 'print',
-		'title' => elgg_echo('hj:framework:print'),
-		'text' => elgg_echo('hj:framework:print'),
-		'href' => "hj/print?{$url}",
+		'title' => elgg_echo('framework:print'),
+		'text' => elgg_echo('framework:print'),
+		'href' => "framework/print?{$url}",
 		'target' => "_blank",
 		'priority' => 200,
 		'section' => 'dropdown'
@@ -226,9 +229,9 @@ function hj_framework_segment_head_menu($hook, $type, $return, $params) {
 	if (file_exists(elgg_get_plugins_path() . 'hypeFramework/lib/dompdf/dompdf_config.inc.php')) {
 		$pdf = array(
 			'name' => 'pdf',
-			'title' => elgg_echo('hj:framework:pdf'),
-			'text' => elgg_echo('hj:framework:pdf'),
-			'href' => "hj/pdf?{$url}",
+			'title' => elgg_echo('framework:pdf'),
+			'text' => elgg_echo('framework:pdf'),
+			'href' => "framework/pdf?{$url}",
 			//'is_action' => false,
 			'target' => "_blank",
 			'priority' => 300,
@@ -241,7 +244,7 @@ function hj_framework_segment_head_menu($hook, $type, $return, $params) {
 //
 //        $email = array(
 //            'name' => 'email',
-//            'title' => elgg_echo('hj:framework:email'),
+//            'title' => elgg_echo('framework:email'),
 //            'text' => elgg_view_icon('hj hj-icon-email'),
 //            'href' => "action/framework/entities/edit?f={$email_f}&s={$entity->guid}",
 //            //'is_action' => true,
@@ -295,9 +298,9 @@ function hj_framework_section_foot_menu($hook, $type, $return, $params) {
 		// AJAXed Add Button
 		$add = array(
 			'name' => 'add',
-			'title' => elgg_echo('hj:framework:addnew'),
-			'text' => elgg_view_icon('hj hj-icon-add') . '<span class="hj-icon-text">' . elgg_echo('hj:framework:addnew') . '</span>',
-			'href' => "action/framework/entities/edit",
+			'title' => elgg_echo('framework:addnew'),
+			'text' => elgg_view_icon('hj hj-icon-add') . '<span class="hj-icon-text">' . elgg_echo('framework:addnew') . '</span>',
+			'href' => "framework/add/$container_guid/object/$section/default/$widget_guid/$segment_guid",
 			'data-options' => $data,
 			'is_action' => true,
 			'rel' => 'fancybox',
@@ -306,21 +309,7 @@ function hj_framework_section_foot_menu($hook, $type, $return, $params) {
 		);
 		$return[] = ElggMenuItem::factory($add);
 
-//        // AJAXed Refresh Button
-//        $refresh = array(
-//            'name' => 'refresh',
-//            'title' => elgg_echo('hj:framework:refresh'),
-//            'text' => elgg_view_icon('hj hj-icon-refresh') . '<span class="hj-icon-text">' . elgg_echo('hj:framework:refresh') . '</span>',
-//            'href' => "action/framework/entities/view?e=$entity->guid",
-//            'data-options' => $data,
-//            'is_action' => true,
-//            'id' => "hj-ajaxed-refresh-{$entity->guid}",
-//            'class' => "hj-ajaxed-refresh",
-//            'target' => "#elgg-widget-{$widget->guid} #hj-section-{$section}",
-//            'priority' => 300
-//        );
-//        $return[] = ElggMenuItem::factory($refresh);
-	}
+		}
 
 	return $return;
 }

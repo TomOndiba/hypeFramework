@@ -1,6 +1,6 @@
 <?php
-elgg_load_js('hj.framework.colorpicker');
-elgg_load_css('hj.framework.colorpicker');
+elgg_load_js('framework.colorpicker');
+elgg_load_css('framework.colorpicker');
 
 $vars['class'] = "{$vars['class']} hj-color-picker";
 $vars['maxlength'] = '7';

@@ -28,21 +28,21 @@ if ($simpletype == 'image') {
     );
 }
 
-$form_body = elgg_echo('hj:framework:embed:type');
+$form_body = elgg_echo('framework:embed:type');
 $form_body .= elgg_view('input/radio', array(
     'align' => 'horizontal',
     'name' => 'type',
     'options' => $options_size
 ));
 
-$form_body .= elgg_echo("hj:framework:embed:float");
+$form_body .= elgg_echo("framework:embed:float");
 $form_body .= elgg_view('input/radio', array(
     'align' => 'horizontal',
     'name' => 'align', 
     'options' => $options_float
 ));
 
-$form_body .= elgg_echo("hj:framework:embed:url");
+$form_body .= elgg_echo("framework:embed:url");
 $form_body .= elgg_view('input/url', array(
     'name' => 'url',
     'value' => $entity->getURL(),

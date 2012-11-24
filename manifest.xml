@@ -3,21 +3,15 @@
 	<name>hypeFramework</name>
 	<author>Ismayil Khayredinov (hypeJunction)</author>
 	<version>1.8.6</version>
-	<category>development</category>
 	<category>hypeJunction</category>
-	<blurb>hypeJunction Core</blurb>
+	<category>framework</category>
+	<blurb>Libraries and classes for hypeJunction plugins</blurb>
 	<description>Creates a framework for hypeJunction plugins, including reusable views, scripts, actions</description>
 	<website>http://hypeJunction.com</website>
 	<copyright>See lisence.txt</copyright>
 	<license>GNU Public License version 2</license>
 	<requires>
 		<type>elgg_version</type>
-		<version>2012041801</version>
+		<release>1.8</release>
 	</requires>
-	<conflicts>
-        <type>plugin</type>
-        <name>infinite_scroll</name>
-    </conflicts>
-	<admin_interface>simple</admin_interface>
-	<activate_on_install>false</activate_on_install>
 </plugin_manifest>

@@ -25,13 +25,25 @@ Added additional parameters handled by the js, including 'dom_order' (append|pre
 - Introduced ajaxed pagination (show more) mechanism
 
 1.8.5 - 1.8.6
-- New framework for handling lists - client-side JS json objects
-- Refactored functions, views, actions
-- Refined JS
-- New vendor libraries
+
 - Fixed major simplecache regeneration bug (thanks to Mark Griffiths for reporting and helping debug)
 - Fixed missing provision for ElggAnnotations in lists (thanks to Matt Beckett for the fix)
 
+- JS/CSS:
+	-- Introduced JS framework object to store and manipulate data client-side
+	-- Deprecated a number of redundant CSS styles
+	-- Introduced on-demand JS/CSS loading for AJAX calls
+
+- Lists:
+	-- Brand new framework for rendering lists (list filtering, real-time updates)
+
+- Forms:
+	-- Refactored the code to generate forms from config array. Regeneration is triggered when the the final value of 'forms:config', 'framework:forms' hook changes
+	-- Added support for user function for 'value', 'options', 'options_values' hjField attributes - gradually moving away from eval()
+
+- Location:
+	-- Added geocoding support for all entities that have 'location' metadata
+
+
 1.8.6 - 1.8.7 (in progress)
-- Dropped hjField class and migrated hjForm class to be handled in a more dynamic way
-- Refactored functions, views, actions
+- Deprecating hjForm and hjField classes in favour of an hjDynamicForm class
