@@ -4,7 +4,7 @@ $subtypes = array(
 	'hjform' => 'hjForm',  // form class
 	'hjfield' => 'hjField', // form fields class
 	'hjfile' => 'hjFile', // file class extention
-	'hjfilefolder' => 'hjFileFolder', // fill folder class
+	'hjfilefolder' => 'hjFileFolder', // file folder class
 	'hjsegment' => 'hjSegment', // content segment class
 	'hjannotation' => 'hjAnnotation' // annotation class
 );
