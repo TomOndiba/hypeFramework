@@ -1,14 +1,14 @@
 <?php
 
 elgg_unregister_js('jquery');
-elgg_register_js('jquery', 'mod/' . HYPEFRAMEWORK_PLUGINNAME . '/vendors/jquery/jquery-1.8.2.min.js');
+elgg_register_js('jquery', 'mod/' . hypeFramework . '/vendors/jquery/jquery-1.8.2.min.js');
 elgg_load_js('jquery');
 
 elgg_unregister_js('jquery-ui');
-elgg_register_js('jquery-ui', 'mod/' . HYPEFRAMEWORK_PLUGINNAME . '/vendors/jquery/jquery-ui-1.9.0.custom.min.js');
+elgg_register_js('jquery-ui', 'mod/' . hypeFramework . '/vendors/jquery/jquery-ui-1.9.0.custom.min.js');
 elgg_load_js('jquery-ui');
 
-elgg_register_css('jquery-ui-theme', 'mod/' . HYPEFRAMEWORK_PLUGINNAME . '/vendors/jquery/jquery-ui-1.9.0.custom.min.css');
+elgg_register_css('jquery-ui-theme', 'mod/' . hypeFramework . '/vendors/jquery/jquery-ui-1.9.0.custom.min.css');
 elgg_load_css('jquery-ui-theme');
 
 elgg_extend_view('js/framework/ajax', 'js/lightbox');
@@ -101,7 +101,7 @@ $hj_css_uploadify = elgg_get_simplecache_url('css', 'vendors/uploadify/uploadify
 elgg_register_css('framework.uploadify', $hj_css_uploadify);
 elgg_register_simplecache_view('css/vendors/uploadify/uploadify.css');
 
-if (elgg_get_plugin_setting('cleditor', HYPEFRAMEWORK_PLUGINNAME) == 'on') {
+if (elgg_get_plugin_setting('cleditor', hypeFramework) == 'on') {
 	elgg_extend_view('input/longtext', 'js/vendors/editor/metatags');
 
 	//elgg_extend_view('page/elements/head', 'js/vendors/editor/metatags');

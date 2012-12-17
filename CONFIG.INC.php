@@ -1,6 +1,5 @@
 <?php
 
-define('HYPEFRAMEWORK_PLUGINNAME', 'hypeFramework');
 define('HYPEFRAMEWORK_RELEASE', 1349960132);
 
 // global page handler namespace
@@ -11,7 +10,7 @@ if (!$pagehandler) {
 }
 define('HYPEFRAMEWORK_PAGEHANDLER', $pagehandler);
 
-define('HYPEFRAMEWORK_PATH', 'mod/' . HYPEFRAMEWORK_PLUGINNAME . '/');
+define('HYPEFRAMEWORK_PATH', 'mod/hypeFramework/');
 define('HYPEFRAMEWORK_PATH_ACTIONS', elgg_get_root_path() . HYPEFRAMEWORK_PATH . 'actions/');
 define('HYPEFRAMEWORK_PATH_CLASSES', elgg_get_root_path() . HYPEFRAMEWORK_PATH . 'classes/');
 define('HYPEFRAMEWORK_PATH_GRAPHICS', elgg_get_site_url() .HYPEFRAMEWORK_PATH . 'graphics/');

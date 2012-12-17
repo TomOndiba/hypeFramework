@@ -4,14 +4,14 @@
  * Check if the forms configuration array has changed and rebuild forms
  */
 function hj_framework_forms_check_updates() {
-	$hash = elgg_get_plugin_setting('forms_hash', HYPEFRAMEWORK_PLUGINNAME);
+	$hash = elgg_get_plugin_setting('forms_hash', hypeFramework);
 	$form_config = elgg_trigger_plugin_hook('forms:config', 'framework:forms', array(), null);
 
 	$current_hash = sha1(serialize($form_config));
 
 	if ($hash != $current_hash) {
 		hj_framework_forms_regenerate_from_config($form_config);
-		elgg_set_plugin_setting('forms_hash', $current_hash, HYPEFRAMEWORK_PLUGINNAME);
+		elgg_set_plugin_setting('forms_hash', $current_hash, hypeFramework);
 	}
 }
 
