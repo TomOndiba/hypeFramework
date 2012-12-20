@@ -2,10 +2,9 @@
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>hypeFramework</name>
 	<author>Ismayil Khayredinov (hypeJunction)</author>
-	<version>1.8.6</version>
+	<version>1.8.6.5</version>
 	<category>hypeJunction</category>
-	<category>framework</category>
-	<blurb>Libraries and classes for hypeJunction plugins</blurb>
+	<blurb>hypeJunction Core</blurb>
 	<description>Creates a framework for hypeJunction plugins, including reusable views, scripts, actions</description>
 	<website>http://hypeJunction.com</website>
 	<copyright>See lisence.txt</copyright>

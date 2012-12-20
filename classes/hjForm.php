@@ -90,7 +90,7 @@ class hjForm extends ElggObject {
 
 	public function save() {
 		$result = parent::save();
-		elgg_set_plugin_setting("hj:form:$this->subject_entity_type:$this->subject_entity_subtype", $this->guid, hypeFramework);
+		elgg_set_plugin_setting("hj:form:$this->subject_entity_type:$this->subject_entity_subtype", $this->guid, 'hypeFramework');
 		return $result;
 	}
 

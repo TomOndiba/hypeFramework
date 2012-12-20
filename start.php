@@ -20,7 +20,7 @@ function hj_framework_init() {
 	elgg_register_library('framework:base', HYPEFRAMEWORK_PATH_LIBRARIES . 'base.php');
 	elgg_load_library('framework:base');
 
-	hj_framework_check_release(hypeFramework, HYPEFRAMEWORK_RELEASE);
+	hj_framework_check_release('hypeFramework', HYPEFRAMEWORK_RELEASE);
 
 	elgg_register_classes(HYPEFRAMEWORK_PATH_CLASSES);
 

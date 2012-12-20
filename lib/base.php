@@ -5,8 +5,8 @@ elgg_register_viewtype_fallback('json');
 /**
  * Check the current plugin release and load $plugin_id/lib/upgrade.php script if the release is newer
  *
- * @param str $plugin_id Plugin Name
- * @param str $release Release timestamp
+ * @param str		$plugin_id		Plugin Name
+ * @param str		$release		Release timestamp
  */
 function hj_framework_check_release($plugin_id, $release) {
 
@@ -50,6 +50,7 @@ function hj_framework_path_shortcuts($plugin) {
 		"vendors" => "{$plugin_path}vendors/"
 	);
 }
+
 
 function hj_framework_decode_options_array(&$item, $key) {
 	$item = htmlspecialchars_decode($item, ENT_QUOTES);

@@ -1,19 +1,27 @@
 <?php
 
 elgg_unregister_js('jquery');
-elgg_register_js('jquery', 'mod/' . hypeFramework . '/vendors/jquery/jquery-1.8.2.min.js');
+elgg_register_js('jquery', 'mod/hypeFramework/vendors/jquery/jquery-1.8.2.min.js');
 elgg_load_js('jquery');
 
 elgg_unregister_js('jquery-ui');
-elgg_register_js('jquery-ui', 'mod/' . hypeFramework . '/vendors/jquery/jquery-ui-1.9.0.custom.min.js');
+elgg_register_js('jquery-ui', 'mod/hypeFramework/vendors/jquery/jquery-ui-1.9.0.custom.min.js');
 elgg_load_js('jquery-ui');
 
-elgg_register_css('jquery-ui-theme', 'mod/' . hypeFramework . '/vendors/jquery/jquery-ui-1.9.0.custom.min.css');
+elgg_register_css('jquery-ui-theme', 'mod/hypeFramework/vendors/jquery/jquery-ui-1.9.0.custom.min.css');
 elgg_load_css('jquery-ui-theme');
 
-elgg_extend_view('js/framework/ajax', 'js/lightbox');
-elgg_extend_view('js/framework/ajax', 'js/framework/fieldcheck');
-//elgg_extend_view('js/framework/ajax', 'js/vendors/slider/bxslider');
+elgg_register_css('bootstrap', 'mod/hypeFramework/vendors/bootsrap/css/bootstrap.min.css');
+elgg_load_css('bootstrap');
+
+elgg_register_css('bootsrap-responsive', 'mod/hypeFramework/vendors/bootstrap/css/bootstrap-responsive.min.css');
+elgg_load_css('bootstrap-responsive');
+
+elgg_register_js('bootstrap', 'mod/hypeFramework/vendors/bootstrap/js/bootsrap.min.js');
+elgg_load_js('bootsrap');
+
+elgg_register_js('jquery.validation', 'mod/hypeFramework/vendors/jquery.validate/jquery.validate.min.js');
+
 
 $hj_js_ajax = elgg_get_simplecache_url('js', 'framework/ajax');
 elgg_register_js('framework.ajax', $hj_js_ajax);
@@ -101,7 +109,7 @@ $hj_css_uploadify = elgg_get_simplecache_url('css', 'vendors/uploadify/uploadify
 elgg_register_css('framework.uploadify', $hj_css_uploadify);
 elgg_register_simplecache_view('css/vendors/uploadify/uploadify.css');
 
-if (elgg_get_plugin_setting('cleditor', hypeFramework) == 'on') {
+if (elgg_get_plugin_setting('cleditor', 'hypeFramework') == 'on') {
 	elgg_extend_view('input/longtext', 'js/vendors/editor/metatags');
 
 	//elgg_extend_view('page/elements/head', 'js/vendors/editor/metatags');

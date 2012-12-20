@@ -3,7 +3,7 @@
 // Manage Menus
 elgg_register_plugin_hook_handler('register', 'all', 'hj_framework_menu_manager');
 
-if (elgg_get_plugin_setting('cleditor', hypeFramework) == 'on') {
+if (elgg_get_plugin_setting('cleditor', 'hypeFramework') == 'on') {
 	if (elgg_is_active_plugin('tinymce'))
 		elgg_unregister_plugin_hook_handler('register', 'menu:longtext', 'tinymce_longtext_menu');
 	if (elgg_is_active_plugin('embed'))
@@ -425,7 +425,7 @@ function hj_framework_entity_icons($hook, $type, $return, $params) {
 			if (!$type)
 				$type = "default";
 
-			$url = "mod/" . hypeFramework . "/graphics/folder/{$size}/{$type}.png";
+			$url = "mod/hypeFramework/graphics/folder/{$size}/{$type}.png";
 			return $url;
 
 			break;

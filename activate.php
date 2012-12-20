@@ -17,3 +17,4 @@ foreach ($subtypes as $subtype => $class) {
 		add_subtype('object', $subtype, $class);
 	}
 }
+

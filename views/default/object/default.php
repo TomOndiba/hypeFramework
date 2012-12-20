@@ -16,7 +16,7 @@ if (elgg_instanceof($entity)) {
 
         if ($full) {
             $params_menu = hj_framework_extract_params_from_entity($entity);
-            $header_menu = elgg_view_menu('hjentityhead', array(
+            $header_menu = elgg_view_menu('entity', array(
                 'entity' => $entity,
                 'view_params' => $view_params,
                 'class' => 'elgg-menu-hz hj-menu-hz',
