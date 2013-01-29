@@ -52,7 +52,7 @@ if (is_array($entities) && count($entities) > 0) {
 		}
 
 		if ($id !== false) {
-			$list_body .= elgg_view('page/components/lists/list/item', array(
+			$list_body .= elgg_view('page/components/grids/list/item', array(
 				'item' => $item,
 				'attributes' => $attr,
 				'params' => $viewer_options
@@ -60,7 +60,7 @@ if (is_array($entities) && count($entities) > 0) {
 		}
 	}
 } else {
-	$list_body = elgg_view('page/components/lists/list/placeholder', array(
+	$list_body = elgg_view('page/components/grids/list/placeholder', array(
 		'class' => $item_class,
 		'data-list' => $list_id
 			));

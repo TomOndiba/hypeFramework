@@ -16,7 +16,7 @@ $options = array(
 $subtype = $entity->getSubtype();
 $type = $entity->getType();
 
-$title = elgg_echo('framework:print:title', array($entity->title));
+$title = elgg_echo('hj:framework:print:title', array($entity->title));
 
 $body = elgg_view("print/$type/$subtype", $params);
 

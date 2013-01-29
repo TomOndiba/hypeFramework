@@ -1,5 +1,5 @@
 <?php
 
-$list = elgg_view('page/components/lists/list/body', $vars);
+$list = elgg_view('page/components/grids/list/body', $vars);
 
 echo $list;

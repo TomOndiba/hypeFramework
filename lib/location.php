@@ -112,7 +112,7 @@ function hj_framework_geocode_location_metadata($event, $type, $metadata) {
 				$entity = get_entity($metadata->entity_guid);
 				$entity->setLatLong($coordinates['lat'], $coordinates['long']);
 			} else {
-				register_error(elgg_echo('framework:geocode:error'));
+				register_error(elgg_echo('hj:framework:geocode:error'));
 			}
 				break;
 

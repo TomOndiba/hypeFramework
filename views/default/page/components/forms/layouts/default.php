@@ -28,13 +28,13 @@ if (!empty($vars['description'])) {
 }
 
 foreach ($fieldsets as $fieldset) {
-	$overwrite_view = $fieldset['overwrite_view'];
-	unset($fieldset['overwrite_view']);
+	$override_view = $fieldset['override_view'];
+	unset($fieldset['override_view']);
 
 	$fieldset['values'] = $sticky_values;
 
-	if (elgg_view_exists($overwrite_view)) {
-		$fieldset_view = elgg_view($overwrite_view, $fieldset);
+	if (elgg_view_exists($override_view)) {
+		$fieldset_view = elgg_view($override_view, $fieldset);
 	} elseif (elgg_view_exists("page/components/forms/layouts/fieldsets/{$fieldset['name']}")) {
 		$fieldset_view = elgg_view("page/components/forms/layouts/fieldsets/{$fieldset['name']}", $fieldset);
 	} else {

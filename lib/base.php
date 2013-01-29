@@ -51,7 +51,6 @@ function hj_framework_path_shortcuts($plugin) {
 	);
 }
 
-
 function hj_framework_decode_options_array(&$item, $key) {
 	$item = htmlspecialchars_decode($item, ENT_QUOTES);
 	if ($item == 'null') {
@@ -82,10 +81,12 @@ function hj_framework_decode_options_array(&$item, $key) {
  * @return bool
  */
 function hj_framework_set_entity_priority($entity, $priority = null) {
+
 	if ($priority) {
 		$entity->priority = $priority;
 		return true;
 	}
+
 	$count = elgg_get_entities(array(
 		'type' => $entity->getType(),
 		'subtype' => $entity->getSubtype(),
@@ -112,6 +113,10 @@ function hj_framework_set_entity_priority($entity, $priority = null) {
  */
 function hj_framework_get_entities_by_priority($options = array()) {
 
+	if (!is_array($options) || empty($options)) {
+		return false;
+	}
+	
 	$defaults = array(
 		'order_by_metadata' => array(
 			'name' => 'priority', 'value' => 'ASC'
@@ -391,7 +396,7 @@ function hj_framework_extract_params_from_params($params) {
 	if (!elgg_instanceof($form)) {
 		$form = hj_framework_get_data_pattern('object', $section, $handler);
 	}
-	if (elgg_instanceof($form)) {
+	if (elgg_instanceof($form, 'object', 'hjforum')) {
 		$fields = $form->getFields();
 	}
 

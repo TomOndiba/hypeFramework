@@ -34,7 +34,7 @@ if (is_array($entities) && count($entities) > 0) {
 				'data-timestamp' => $item->time_created
 			);
 			$list_item_uids[] = $item->guid;
-			$list_item_views["uid$item->guid"] = elgg_view('page/components/lists/list/item', array(
+			$list_item_views["uid$item->guid"] = elgg_view('page/components/grids/list/item', array(
 				'item' => $item,
 				'attributes' => $attr,
 				'params' => $viewer_options
@@ -50,7 +50,7 @@ if (is_array($entities) && count($entities) > 0) {
 				'data-timestamp' => $item->posted
 			);
 			$list_item_uids[] = $item->id;
-			$list_item_views["uid$item->id"] = elgg_view('page/components/lists/list/item', array(
+			$list_item_views["uid$item->id"] = elgg_view('page/components/grids/list/item', array(
 				'item' => $item,
 				'attributes' => $attr,
 				'params' => $viewer_options
@@ -66,7 +66,7 @@ if (is_array($entities) && count($entities) > 0) {
 				'data-timestamp' => $item->time_created
 			);
 			$list_item_uids[] = $item->id;
-			$list_item_views["uid$item->id"] = htmlentities(elgg_view('page/components/lists/list/item', array(
+			$list_item_views["uid$item->id"] = htmlentities(elgg_view('page/components/grids/list/item', array(
 				'item' => $item,
 				'attributes' => $attr,
 				'params' => $viewer_options
@@ -89,7 +89,7 @@ $show_pagination = elgg_extract('list_pagination', $list_options, false);
 
 if ($show_pagination) {
 	$pagination_type = elgg_extract('list_pagination_type', $list_options, 'paginate');
-	$data['pagination'] = elgg_view("page/components/lists/elements/pagination/$pagination_type", $vars);
+	$data['pagination'] = elgg_view("page/components/grids/elements/pagination/$pagination_type", $vars);
 }
 
 $data = elgg_trigger_plugin_hook('client_side_list_options', 'framework:lists', $vars, $data);

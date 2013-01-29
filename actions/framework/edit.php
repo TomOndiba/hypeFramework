@@ -20,7 +20,7 @@ $form = get_entity($form_guid);
 $html = elgg_view_entity($form, $params);
 
 if (empty($html)) {
-	$html = elgg_echo('framework:ajax:noentity');
+	$html = elgg_echo('hj:framework:ajax:noentity');
 }
 
 $output['data'] = $html;

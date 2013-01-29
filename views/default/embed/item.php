@@ -29,7 +29,7 @@ if ($owner) {
 $embed_link = elgg_view('output/url', array(
     'href' => "#hj-embed-options-$entity->guid",
     'rel' => 'toggle',
-    'text' => elgg_echo('framework:embed:options')
+    'text' => elgg_echo('hj:framework:embed:options')
 ));
 
 $embed_options = elgg_view('embed/options', array('entity' => $entity));

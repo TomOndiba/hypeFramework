@@ -143,9 +143,9 @@ if (!$ajaxify) {
 	}
 
 	if ($limit > 0) {
-		$load_more_string = elgg_echo('framework:pagination:loadnext', array($limit));
+		$load_more_string = elgg_echo('hj:framework:pagination:loadnext', array($limit));
 	} else {
-		$load_more_string = elgg_echo('framework:pagination:loadmore', array($count, $string));
+		$load_more_string = elgg_echo('hj:framework:pagination:loadmore', array($count, $string));
 	}
 	$context = elgg_get_context();
 	echo "<div class=\"hj-pagination-next hj-pagination-$context\" rel=\"$list_id\"><span>$load_more_string</span></div>";

@@ -6,11 +6,11 @@
  * @uses $vars['type'] Input type to parse the wrapper class
  * @uses $vars['label'] Label
  * @uses $vars['hint'] Tooltip or hint text
- * @uses $vars['overwrite_views'] Views to use for 'label', 'hint', 'input', 'output'
+ * @uses $vars['override_views'] Views to use for 'label', 'hint', 'input', 'output'
  */
 
-$overwrite_views = elgg_extract('overwrite_views', $vars, array());
-unset($vars['overwrite_views']);
+$override_views = elgg_extract('override_views', $vars, array());
+unset($vars['override_views']);
 
 $input_type = $vars['type'];
 $input_name = $vars['name'];
@@ -22,7 +22,7 @@ if ($vars['label'] !== false && $input_type !== 'hidden') {
 	if (!isset($vars['label']['for'])) {
 		$vars['label']['for'] = $input_name;
 	}
-	$label_view = $overwrite_views['label'];
+	$label_view = $override_views['label'];
 	if (elgg_view_exists($label_view)) {
 		$label = elgg_view($label_view, $vars);
 	} else {
@@ -32,7 +32,7 @@ if ($vars['label'] !== false && $input_type !== 'hidden') {
 }
 
 if (isset($vars['hint'])) {
-	$hint_view = $overwrite_views['hint'];
+	$hint_view = $override_views['hint'];
 	if (elgg_view_exists($hint_view)) {
 		$hint = elgg_view($hint_view, $vars);
 	} else {
@@ -41,7 +41,7 @@ if (isset($vars['hint'])) {
 	unset($vars['hint']);
 }
 
-$input_view = $overwrite_views['input'];
+$input_view = $override_views['input'];
 if (elgg_view_exists($input_view)) {
 	$input = elgg_view($input_view, $vars);
 } elseif (elgg_view_exists("input/$input_type")) {
@@ -50,7 +50,7 @@ if (elgg_view_exists($input_view)) {
 	$input = elgg_view('input/text', $vars);
 }
 
-$wrapper_view = $overwrite_views['wrapper'];
+$wrapper_view = $override_views['wrapper'];
 $wrapper_params = array(
 	'label' => $label,
 	'hint' => $hint,

@@ -14,6 +14,6 @@ if (is_array($priorities)) {
         $entity = get_entity($guid);
         $entity->priority = $priority;
     }
-    system_message(elgg_echo('framework:success'));
+    system_message(elgg_echo('hj:framework:success'));
 }
 return true;

@@ -4,8 +4,8 @@
 	<author>Ismayil Khayredinov (hypeJunction)</author>
 	<version>1.8.6.5</version>
 	<category>hypeJunction</category>
-	<blurb>hypeJunction Core</blurb>
-	<description>Creates a framework for hypeJunction plugins, including reusable views, scripts, actions</description>
+	<blurb>hypeJunction Framework</blurb>
+	<description>hypeJunction Plugin Framework provides generic classes, views, actions and interfaces.</description>
 	<website>http://hypeJunction.com</website>
 	<copyright>See lisence.txt</copyright>
 	<license>GNU Public License version 2</license>

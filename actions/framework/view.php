@@ -31,7 +31,7 @@ if (elgg_view_exists($view)) {
 }
 
 if (!$html) {
-    register_error(elgg_echo('framework:ajax:empty'));
+    register_error(elgg_echo('hj:framework:ajax:empty'));
 } else {
     $output['data'] = $html;
     print(json_encode($output));

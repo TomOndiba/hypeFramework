@@ -1,7 +1,7 @@
 <?php
 
 // Default framework page handler is 'framework'
-elgg_register_page_handler(HYPEFRAMEWORK_PAGEHANDLER, 'hj_framework_page_handlers');
+elgg_register_page_handler('framework', 'hj_framework_page_handlers');
 
 /**
  * Page handlers for hypeFramework
@@ -15,7 +15,9 @@ function hj_framework_page_handlers($page) {
 	if (!isset($page[0])) {
 		forward();
 	}
-	
+
+	$path_pages = elgg_get_root_path() . 'mod/hypeFramework/pages/';
+
 	switch ($page[0]) {
 
 		case 'add' : // framework/add/$container_guid/$type/$subtype/$handler/$widget_guid/$segment_guid
@@ -44,17 +46,17 @@ function hj_framework_page_handlers($page) {
 				return false;
 			}
 
-			include HYPEFRAMEWORK_PATH_PAGES . 'entities/add.php';
+			include $path_pages . 'entities/add.php';
 			break;
 
 		case 'edit' : // framework/edit/$entity_guid
 			set_input('entity_guid', $page[1]);
-			include HYPEFRAMEWORK_PATH_PAGES . 'entities/edit.php';
+			include $path_pages . 'entities/edit.php';
 			break;
 
 		case 'view' :
 			set_input('entity_guid', $page[1]);
-			include HYPEFRAMEWORK_PATH_PAGES . 'entities/view.php';
+			include $path_pages . 'entities/view.php';
 			break;
 
 		case 'form' : // framework/form/$type/$subtype/$handler/$entity_guid
@@ -62,7 +64,7 @@ function hj_framework_page_handlers($page) {
 			set_input('subtype', $page[2]);
 			set_input('handler', $page[3]);
 			set_input('entity_guid', $page[4]);
-			include HYPEFRAMEWORK_PATH_PAGES . 'forms/view.php';
+			include $path_pages . 'forms/view.php';
 			break;
 		
 		case 'file' :
@@ -77,7 +79,7 @@ function hj_framework_page_handlers($page) {
 
 				case 'download':
 					set_input('guid', $page[2]);
-					include HYPEFRAMEWORK_PATH_PAGES . 'file/download.php';
+					include $path_pages . 'file/download.php';
 					break;
 
 				default :
@@ -86,35 +88,35 @@ function hj_framework_page_handlers($page) {
 			}
 
 		case 'print' :
-			include HYPEFRAMEWORK_PATH_PAGES . 'print/print.php';
+			include $path_pages . 'print/print.php';
 			break;
 
 		case 'pdf' :
-			include HYPEFRAMEWORK_PATH_PAGES . 'print/pdf.php';
+			include $path_pages . 'print/pdf.php';
 			break;
 
 		case 'icon':
 			set_input('guid', $page[1]);
 			set_input('size', $page[2]);
-			include HYPEFRAMEWORK_PATH_PAGES . "icon/icon.php";
+			include $path_pages . "icon/icon.php";
 			break;
 
 		case 'sync':
 			switch ($page[1]) {
 				default :
-					include HYPEFRAMEWORK_PATH_PAGES . "sync/sync.php";
+					include $path_pages . "sync/sync.php";
 					break;
 
 				case 'priority' :
-					include HYPEFRAMEWORK_PATH_PAGES . "sync/sync_priority.php";
+					include $path_pages . "sync/sync_priority.php";
 					break;
 
 				case 'metadata' :
-					include HYPEFRAMEWORK_PATH_PAGES . "sync/sync_metadata.php";
+					include $path_pages . "sync/sync_metadata.php";
 					break;
 
 				case 'relationship' :
-					include HYPEFRAMEWORK_PATH_PAGES . "sync/sync_relationship.php";
+					include $path_pages . "sync/sync_relationship.php";
 					break;
 			}
 			break;
@@ -132,3 +134,4 @@ function hj_framework_page_handlers($page) {
 	}
 	return true;
 }
+

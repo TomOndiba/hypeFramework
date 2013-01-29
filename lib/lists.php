@@ -1,126 +1,22 @@
 <?php
 
-/**
- * View a styled list with filters
- *
- * @param str $list_id
- * @param array $list_options
- * @param array $getter_options
- * @param array $viewer_options
- * @param array $getter
- * @return type
- */
-function hj_framework_view_list($list_id, $list_options = array(), $getter_options = array(), $viewer_options = array(), $getter = 'elgg_get_entities') {
 
-	$list_type = get_input("list_type", array($list_id => elgg_extract('list_type', $list_options, 'list')));
-	$order_by = get_input("order_by", array($list_id => elgg_extract('order_by', $list_options, 'e.time_created')));
-	$direction = get_input("direction", array($list_id => elgg_extract('direction', $list_options, 'desc')));
-	$query = get_input("query", array($list_id => null));
-	$search_in = get_input("search_in", array($list_id => 'all'));
-	$offset = get_input("offset", array($list_id => 0));
-	$limit = get_input("limit", array($list_id => 10));
-	$context = get_input("context", array($list_id => null));
-
-//	if (elgg_is_xhr()) {
-//		$list_options = get_input('list_options', $list_options);
-//		$getter_options = get_input('getter_options', $getter_options);
-//		$viewer_options = get_input('viewer_options', $viewer_options);
-//		$getter = get_input('getter', $getter);
-//	}
-
-	$getter_options['offset'] = $offset["$list_id"];
-	$getter_options['limit'] = $limit["$list_id"];
+function hj_framework_view_list($list_id, $getter_options = array(), $list_options = array(), $viewer_options = array(), $getter = 'elgg_get_entities') {
 
 	$default_list_options = array(
-		'list_type' => (isset($list_type["$list_id"])) ? $list_type["$list_id"] : 'list',
-		'list_mode' => 'objects',
-		'list_type_toggle' => false,
-		'list_type_toggle_options' => false,
+		'list_type' => 'list',
 		'list_class' => null,
 		'item_class' => null,
 		'list_filter' => false,
-		'list_filter_options' => false,
-		'list_filter_callbacks' => false,
-		'list_filter_view_override' => false,
 		'list_pagination' => true,
-		'list_pagination_type' => 'paginate', // or 'infinite'
-		'list_pagination_position' => 'after',
-		'list_pagination_offset' => $offset["$list_id"],
-		'list_pagination_limit' => $limit["$list_id"],
-		'list_pagination_base_url' => full_url()
 	);
 
 	$list_options = array_merge($default_list_options, $list_options);
 
-	if ($list_options['list_filter'] && !$list_options['list_filter_options']) {
-		switch ($list_options['list_mode']) {
-
-			case 'objects' :
-				$list_options['list_filter_options'] = array(
-					'search_in_options' => array(
-						'objects:all', 'objects:attributes', 'objects:tags'
-					),
-					'order_by_options' => array(
-						'e.time_created', 'oe.title'
-						));
-				break;
-
-			case 'users' :
-				$list_options['list_filter_options'] = array(
-					'search_in_options' => array(
-						'users:all', 'users:attributes', 'users:tags'
-					),
-					'order_by_options' => array(
-						'e.time_created', 'ue.last_login', 'ue.name', 'ue.username'
-						));
-				break;
-
-			case 'groups' :
-				$list_options['list_filter_options'] = array(
-					'search_in_options' => array(
-						'groups:all', 'groups:attributes', 'groups:tags'
-					),
-					'order_by_options' => array(
-						'e.time_created', 'ge.name', 'md.featured_group'
-						));
-				break;
-
-			default :
-				$list_options['list_filter_options'] = array(
-					'search_in_options' => array(
-						'all:tags'
-					),
-					'order_by_options' => array(
-						'e.time_created', 'oe.title'
-						));
-				break;
-		}
-	}
-
-	// Get search options
-	$pquery = $query["$list_id"];
-	$psearch_in = $search_in["$list_id"];
-	$getter_options = hj_framework_get_search_clause($pquery, $psearch_in, $getter_options);
-
 	// Get ordering options
-	$porder_by = $order_by["$list_id"];
-	$pdirection = $direction["$list_id"];
+	$porder_by = get_input('order_by');
+	$pdirection = get_input('direction');
 	$getter_options = hj_framework_get_order_by_clause($porder_by, $pdirection, $getter_options);
-
-	// Get owner guids
-	$pcontext = $context["$list_id"];
-	if ($pcontext) {
-		$getter_options = hj_framework_get_owner_guids_clause($pcontext, $getter_options);
-	}
-
-	$callbacks = $list_options['list_filter_callbacks'];
-	if (is_array($callbacks)) {
-		foreach ($callbacks as $callback) {
-			if (is_callable($callback)) {
-				$getter_options = call_user_func_array($callback, $getter_options);
-			}
-		}
-	}
 
 	$getter_options['count'] = true;
 	$count = $getter($getter_options);
@@ -132,25 +28,153 @@ function hj_framework_view_list($list_id, $list_options = array(), $getter_optio
 		'list_id' => $list_id,
 		'entities' => $entities,
 		'count' => $count,
-		'filter_values' => array(
-			'order_by' => $order_by["$list_id"],
-			'direction' => $direction["$list_id"],
-			'query' => $query["$list_id"],
-			'search_in' => $search_in["$list_id"],
-			'list_type' => $list_type["$list_id"]
-		),
 		'list_options' => $list_options,
 		'getter_options' => $getter_options,
 		'viewer_options' => $viewer_options,
 		'getter' => $getter
 	);
 
-	if (elgg_view_exists("page/components/lists/{$list_type["$list_id"]}")) {
-		return elgg_view("page/components/lists/{$list_type["$list_id"]}", $params);
+	if (elgg_view_exists("page/components/grids/{$list_options['list_type']}")) {
+		return elgg_view("page/components/grids/{$list_options['list_type']}", $params);
 	} else {
-		return elgg_view("page/components/lists/list", $params);
+		return elgg_view("page/components/grids/list", $params);
 	}
 }
+
+/**
+ * Uniform function to handle lists
+ *
+ * @return type
+ */
+//function hj_framework_view_list($list_id, $getter_options = array(), $list_options = array(), $viewer_options = array(), $getter = 'elgg_get_entities') {
+//
+//	$list_type = get_input("list_type", array($list_id => elgg_extract('list_type', $list_options, 'list')));
+//	$order_by = get_input("order_by", array($list_id => elgg_extract('order_by', $list_options, 'e.time_created')));
+//	$direction = get_input("direction", array($list_id => elgg_extract('direction', $list_options, 'desc')));
+//	$query = get_input("query", array($list_id => null));
+//	$search_in = get_input("search_in", array($list_id => 'all'));
+//	$offset = get_input("offset", array($list_id => 0));
+//	$limit = get_input("limit", array($list_id => 10));
+//	$context = get_input("context", array($list_id => null));
+//
+//	$getter_options['offset'] = $offset["$list_id"];
+//	$getter_options['limit'] = $limit["$list_id"];
+//
+//	$default_list_options = array(
+//		'list_type' => 'list',
+//		'list_class' => null,
+//		'item_class' => null,
+//		'list_filter' => false,
+//		'list_pagination' => true,
+//		'list_pagination_type' => 'paginate', // or 'infinite'
+//		'list_pagination_position' => 'after',
+//		'list_pagination_offset' => $offset["$list_id"],
+//		'list_pagination_limit' => $limit["$list_id"],
+//		'list_pagination_base_url' => full_url()
+//	);
+//
+//	$list_options = array_merge($default_list_options, $list_options);
+//
+//	if ($list_options['list_filter'] && !$list_options['list_filter_options']) {
+//		switch ($list_options['list_mode']) {
+//
+//			case 'objects' :
+//				$list_options['list_filter_options'] = array(
+//					'search_in_options' => array(
+//						'objects:all', 'objects:attributes', 'objects:tags'
+//					),
+//					'order_by_options' => array(
+//						'e.time_created', 'oe.title'
+//						));
+//				break;
+//
+//			case 'users' :
+//				$list_options['list_filter_options'] = array(
+//					'search_in_options' => array(
+//						'users:all', 'users:attributes', 'users:tags'
+//					),
+//					'order_by_options' => array(
+//						'e.time_created', 'ue.last_login', 'ue.name', 'ue.username'
+//						));
+//				break;
+//
+//			case 'groups' :
+//				$list_options['list_filter_options'] = array(
+//					'search_in_options' => array(
+//						'groups:all', 'groups:attributes', 'groups:tags'
+//					),
+//					'order_by_options' => array(
+//						'e.time_created', 'ge.name', 'md.featured_group'
+//						));
+//				break;
+//
+//			default :
+//			case 'mixed' :
+//				$list_options['list_filter_options'] = array(
+//					'search_in_options' => array(
+//						'all:tags'
+//					),
+//					'order_by_options' => array(
+//						'e.time_created', 'oe.title'
+//						));
+//				break;
+//		}
+//	}
+//
+//	// Get search options
+//	$pquery = $query["$list_id"];
+//	$psearch_in = $search_in["$list_id"];
+//	$getter_options = hj_framework_get_search_clause($pquery, $psearch_in, $getter_options);
+//
+//	// Get ordering options
+//	$porder_by = $order_by["$list_id"];
+//	$pdirection = $direction["$list_id"];
+//	$getter_options = hj_framework_get_order_by_clause($porder_by, $pdirection, $getter_options);
+//
+//	// Get owner guids
+//	$pcontext = $context["$list_id"];
+//	if ($pcontext) {
+//		$getter_options = hj_framework_get_owner_guids_clause($pcontext, $getter_options);
+//	}
+//
+//	$callbacks = $list_options['list_filter_callbacks'];
+//	if (is_array($callbacks)) {
+//		foreach ($callbacks as $callback) {
+//			if (is_callable($callback)) {
+//				$getter_options = call_user_func_array($callback, $getter_options);
+//			}
+//		}
+//	}
+//
+//	$getter_options['count'] = true;
+//	$count = $getter($getter_options);
+//
+//	$getter_options['count'] = false;
+//	$entities = $getter($getter_options);
+//
+//	$params = array(
+//		'list_id' => $list_id,
+//		'entities' => $entities,
+//		'count' => $count,
+//		'filter_values' => array(
+//			'order_by' => $order_by["$list_id"],
+//			'direction' => $direction["$list_id"],
+//			'query' => $query["$list_id"],
+//			'search_in' => $search_in["$list_id"],
+//			'list_type' => $list_type["$list_id"]
+//		),
+//		'list_options' => $list_options,
+//		'getter_options' => $getter_options,
+//		'viewer_options' => $viewer_options,
+//		'getter' => $getter
+//	);
+//
+//	if (elgg_view_exists("page/components/grids/{$list_type["$list_id"]}")) {
+//		return elgg_view("page/components/grids/{$list_type["$list_id"]}", $params);
+//	} else {
+//		return elgg_view("page/components/grids/list", $params);
+//	}
+//}
 
 function hj_framework_get_order_by_clause($order_by = 'e.time_created', $direction = 'desc', $options = array()) {
 
@@ -161,6 +185,9 @@ function hj_framework_get_order_by_clause($order_by = 'e.time_created', $directi
 
 	$prefix = sanitize_string($prefix);
 	$column = sanitize_string($column);
+	if (!in_array($direction, array('ASC', 'DESC'))) {
+		$direction = 'ASC';
+	}
 	$direction = sanitize_string($direction);
 
 	if (!$prefix || !$column) {
@@ -199,7 +226,7 @@ function hj_framework_get_order_by_clause($order_by = 'e.time_created', $directi
 
 		case 'distance' :
 			if (!$latitude = $user->getLatitude() || !$longitude = $user->getLongitude()) {
-				register_error(elgg_echo('framework:nousergeocode'));
+				register_error(elgg_echo('hj:framework:nousergeocode'));
 			} else {
 				$options['joins'][] = "JOIN {$dbprefix}metadata md_geo_lat ON md_geo_lat.entity_guid = e.guid";
 				$options['joins'][] = "JOIN {$dbprefix}metastrings msn_geo_lat ON msn_geo_lat.id = md_geo_lat.name_id";
@@ -388,12 +415,12 @@ function hj_framework_list_filter_form($hook, $type, $return, $params) {
 
 	$form->registerFieldset('search', array(
 		'priority' => 100,
-		'legend' => elgg_echo('framework:filter:fieldset:search')
+		'legend' => elgg_echo('hj:framework:filter:fieldset:search')
 	));
 
 	$form->registerFieldset('sorting', array(
 		'prirority' => 200,
-		'legend' => elgg_echo('framework:filter:fieldset:sorting')
+		'legend' => elgg_echo('hj:framework:filter:fieldset:sorting')
 	));
 
 	$list_filter_options = elgg_extract('list_filter_options', $list_options);
@@ -409,15 +436,15 @@ function hj_framework_list_filter_form($hook, $type, $return, $params) {
 
 		$form->registerInput("query[$list_id]", 'text', false, array(
 			'value' => $filter_values['query'],
-			'label' => array('text' => elgg_echo('framework:filter:query')),
-			'data-tooltip' => elgg_echo('framework:filter:query:tooltip'),
+			'label' => array('text' => elgg_echo('hj:framework:filter:query')),
+			'data-tooltip' => elgg_echo('hj:framework:filter:query:tooltip'),
 			'priority' => 100,
 			'fieldset' => 'search'
 		));
 		$form->registerInput("search_in[$list_id]", 'dropdown', false, array(
 			'value' => $filter_values['search_in'],
 			'options_values' => $options_values,
-			'label' => array('text' => elgg_echo('framework:filter:search_in')),
+			'label' => array('text' => elgg_echo('hj:framework:filter:search_in')),
 			'priority' => 200,
 			'fieldset' => 'search'
 		));
@@ -432,7 +459,7 @@ function hj_framework_list_filter_form($hook, $type, $return, $params) {
 		$form->registerInput("order_by[$list_id]", 'dropdown', false, array(
 			'value' => $filter_values['order_by'],
 			'options_values' => $options_values,
-			'label' => array('text' => elgg_echo('framework:filter:order_by')),
+			'label' => array('text' => elgg_echo('hj:framework:filter:order_by')),
 			'priority' => 100,
 			'fieldset' => 'sorting'
 		));
@@ -441,10 +468,10 @@ function hj_framework_list_filter_form($hook, $type, $return, $params) {
 	$form->registerInput("direction[$list_id]", 'dropdown', false, array(
 		'value' => $filter_values['direction'],
 		'options_values' => array(
-			'desc' => elgg_echo('framework:filter:direction:asc'),
-			'asc' => elgg_echo('framework:filter:direction:desc')
+			'desc' => elgg_echo('hj:framework:filter:direction:asc'),
+			'asc' => elgg_echo('hj:framework:filter:direction:desc')
 		),
-		'label' => array('text' => elgg_echo('framework:filter:direction')),
+		'label' => array('text' => elgg_echo('hj:framework:filter:direction')),
 		'priority' => 200,
 		'fieldset' => 'sorting'
 	));
@@ -452,7 +479,7 @@ function hj_framework_list_filter_form($hook, $type, $return, $params) {
 	$form->registerInput("limit[$list_id]", 'dropdown', false, array(
 		'value' => $filter_values['limit'],
 		'options' => array(10, 25, 50, 100),
-		'label' => array('text' => elgg_echo('framework:filter:limit')),
+		'label' => array('text' => elgg_echo('hj:framework:filter:limit')),
 		'priority' => 300,
 		'fieldset' => 'sorting'
 	));
@@ -460,11 +487,11 @@ function hj_framework_list_filter_form($hook, $type, $return, $params) {
 	if ($context_options) {
 		$form->registerFieldset('context', array(
 			'prirority' => 300,
-			'legend' => elgg_echo('framework:filter:fieldset:context')
+			'legend' => elgg_echo('hj:framework:filter:fieldset:context')
 		));
 		$form->registerInput("context[$list_id]", 'dropdown', false, array(
 			'value' => $filter_values['context'],
-			'label' => array('text' => elgg_echo('framework:filter:context')),
+			'label' => array('text' => elgg_echo('hj:framework:filter:context')),
 			'options_values' => array(
 				'all' => elgg_echo('all'),
 				'friends' => elgg_echo('friends'),

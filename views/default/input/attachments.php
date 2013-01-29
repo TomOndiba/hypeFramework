@@ -20,7 +20,7 @@ if ($files) {
 	foreach ($files as $file) {
 		$options = array(elgg_view_entity($file) => $file->guid);
 	}
-	echo '<div><label>' . elgg_echo('framework:email:attachments') . '</label></div>';
+	echo '<div><label>' . elgg_echo('hj:framework:email:attachments') . '</label></div>';
 
 	echo '<div>';
 	echo elgg_view('input/checkboxes', array(

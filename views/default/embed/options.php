@@ -28,7 +28,7 @@ if ($simpletype == 'image') {
     );
 }
 
-$form_body = elgg_echo('framework:embed:type');
+$form_body = elgg_echo('hj:framework:embed:type');
 $form_body .= elgg_view('input/radio', array(
     'align' => 'horizontal',
     'name' => 'type',

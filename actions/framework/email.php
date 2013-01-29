@@ -27,9 +27,9 @@ foreach ($file_attachments as $file_guid) {
 }
 
 if (phpmailer_send($from, $from_name, $to, '', $subject, $body, NULL, true, $attachments, NULL)) {
-    system_message(elgg_echo('framework:email:success'));
+    system_message(elgg_echo('hj:framework:email:success'));
 } else {
-    system_message(elgg_echo('framework:email:error'));
+    system_message(elgg_echo('hj:framework:email:error'));
 }
 
 forward();

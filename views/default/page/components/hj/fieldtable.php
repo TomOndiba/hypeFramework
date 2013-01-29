@@ -29,8 +29,8 @@ if (is_array($fields)) {
             if (!empty($output_value)) {
                 $content .= <<<HTML
                         <div class="hj-field-module-output clearfix">
-                            $output_icon<span class="hj-field-module hj-output-label hj-left">$output_label: </span>
-                            <span class="hj-field-module hj-output-text hj-left">$output_text</span>
+                            $output_icon<span class="hj-field-module hj-output-label pull-left">$output_label: </span>
+                            <span class="hj-field-module hj-output-text pull-left">$output_text</span>
                         </div>
 HTML;
             }

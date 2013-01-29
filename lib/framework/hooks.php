@@ -67,14 +67,14 @@ function hj_framework_forms_filefolder($hook, $type, $return, $params) {
 		'class' => null,
 		'value' => '', // string or callback function
 		'options_values' => false, /// string or callback function
-		'overwrite_view' => false, // by default 'input/$type' is used
+		'override_view' => false, // by default 'input/$type' is used
 		'placeholder' => 'filefolder:title:placeholder',
 		'output' => array(
 			'type' => 'text',
-			'overwrite_view' => false
+			'override_view' => false
 		),
 		'fieldset' => 'default', // fieldset to add this input to
-		'overwrite_views' => array(
+		'override_views' => array(
 			'wrapper' => false,
 			'label' => false,
 			'hint' => false,
@@ -138,7 +138,7 @@ function hj_framework_forms_filefolder($hook, $type, $return, $params) {
 //					'legend' => false,
 //					'class' => null,
 //					'title' => null,
-//					'overwrite_view' => false,
+//					'override_view' => false,
 //					'priority' => 100
 //				)
 //			));

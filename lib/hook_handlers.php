@@ -90,10 +90,10 @@ function hj_framework_menu_manager($hook, $type, $return, $params) {
 					$download = array(
 						'parent_name' => 'options',
 						'name' => 'download',
-						//'title' => elgg_echo('framework:download'),
-						'text' => elgg_echo('framework:download'),
+						//'title' => elgg_echo('hj:framework:download'),
+						'text' => elgg_echo('hj:framework:download'),
 						'id' => "hj-ajaxed-download-{$file_guid}",
-						'href' => HYPEFRAMEWORK_PAGEHANDLER . "/file/download/{$file_guid}/",
+						'href' => "framework/file/download/{$file_guid}/",
 						'target' => '_blank',
 						'priority' => 500,
 						'section' => 'dropdown'
@@ -106,9 +106,9 @@ function hj_framework_menu_manager($hook, $type, $return, $params) {
 				$edit = array(
 					'parent_name' => 'options',
 					'name' => 'edit',
-					'title' => elgg_echo('framework:edit'),
+					'title' => elgg_echo('hj:framework:edit'),
 					'icon' => 'edit',
-					'text' => elgg_echo('framework:edit'),
+					'text' => elgg_echo('hj:framework:edit'),
 					'rel' => 'fancybox',
 					'href' => "action/framework/entities/edit",
 					'data-options' => htmlentities($data, ENT_QUOTES, 'UTF-8'),
@@ -122,8 +122,8 @@ function hj_framework_menu_manager($hook, $type, $return, $params) {
 				$delete = array(
 					'parent_name' => 'options',
 					'name' => 'delete',
-					//'title' => elgg_echo('framework:delete'),
-					'text' => elgg_echo('framework:delete'),
+					//'title' => elgg_echo('hj:framework:delete'),
+					'text' => elgg_echo('hj:framework:delete'),
 					'href' => "action/framework/entities/delete?e=$entity->guid",
 					'data-options' => htmlentities($data, ENT_QUOTES, 'UTF-8'),
 					'class' => 'hj-ajaxed-remove framework-ui-control',
@@ -182,8 +182,8 @@ function hj_framework_menu_manager($hook, $type, $return, $params) {
 				// Add widget
 				$widget = array(
 					'name' => 'widget',
-					'title' => elgg_echo('framework:addwidget'),
-					'text' => elgg_echo('framework:addwidget'),
+					'title' => elgg_echo('hj:framework:addwidget'),
+					'text' => elgg_echo('hj:framework:addwidget'),
 					'href' => "action/framework/widget/add",
 					'data-options' => $data,
 					'id' => "hj-ajaxed-addwidget-{$entity->guid}",
@@ -197,8 +197,8 @@ function hj_framework_menu_manager($hook, $type, $return, $params) {
 				// AJAXed Edit Button
 				$edit = array(
 					'name' => 'edit',
-					'title' => elgg_echo('framework:edit'),
-					'text' => elgg_echo('framework:edit'),
+					'title' => elgg_echo('hj:framework:edit'),
+					'text' => elgg_echo('hj:framework:edit'),
 					'href' => "action/framework/entities/edit",
 					'data-options' => $data,
 					'id' => "hj-ajaxed-edit-{$entity->guid}",
@@ -212,8 +212,8 @@ function hj_framework_menu_manager($hook, $type, $return, $params) {
 				// AJAXed Delete Button
 				$delete = array(
 					'name' => 'delete',
-					'title' => elgg_echo('framework:delete'),
-					'text' => elgg_echo('framework:delete'),
+					'title' => elgg_echo('hj:framework:delete'),
+					'text' => elgg_echo('hj:framework:delete'),
 					'href' => "action/framework/entities/delete?e=$entity->guid",
 					'data-options' => $data,
 					'id' => "hj-ajaxed-remove-{$entity->guid}",
@@ -226,21 +226,21 @@ function hj_framework_menu_manager($hook, $type, $return, $params) {
 
 			$print = array(
 				'name' => 'print',
-				'title' => elgg_echo('framework:print'),
-				'text' => elgg_echo('framework:print'),
-				'href' => HYPEFRAMEWORK_PAGEHANDLER . "/print?{$url}",
+				'title' => elgg_echo('hj:framework:print'),
+				'text' => elgg_echo('hj:framework:print'),
+				'href' => "framework/print?{$url}",
 				'target' => "_blank",
 				'priority' => 200,
 				'section' => 'dropdown'
 			);
 			$return[] = ElggMenuItem::factory($print);
 
-			if (file_exists(HYPEFRAMEWORK_PATH . 'vendors/dompdf/dompdf_config.inc.php')) {
+			if (file_exists(elgg_get_root_path() . 'mod/hypeFramework/vendors/dompdf/dompdf_config.inc.php')) {
 				$pdf = array(
 					'name' => 'pdf',
-					'title' => elgg_echo('framework:pdf'),
-					'text' => elgg_echo('framework:pdf'),
-					'href' => HYPEFRAMEWORK_PAGEHANDLER . "/pdf?{$url}",
+					'title' => elgg_echo('hj:framework:pdf'),
+					'text' => elgg_echo('hj:framework:pdf'),
+					'href' => "framework/pdf?{$url}",
 					//'is_action' => false,
 					'target' => "_blank",
 					'priority' => 300,
@@ -253,7 +253,7 @@ function hj_framework_menu_manager($hook, $type, $return, $params) {
 //
 //        $email = array(
 //            'name' => 'email',
-//            'title' => elgg_echo('framework:email'),
+//            'title' => elgg_echo('hj:framework:email'),
 //            'text' => elgg_view_icon('hj hj-icon-email'),
 //            'href' => "action/framework/entities/edit?f={$email_f}&s={$entity->guid}",
 //            //'is_action' => true,
@@ -286,8 +286,8 @@ function hj_framework_menu_manager($hook, $type, $return, $params) {
 				// AJAXed Add Button
 				$add = array(
 					'name' => 'add',
-					'title' => elgg_echo('framework:addnew'),
-					'text' => elgg_view_icon('hj hj-icon-add') . '<span class="hj-icon-text">' . elgg_echo('framework:addnew') . '</span>',
+					'title' => elgg_echo('hj:framework:addnew'),
+					'text' => elgg_view_icon('hj hj-icon-add') . '<span class="hj-icon-text">' . elgg_echo('hj:framework:addnew') . '</span>',
 					'href' => "action/framework/entities/edit",
 					'data-options' => $data,
 					'is_action' => true,
@@ -300,8 +300,8 @@ function hj_framework_menu_manager($hook, $type, $return, $params) {
 //        // AJAXed Refresh Button
 //        $refresh = array(
 //            'name' => 'refresh',
-//            'title' => elgg_echo('framework:refresh'),
-//            'text' => elgg_view_icon('hj hj-icon-refresh') . '<span class="hj-icon-text">' . elgg_echo('framework:refresh') . '</span>',
+//            'title' => elgg_echo('hj:framework:refresh'),
+//            'text' => elgg_view_icon('hj hj-icon-refresh') . '<span class="hj-icon-text">' . elgg_echo('hj:framework:refresh') . '</span>',
 //            'href' => "action/framework/entities/view?e=$entity->guid",
 //            'data-options' => $data,
 //            'is_action' => true,
@@ -360,7 +360,7 @@ function hj_framework_menu_manager($hook, $type, $return, $params) {
 			$return[] = ElggMenuItem::factory(array(
 						'name' => 'filter',
 						'section' => 'filter',
-						'text' => elgg_echo('framework:toggle_filter'),
+						'text' => elgg_echo('hj:framework:toggle_filter'),
 						'icon' => 'search',
 						'href' => "#filter-$list_id",
 						'class' => 'framework-ui-control',
@@ -393,7 +393,7 @@ function hj_framework_entity_icons($hook, $type, $return, $params) {
 	switch ($entity->getSubtype()) {
 		case 'hjfile' :
 			if ($entity->simpletype == 'image') {
-				return HYPEFRAMEWORK_PATH . "pages/file/icon.php?guid={$entity->guid}&size={$size}";
+				return "mod/hypeFramework/pages/file/icon.php?guid={$entity->guid}&size={$size}";
 			}
 
 			$mapping = hj_framework_mime_mapping();
@@ -414,7 +414,7 @@ function hj_framework_entity_icons($hook, $type, $return, $params) {
 				$type = 'general';
 			}
 
-			$url = HYPEFRAMEWORK_PATH_GRAPHICS . "mime/{$size}/{$type}.png";
+			$url = elgg_get_site_url() . "mod/hypeFramework/graphics/mime/{$size}/{$type}.png";
 			return $url;
 
 			break;
@@ -430,11 +430,6 @@ function hj_framework_entity_icons($hook, $type, $return, $params) {
 
 			break;
 
-		default :
-			if ($entity->hjicontime) {
-				return elgg_get_config('url') . "framework/icon/$entity->guid/$size/$entity->hjicontime.jpg";
-			}
-			break;
 	}
 
 	return $return;
@@ -773,6 +768,29 @@ function hj_framework_ajax_forward_hook($hook, $type, $reason, $params) {
  * Forms config
  */
 function hj_framework_setup_forms($hook, $type, $return, $params) {
+
+	$return['edit:object:default'] = array(
+		'attributes' => array(
+			'type' => 'object',
+			'subtype' => 'hjformsubmission'
+		),
+		'fields' => array(
+			'title' => array(
+				'required' => true
+			),
+			'description' => array(
+				'input_type' => 'longtext',
+				'class' => 'elgg-input-longtext'
+			),
+			'tags' => array(
+				'input_type' => 'tags'
+			),
+			'access_id' => array(
+				'input_type' => 'access',
+				'required' => true
+			)
+		)
+	);
 
 	$return['framework:filefolder'] = array(
 		'title' => 'hypeFramework:filefolder',

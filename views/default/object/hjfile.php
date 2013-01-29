@@ -17,10 +17,10 @@ $owner = $obj_params['owner'];
 
 $title = $entity->title;
 
-$filefolder = sprintf(elgg_echo('framework:filefolder'), $filefolder->title);
-$filename = sprintf(elgg_echo('framework:filename'), $entity->originalfilename);
-$simpletype = sprintf(elgg_echo('framework:simpletype'), $entity->simpletype);
-$filesize = sprintf(elgg_echo('framework:filesize'), $entity->filesize);
+$filefolder = sprintf(elgg_echo('hj:framework:filefolder'), $filefolder->title);
+$filename = sprintf(elgg_echo('hj:framework:filename'), $entity->originalfilename);
+$simpletype = sprintf(elgg_echo('hj:framework:simpletype'), $entity->simpletype);
+$filesize = sprintf(elgg_echo('hj:framework:filesize'), $entity->filesize);
 
 $subtitle = "$filefolder <br />$filename  <br />$simpletype <br />$filesize";
 $short_description = elgg_get_excerpt($entity->description);

@@ -8,13 +8,13 @@ elgg_unregister_js('jquery-ui');
 elgg_register_js('jquery-ui', 'mod/hypeFramework/vendors/jquery/jquery-ui-1.9.0.custom.min.js');
 elgg_load_js('jquery-ui');
 
-elgg_register_css('jquery-ui-theme', 'mod/hypeFramework/vendors/jquery/jquery-ui-1.9.0.custom.min.css');
+elgg_register_css('jquery-ui-theme', 'mod/hypeFramework/vendors/jquery/jquery-ui-1.9.0.custom.min.css', 100);
 elgg_load_css('jquery-ui-theme');
 
-elgg_register_css('bootstrap', 'mod/hypeFramework/vendors/bootsrap/css/bootstrap.min.css');
+elgg_register_css('bootstrap', 'mod/hypeFramework/vendors/bootstrap/css/bootstrap.min.css', 110);
 elgg_load_css('bootstrap');
 
-elgg_register_css('bootsrap-responsive', 'mod/hypeFramework/vendors/bootstrap/css/bootstrap-responsive.min.css');
+elgg_register_css('bootstrap-responsive', 'mod/hypeFramework/vendors/bootstrap/css/bootstrap-responsive.min.css', 120);
 elgg_load_css('bootstrap-responsive');
 
 elgg_register_js('bootstrap', 'mod/hypeFramework/vendors/bootstrap/js/bootsrap.min.js');

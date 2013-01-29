@@ -21,7 +21,7 @@ if (!$grid) {
 }
     
 $page = <<<HTML
-    <div class="row-fluid">
+    <div class="row-fluid hj-row">
         $page
     </div>
 HTML;

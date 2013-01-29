@@ -11,7 +11,7 @@ $obj_params = hj_framework_extract_params_from_entity($entity);
 
 $files = $entity->getContainedFiles();
 $file_count = count($files);
-$file_count_text = elgg_echo('framework:filecount');
+$file_count_text = elgg_echo('hj:framework:filecount');
 
 $title = $entity->title;
 $subtitle = "<b>$file_count_text</b>  $file_count";

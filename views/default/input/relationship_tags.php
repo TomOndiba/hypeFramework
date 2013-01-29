@@ -72,9 +72,9 @@ if ($results) {
 				$icon = $tag->getIconURL('tiny');
 				$remove = elgg_echo('remove');
 				$html = '<li class="relationship-tag hj-padding-ten clearfix">
-                            <span class="hj-left hj-padding-ten"><img src="' . $icon . '" /></span>
-                            <span class="hj-left hj-padding-ten">' . $tag->title . '</span>
-                            <a class="hj-relationship-tag-remove hj-right" href="javascript:void(0)">' . $remove . '</a>
+                            <span class="pull-left hj-padding-ten"><img src="' . $icon . '" /></span>
+                            <span class="pull-left hj-padding-ten">' . $tag->title . '</span>
+                            <a class="hj-relationship-tag-remove pull-right" href="javascript:void(0)">' . $remove . '</a>
                             <input type="hidden" name="relationship_tag_guids[]" value="' . $tag->guid . '" />
                         </li>';
 				echo $html;

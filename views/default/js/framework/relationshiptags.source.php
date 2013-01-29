@@ -34,9 +34,9 @@ framework.relationshiptags.init = function() {
         },
         select: function( event, ui ) {
             var tag = '<li class="relationship-tag hj-padding-ten clearfix">\n\
-                            <span class="hj-left hj-padding-ten"><img src="' + ui.item.icon + '" /></span>\n\
-                            <span class="hj-left hj-padding-ten">' + ui.item.value + '</span>\n\
-                            <a class="relationship-tag-remove hj-right">' + elgg.echo('remove') + '</a>\n\
+                            <span class="pull-left hj-padding-ten"><img src="' + ui.item.icon + '" /></span>\n\
+                            <span class="pull-left hj-padding-ten">' + ui.item.value + '</span>\n\
+                            <a class="relationship-tag-remove pull-right">' + elgg.echo('remove') + '</a>\n\
                             <input type="hidden" name="relationship_tag_guids[]" value="' + ui.item.guid + '" />\n\
                         </li>';
             $('ul#relationship-tags').prepend(tag);
