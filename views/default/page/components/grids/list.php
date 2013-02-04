@@ -17,12 +17,12 @@ if ($show_filter) {
 	}
 }
 
-$show_pagination = elgg_extract('list_pagination', $list_options, false);
+$show_pagination = elgg_extract('pagination', $list_options, false);
 
 if ($show_pagination) {
-	$pagination_type = elgg_extract('list_pagination_type', $list_options, 'paginate');
+	$pagination_type = elgg_extract('pagination_type', $list_options, 'paginate');
 	$pagination = elgg_view("page/components/grids/elements/pagination/$pagination_type", $vars);
-	$position = elgg_extract('list_pagination_bosition', $list_options, 'after');
+	$position = elgg_extract('pagination_position', $list_options, 'after');
 
 	if ($position == 'both') {
 		$before = "$before $pagination";

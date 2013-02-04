@@ -5,11 +5,13 @@ elgg_push_context('table-view');
 $entities = elgg_extract('entities', $vars);
 unset($vars['entities']);
 
-$class = "elgg-table hj-framework-table-view";
+$list_options = elgg_extract('list_options', $vars, array());
 
-if (isset($vars['list_class'])) {
-	$class = "$class {$vars['list_class']}";
-	unset($vars['list_class']);
+
+$class = "elgg-table-alt hj-framework-table-view";
+
+if (isset($list_options['list_class'])) {
+	$class = "$class {$list_options['list_class']}";
 }
 
 $id = $vars['list_id'];
@@ -23,6 +25,22 @@ foreach ($entities as $e) {
 }
 
 $table .= '</table>';
+
+$show_pagination = elgg_extract('pagination', $list_options, false);
+
+if ($show_pagination) {
+	$pagination_type = elgg_extract('pagination_type', $list_options, 'paginate');
+	$pagination = elgg_view("page/components/grids/elements/pagination/$pagination_type", $vars);
+	$position = elgg_extract('pagination_position', $list_options, 'after');
+
+	if ($position == 'both') {
+		$table = "$pagination $table $pagination";
+	} else if ($position == 'before') {
+		$table = "$pagination $table";
+	} else {
+		$table = "$table $pagination";
+	}
+}
 
 echo $table;
 

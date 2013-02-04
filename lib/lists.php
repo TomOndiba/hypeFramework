@@ -1,21 +1,36 @@
 <?php
 
-
 function hj_framework_view_list($list_id, $getter_options = array(), $list_options = array(), $viewer_options = array(), $getter = 'elgg_get_entities') {
 
 	$default_list_options = array(
 		'list_type' => 'list',
 		'list_class' => null,
 		'item_class' => null,
-		'list_filter' => false,
-		'list_pagination' => true,
+		'base_url' => current_page_url(),
+		'num_pages' => 5,
+		'pagination' => true,
+		'limit_key' => "__lim_$list_id",
+		'offset_key' => "__off_$list_id",
+		'order_by_key' => "__ord_$list_id",
+		'direction_key' => "__dir_$list_id",
 	);
 
 	$list_options = array_merge($default_list_options, $list_options);
 
-	// Get ordering options
-	$porder_by = get_input('order_by');
-	$pdirection = get_input('direction');
+
+	if (!isset($getter_options['limit'])) {
+		$getter_options['limit'] = get_input($list_options['limit_key'], 10);
+	}
+	if (!isset($getter_options['offset'])) {
+		$getter_options['offset'] = get_input($list_options['offset_key'], 0);
+	}
+	if (!isset($getter_options['order_by'])) {
+		$porder_by = get_input($list_options['order_by_key'], 'e.time_created');
+	}
+	if (!isset($getter_options['direction'])) {
+		$pdirection = get_input($list_options['direction_key'], 10);
+	}
+
 	$getter_options = hj_framework_get_order_by_clause($porder_by, $pdirection, $getter_options);
 
 	$getter_options['count'] = true;
@@ -176,7 +191,7 @@ function hj_framework_view_list($list_id, $getter_options = array(), $list_optio
 //	}
 //}
 
-function hj_framework_get_order_by_clause($order_by = 'e.time_created', $direction = 'desc', $options = array()) {
+function hj_framework_get_order_by_clause($order_by = 'e.time_created', $direction = 'DESC', $options = array()) {
 
 	$prefix = 'e';
 	$column = 'time_created';
@@ -186,7 +201,7 @@ function hj_framework_get_order_by_clause($order_by = 'e.time_created', $directi
 	$prefix = sanitize_string($prefix);
 	$column = sanitize_string($column);
 	if (!in_array($direction, array('ASC', 'DESC'))) {
-		$direction = 'ASC';
+		$direction = 'DESC';
 	}
 	$direction = sanitize_string($direction);
 
@@ -198,47 +213,79 @@ function hj_framework_get_order_by_clause($order_by = 'e.time_created', $directi
 	switch ($prefix) {
 
 		case 'e' :
-			$options['order_by'] = "e.$column $direction";
+			switch ($column) {
+
+				case 'guid' :
+				case 'type' :
+				case 'subtype' :
+				case 'owner_guid' :
+				case 'site_guid' :
+				case 'container_guid' :
+				case 'access_id' :
+				case 'time_created' :
+				case 'time_updated' :
+				case 'last_action' :
+				case 'enabled' :
+					$options['order_by'] = "e.$column $direction";
+					break;
+			}
+
 			break;
 
 		case 'oe' :
-			$options['joins'][] = "JOIN {$dbprefix}objects_entity oe_order_by ON oe_order_by.guid = e.guid";
-			$options['order_by'] = "oe_order_by.$column $direction, e.time_created $direction";
+			switch ($column) {
+
+				case 'guid' :
+				case 'title' :
+				case 'description' :
+					$options['joins'][] = "JOIN {$dbprefix}objects_entity oe_order_by ON oe_order_by.guid = e.guid";
+					$options['order_by'] = "oe_order_by.$column $direction, e.time_created $direction";
+					break;
+			}
+
 			break;
 
 		case 'md' :
-			$options['joins'][] = "JOIN {$dbprefix}metadata md_order_by ON md_order_by.entity_guid = e.guid";
-			$options['joins'][] = "JOIN {$dbprefix}metastrings msn_order_by ON msn_order_by.id = md_order_by.name_id";
-			$options['joins'][] = "JOIN {$dbprefix}metastrings msv_order_by ON msv_order_by.id = md_order_by.value_id";
-			$options['wheres'][] = "(msn_order_by.string = '$column')";
-			$options['order_by'] = "msv_order_by.string $direction, e.time_created $direction";
-			break;
 
-		case 'ue' :
-			$options['joins'][] = "JOIN {$dbprefix}users_entity ue_order_by ON ue_order_by.guid = e.guid";
-			$options['order_by'] = "ue_order_by.$column $direction, e.time_created $direction";
-			break;
+			switch ($column) {
 
-		case 'ge' :
-			$options['joins'][] = "JOIN {$dbprefix}groups_entity ge_order_by ON ge_order_by.guid = e.guid";
-			$options['order_by'] = "ge_order_by.$column $direction, e.time_created $direction";
-			break;
+				case 'priority' :
+					$options['selects'][] = "CAST(eprioritymsv.string AS SIGNED) AS epriority";
+					$options['joins'][] = "JOIN {$dbprefix}metadata eprioritymd ON e.guid = eprioritymd.entity_guid";
+					$options['joins'][] = "LEFT JOIN {$dbprefix}metastrings eprioritymsn ON (eprioritymd.name_id = eprioritymsn.id AND eprioritymsn.string = 'priority')";
+					$options['joins'][] = "LEFT JOIN {$dbprefix}metastrings eprioritymsv ON (eprioritymd.value_id = eprioritymsv.id)";
+					$options['order_by'] = "epriority = 0, epriority";
 
-		case 'distance' :
-			if (!$latitude = $user->getLatitude() || !$longitude = $user->getLongitude()) {
-				register_error(elgg_echo('hj:framework:nousergeocode'));
-			} else {
-				$options['joins'][] = "JOIN {$dbprefix}metadata md_geo_lat ON md_geo_lat.entity_guid = e.guid";
-				$options['joins'][] = "JOIN {$dbprefix}metastrings msn_geo_lat ON msn_geo_lat.id = md_geo_lat.name_id";
-				$options['joins'][] = "JOIN {$dbprefix}metastrings msv_geo_lat ON msv_geo_lat.id = md_geo_lat.value_id";
-				$options['joins'][] = "JOIN {$dbprefix}metadata md_geo_long ON md_geo_long.entity_guid = e.guid";
-				$options['joins'][] = "JOIN {$dbprefix}metastrings msn_geo_long ON msn_geo_long.id = md_geo_long.name_id";
-				$options['joins'][] = "JOIN {$dbprefix}metastrings msv_geo_long ON msv_geo_long.id = md_geo_long.value_id";
-				$options['wheres'][] = "(msn_geo_lat.string = 'geo:lat' AND msn_geo_long.string = 'geo:long')";
-				$options['wheres'][] = "(msv_geo_lat.string NOT NULL AND msv_get_long.string NOT NULL)";
-				$options['selects'][] = "(((acos(sin(($latitude*pi()/180)) * sin((msv_geo_lat.string*pi()/180))+cos(($latitude*pi()/180)) * cos((msv_geo_lat.string*pi()/180)) * cos((($longitude - msv_geo_long.string)*pi()/180))))*180/pi())*60*1.1515*1.609344) as distance";
-				$options['order_by'] = "distance $direction";
+					break;
+
+				case 'distance' :
+					$user = elgg_get_logged_in_user_entity();
+					if (!$user || !$latitude = $user->getLatitude() || !$longitude = $user->getLongitude()) {
+						register_error(elgg_echo('hj:framework:nousergeocode'));
+					} else {
+						$options['joins'][] = "JOIN {$dbprefix}metadata md_geo_lat ON md_geo_lat.entity_guid = e.guid";
+						$options['joins'][] = "JOIN {$dbprefix}metastrings msn_geo_lat ON msn_geo_lat.id = md_geo_lat.name_id";
+						$options['joins'][] = "JOIN {$dbprefix}metastrings msv_geo_lat ON msv_geo_lat.id = md_geo_lat.value_id";
+						$options['joins'][] = "JOIN {$dbprefix}metadata md_geo_long ON md_geo_long.entity_guid = e.guid";
+						$options['joins'][] = "JOIN {$dbprefix}metastrings msn_geo_long ON msn_geo_long.id = md_geo_long.name_id";
+						$options['joins'][] = "JOIN {$dbprefix}metastrings msv_geo_long ON msv_geo_long.id = md_geo_long.value_id";
+						$options['wheres'][] = "(msn_geo_lat.string = 'geo:lat' AND msn_geo_long.string = 'geo:long')";
+						$options['wheres'][] = "(msv_geo_lat.string NOT NULL AND msv_get_long.string NOT NULL)";
+						$options['selects'][] = "(((acos(sin(($latitude*pi()/180)) * sin((msv_geo_lat.string*pi()/180))+cos(($latitude*pi()/180)) * cos((msv_geo_lat.string*pi()/180)) * cos((($longitude - msv_geo_long.string)*pi()/180))))*180/pi())*60*1.1515*1.609344) as distance";
+						$options['order_by'] = "distance $direction";
+					}
+					break;
+
+				default :
+					$options['joins'][] = "JOIN {$dbprefix}metadata md_order_by ON md_order_by.entity_guid = e.guid";
+					$options['joins'][] = "JOIN {$dbprefix}metastrings msn_order_by ON msn_order_by.id = md_order_by.name_id";
+					$options['joins'][] = "JOIN {$dbprefix}metastrings msv_order_by ON msv_order_by.id = md_order_by.value_id";
+					$options['wheres'][] = "(msn_order_by.string = '$column')";
+					$options['order_by'] = "msv_order_by.string $direction, e.time_created $direction";
+					break;
 			}
+
+
 			break;
 
 		default :
@@ -248,277 +295,4 @@ function hj_framework_get_order_by_clause($order_by = 'e.time_created', $directi
 	$options = elgg_trigger_plugin_hook('order_by_clause', 'framework:lists', array('order_by' => $order_by, 'direction' => $direction), $options);
 
 	return $options;
-}
-
-function hj_framework_get_search_clause($query = null, $search_in = 'objects:all', $options = array()) {
-
-	if (!$query || empty($query)) {
-		return $options;
-	}
-
-	$query = sanitize_string($query);
-
-	$dbprefix = elgg_get_config('dbprefix');
-
-	list($mode, $search_area) = explode(':', $search_in);
-
-	switch ($search_area) {
-
-		case 'all' :
-			switch ($mode) {
-				case 'objects' :
-					$join = "JOIN {$dbprefix}objects_entity oe_search ON e.guid = oe_search.guid";
-					$options['joins'][] = $join;
-					$fields = array('title', 'description');
-					$where = search_get_where_sql('oe_search', $fields, array('query' => $query), FALSE);
-					break;
-
-				case 'users' :
-					$join = "JOIN {$dbprefix}users_entity ue_search ON e.guid = ue_search.guid";
-					$options['joins'][] = $join;
-					$fields = array('name', 'username', 'email');
-					$where = search_get_where_sql('ue_search', $fields, array('query' => $query), FALSE);
-					break;
-
-				case 'groups' :
-					$join = "JOIN {$dbprefix}groups_entity ge_search ON e.guid = ge_search.guid";
-					$options['joins'][] = $join;
-					$fields = array('name', 'description');
-					$where = search_get_where_sql('ge_search', $fields, array('query' => $query), FALSE);
-					break;
-				default :
-					break;
-			}
-
-			$search_tag_names = elgg_get_registered_tag_metadata_names();
-
-			$options['joins'][] = "JOIN {$dbprefix}metadata md_search on e.guid = md_search.entity_guid";
-			$options['joins'][] = "JOIN {$dbprefix}metastrings msn_search on md_search.name_id = msn_search.id";
-			$options['joins'][] = "JOIN {$dbprefix}metastrings msv_search on md_search.value_id = msv_search.id";
-
-			$access = get_access_sql_suffix('md_search');
-			$sanitised_tags = array();
-
-			foreach ($search_tag_names as $tag) {
-				$sanitised_tags[] = '"' . sanitise_string($tag) . '"';
-			}
-
-			$tags_in = implode(',', $sanitised_tags);
-
-			$options['wheres'][] = "$where OR (msn_search.string IN ($tags_in) AND msv_search.string LIKE '%$query%' AND $access)";
-
-			break;
-
-		case 'attributes' :
-
-			switch ($mode) {
-				case 'objects' :
-					$join = "JOIN {$dbprefix}objects_entity oe_search ON e.guid = oe_search.guid";
-					$options['joins'][] = $join;
-					$fields = array('title', 'description');
-					$where = search_get_where_sql('oe_search', $fields, array('query' => $query), FALSE);
-					$options['wheres'][] = $where;
-					break;
-
-				case 'users' :
-					$join = "JOIN {$dbprefix}users_entity ue_search ON e.guid = ue_search.guid";
-					$options['joins'][] = $join;
-					$fields = array('name', 'username', 'email');
-					$where = search_get_where_sql('ue_search', $fields, array('query' => $query), FALSE);
-					$options['wheres'][] = $where;
-					break;
-
-				case 'groups' :
-					$join = "JOIN {$dbprefix}groups_entity ge_search ON e.guid = ge_search.guid";
-					$options['joins'][] = $join;
-					$fields = array('name', 'description');
-					$where = search_get_where_sql('ge_search', $fields, array('query' => $query), FALSE);
-					$options['wheres'][] = $where;
-					break;
-
-				default :
-					break;
-			}
-
-
-		case 'tags' :
-			$search_tag_names = elgg_get_registered_tag_metadata_names();
-
-			$options['joins'][] = "JOIN {$dbprefix}metadata md_search on e.guid = md_search.entity_guid";
-			$options['joins'][] = "JOIN {$dbprefix}metastrings msn_search on md_search.name_id = msn_search.id";
-			$options['joins'][] = "JOIN {$dbprefix}metastrings msv_search on md_search.value_id = msv_search.id";
-			$access = get_access_sql_suffix('md_search');
-			$sanitised_tags = array();
-
-			foreach ($search_tag_names as $tag) {
-				$sanitised_tags[] = '"' . sanitise_string($tag) . '"';
-			}
-
-			$tags_in = implode(',', $sanitised_tags);
-
-			$options['wheres'][] = "(msn_search.string IN ($tags_in) AND msv_search.string LIKE '%$query%' AND $access)";
-			break;
-
-		case 'location' :
-			$options['joins'][] = "JOIN {$dbprefix}metadata md_search on e.guid = md_search.entity_guid";
-			$options['joins'][] = "JOIN {$dbprefix}metastrings msn_search on md_search.name_id = msn_search.id";
-			$options['joins'][] = "JOIN {$dbprefix}metastrings msv_search on md_search.value_id = msv_search.id";
-			$access = get_access_sql_suffix('md_search');
-			$options['wheres'][] = "(msn_search.string IN ('location') AND msv_search.string LIKE '%$query%' AND $access)";
-			break;
-
-		default:
-			break;
-	}
-
-	$options = elgg_trigger_plugin_hook('search_in_clause', 'framework:lists', array('query' => $query, 'search_in' => $search_in), $options);
-
-	return $options;
-}
-
-function hj_framework_get_owner_guids_clause($context = null, $options = array()) {
-
-	switch ($context) {
-
-		case 'all' :
-		default :
-			break;
-
-		case 'mine' :
-			$options['owner_guids'] = array(elgg_get_logged_in_user_guid());
-			break;
-
-		case 'friends' :
-			$user = elgg_get_logged_in_user_entity();
-			$friends = $user->getFriends('', 0, 0);
-			$options['owner_guids'] = array();
-			foreach ($friends as $friend) {
-				$options['owner_guids'][] = $friend->guid;
-			}
-	}
-
-	return $options;
-}
-
-/**
- * Manage Filter Form
- */
-elgg_register_plugin_hook_handler('init', 'form:list_filter', 'hj_framework_list_filter_form');
-
-function hj_framework_list_filter_form($hook, $type, $return, $params) {
-
-	$form = elgg_extract('form', $params);
-
-	$list_id = elgg_extract('list_id', $params);
-	$list_options = elgg_extract('list_options', $params);
-	$filter_values = elgg_extract('filter_values', $params);
-
-	$form->registerFieldset('search', array(
-		'priority' => 100,
-		'legend' => elgg_echo('hj:framework:filter:fieldset:search')
-	));
-
-	$form->registerFieldset('sorting', array(
-		'prirority' => 200,
-		'legend' => elgg_echo('hj:framework:filter:fieldset:sorting')
-	));
-
-	$list_filter_options = elgg_extract('list_filter_options', $list_options);
-	$search_in_options = elgg_extract('search_in_options', $list_filter_options, false);
-	$order_by_options = elgg_extract('order_by_options', $list_filter_options, false);
-	$context_options = elgg_extract('context_options', $list_filter_options, false);
-
-	if ($search_in_options) {
-		$options_values = array();
-		foreach ($search_in_options as $search_in_option) {
-			$options_values[$search_in_option] = elgg_echo("framework:filter:search_in:$search_in_option");
-		}
-
-		$form->registerInput("query[$list_id]", 'text', false, array(
-			'value' => $filter_values['query'],
-			'label' => array('text' => elgg_echo('hj:framework:filter:query')),
-			'data-tooltip' => elgg_echo('hj:framework:filter:query:tooltip'),
-			'priority' => 100,
-			'fieldset' => 'search'
-		));
-		$form->registerInput("search_in[$list_id]", 'dropdown', false, array(
-			'value' => $filter_values['search_in'],
-			'options_values' => $options_values,
-			'label' => array('text' => elgg_echo('hj:framework:filter:search_in')),
-			'priority' => 200,
-			'fieldset' => 'search'
-		));
-	}
-
-	if ($order_by_options) {
-		$options_values = array();
-		foreach ($order_by_options as $order_by_option) {
-			$options_values[$order_by_option] = elgg_echo("framework:filter:order_by:$order_by_option");
-		}
-
-		$form->registerInput("order_by[$list_id]", 'dropdown', false, array(
-			'value' => $filter_values['order_by'],
-			'options_values' => $options_values,
-			'label' => array('text' => elgg_echo('hj:framework:filter:order_by')),
-			'priority' => 100,
-			'fieldset' => 'sorting'
-		));
-	}
-
-	$form->registerInput("direction[$list_id]", 'dropdown', false, array(
-		'value' => $filter_values['direction'],
-		'options_values' => array(
-			'desc' => elgg_echo('hj:framework:filter:direction:asc'),
-			'asc' => elgg_echo('hj:framework:filter:direction:desc')
-		),
-		'label' => array('text' => elgg_echo('hj:framework:filter:direction')),
-		'priority' => 200,
-		'fieldset' => 'sorting'
-	));
-
-	$form->registerInput("limit[$list_id]", 'dropdown', false, array(
-		'value' => $filter_values['limit'],
-		'options' => array(10, 25, 50, 100),
-		'label' => array('text' => elgg_echo('hj:framework:filter:limit')),
-		'priority' => 300,
-		'fieldset' => 'sorting'
-	));
-
-	if ($context_options) {
-		$form->registerFieldset('context', array(
-			'prirority' => 300,
-			'legend' => elgg_echo('hj:framework:filter:fieldset:context')
-		));
-		$form->registerInput("context[$list_id]", 'dropdown', false, array(
-			'value' => $filter_values['context'],
-			'label' => array('text' => elgg_echo('hj:framework:filter:context')),
-			'options_values' => array(
-				'all' => elgg_echo('all'),
-				'friends' => elgg_echo('friends'),
-				'mine' => elgg_echo('mine')
-			),
-			'priority' => 100,
-			'fieldset' => 'context'
-		));
-	}
-
-	$url = parse_url(full_url());
-	$form->registerInput('reset', 'custom', false, array(
-		'tag' => 'a',
-		'attr' => array(
-			'href' => $url['path'],
-			'class' => 'framework-ui-control gray',
-		),
-		'text' => '<span class="label">' . elgg_echo('reset') . '</span>',
-		'label' => false,
-		'fieldset' => 'footer'
-	));
-
-	$form->registerInput('submit', 'submit', false, array(
-		'value' => elgg_echo('filter'),
-		'class' => 'framework-ui-control blue',
-		//'fieldset' => 'footer',
-		'label' => false,
-		'fieldset' => 'footer'
-	));
 }

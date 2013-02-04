@@ -1,20 +1,29 @@
 <?php
 
-class hjObject extends ElggObject implements hjLocationInterface, hjSubscriptionInterface, hjPermissionsInterface, hjAnalyticsInterface, hjHierarchyInterface {
+class hjObject extends ElggObject {
 
-	public function save() {
-
+	/**
+	 * Perform generic actions and add generic metadata to the entity
+	 * @return mixed
+	 */
+	public function save($ancestor_subtypes = null) {
 		$return = parent::save();
 
 		if ($return) {
-			$this->createHierarchyBreadcrumbs();
+			$this->setAncestry();
 		}
 
 		return $return;
 	}
 
-	public function createHierarchyBreadcrumbs() {
-		hj_framework_create_hierarchy_breadcrumbs($this->guid);
+	/**
+	 * Update ancestry relationships
+	 * @see hj_framework_set_ancestry()
+	 * @param mixed $subtypes	Array of object subtypes to update or null for all
+	 * @return array			Hierarchy of ancestors
+	 */
+	public function setAncestry($subtypes = null) {
+		return hj_framework_set_ancestry($this->guid, $subtypes);
 	}
 
 	public function getIconURL($size = 'medium') {

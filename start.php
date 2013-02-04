@@ -7,7 +7,7 @@
  * @subpackage hypeFramework
  *
  * @author Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
- * @copyright Copyrigh (c) 2011-2012, Ismayil Khayredinov
+ * @copyright Copyrigh (c) 2011-2013, Ismayil Khayredinov
  */
 
 define('HYPEFRAMEWORK_RELEASE', 1356044864);
@@ -23,14 +23,10 @@ function hj_framework_init() {
 
 	hj_framework_check_release('hypeFramework', HYPEFRAMEWORK_RELEASE);
 
-	/**
-	 * CORE CLASSES
-	 */
+	// Classes
 	elgg_register_classes(elgg_get_root_path() . 'mod/hypeFramework/classes/');
 	
-	/**
-	 * CORE LIBRARIES
-	 */
+	// Libraries
 	$libraries = array(
 		'actions',
 		'views',
@@ -56,10 +52,7 @@ function hj_framework_init() {
 		}
 	}
 
-	/**
-	 * VENDOR LIBRARIES
-	 */
-	// DomPDF
+	// Vendor Libraries
 	// DomPDF library is not included by default
 	// Download and unzip to vendors/dompdf
 	$dompdf = elgg_get_root_path() . 'mod/hypeFramework/vendors/dompdf/dompdf_config.inc.php';

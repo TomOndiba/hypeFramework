@@ -7,18 +7,20 @@ if (elgg_in_context('widget')) {
 $list_id = elgg_extract('list_id', $vars);
 
 $list_options = elgg_extract('list_options', $vars);
+$getter_options = elgg_extract('getter_options', $vars);
 
-$offset = abs((int) elgg_extract('list_pagination_offset', $list_options, 0));
-$offset_key = "offset[$list_id]";
+$offset = abs((int) elgg_extract('offset', $getter_options, 0));
+$offset_key = elgg_extract('offset_key', $list_options, 'offset');
 
-if (!$limit = (int) elgg_extract('list_pagination_limit', $list_options, 10)) {
-	$limit = 10;
+$limit_key = elgg_extract('limit_key', $list_options, 'limit');
+if (!$limit = (int) elgg_extract('limit', $getter_options, 10)) {
+	$limit = get_input($limit_key);
 }
 
 $count = (int) elgg_extract('count', $vars, 0);
 
-$base_url = elgg_extract('list_pagination_base_url', $list_options, current_page_url());
-$num_pages = elgg_extract('list_pagination_num_pages', $list_options, 10);
+$base_url = elgg_extract('base_url', $vars, current_page_url());
+$num_pages = elgg_extract('num_pages', $vars, 5);
 
 $delta = ceil($num_pages / 2);
 
@@ -36,14 +38,14 @@ $pages->prev = array(
 	'href' => '',
 	'is_trusted' => true,
 	'data-list' => $list_id,
-	'data-scenario' => 'paginateList'
+	//'data-scenario' => 'paginateList'
 );
 $pages->next = array(
 	'text' => elgg_echo('next') . ' &raquo;',
 	'href' => '',
 	'is_trusted' => true,
 	'data-list' => $list_id,
-	'data-scenario' => 'paginateList'
+	//'data-scenario' => 'paginateList'
 );
 $pages->items = array();
 
@@ -54,7 +56,7 @@ if ($current_page > 1) {
 		$prev_offset = 0;
 	}
 
-	$pages->prev['href'] = hj_framework_http_add_url_query_elements($base_url, array($offset_key => $prev_offset));
+	$pages->prev['href'] = hj_framework_http_add_url_query_elements($base_url, array($offset_key => $prev_offset, $limit_key => $limit));
 
 	$first_page = $current_page - $delta;
 	if ($first_page < 1) {
@@ -75,7 +77,7 @@ if ($current_page < $total_pages) {
 		$next_offset--;
 	}
 
-	$pages->next['href'] = hj_framework_http_add_url_query_elements($base_url, array($offset_key => $next_offset));
+	$pages->next['href'] = hj_framework_http_add_url_query_elements($base_url, array($offset_key => $next_offset, $limit_key => $limit));
 
 	$last_page = $current_page + $delta;
 	if ($last_page > $total_pages) {
@@ -100,14 +102,14 @@ foreach ($pages->items as $page) {
 		echo "<li class=\"elgg-state-selected\"><span>$page</span></li>";
 	} else {
 		$page_offset = (($page - 1) * $limit);
-		$url = hj_framework_http_add_url_query_elements($base_url, array($offset_key => $page_offset));
+		$url = hj_framework_http_add_url_query_elements($base_url, array($offset_key => $page_offset, $limit_key => $limit));
 		$link = elgg_view('output/url', array(
 			'href' => $url,
 			'text' => $page,
 			'is_trusted' => true,
 			'data-list' => $list_id,
-			'data-scenario' => 'paginateList'
-		));
+			//'data-scenario' => 'paginateList'
+				));
 		echo "<li>$link</li>";
 	}
 }

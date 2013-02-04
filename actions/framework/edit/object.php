@@ -79,9 +79,7 @@ if (!$guid) {
 	forward(REFERER);
 } else {
 	$entity = get_entity($guid);
-
-	hj_framework_set_entity_priority($entity);
-
+	
 	$accesslevel = get_input('accesslevel', false);
 
 	$params = array(
