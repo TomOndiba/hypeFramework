@@ -10,7 +10,7 @@ if (!$headers)
 $order_by_key = $list_options['order_by_key'];
 $direction_key = $list_options['direction_key'];
 $offset_key = $list_options['offset_key'];
-$limit_key = $list_options['limit_key'];
+//$limit_key = $list_options['limit_key'];
 
 $order_by = get_input($order_by_key, false);
 $direction = get_input($direction_key, 'DESC');
@@ -57,7 +57,7 @@ foreach ($ungrouped_headers as $header => $options) {
 	}
 
 	$title_class = ($order_by == $options['sort_key']) ? 'elgg-state-active' : 'elgg-state-selectable';
-
+	
 	$text = (isset($options['text'])) ? $options['text'] : elgg_echo("table:head:$header");
 
 	$controls[$header]['title'] = elgg_view('output/url', array(
@@ -69,6 +69,13 @@ foreach ($ungrouped_headers as $header => $options) {
 }
 
 echo '<thead>';
+
+if (isset($list_options['filter'])) {
+	echo '<tr class="table-filter">';
+	echo $list_options['filter'];
+	echo '</tr>';
+}
+
 echo '<tr class="table-header">';
 
 foreach ($headers as $key => $options) {

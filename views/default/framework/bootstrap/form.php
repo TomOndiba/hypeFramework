@@ -35,7 +35,10 @@ $footer .= elgg_view('input/hidden', array(
 	'value' => $form_name
 		));
 
-$footer .= elgg_view('input/submit');
+$footer .= elgg_view('input/submit', array(
+	'value' => elgg_echo('submit'),
+	'class' => 'elgg-button-submit'
+));
 $footer .= elgg_view('input/button', array(
 	'value' => elgg_echo('cancel'),
 	'class' => 'elgg-button-cancel'

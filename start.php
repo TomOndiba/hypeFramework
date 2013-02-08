@@ -28,12 +28,13 @@ function hj_framework_init() {
 	
 	// Libraries
 	$libraries = array(
-		'actions',
-		'views',
-		'hook_handlers',
-		'page_handlers',
-		'url_handlers',
 		'forms',
+		'page_handlers',
+		'actions',
+		'assets',
+		'views',
+		'ajax',
+		'menus',
 		'files',
 		'lists',
 		'hierarchies',

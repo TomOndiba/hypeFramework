@@ -2,686 +2,491 @@
 	<script type="text/javascript">
 <?php endif; ?>
 
-elgg.provide('framework');
-elgg.provide('framework.data');
-elgg.provide('framework.data.lists');
-elgg.provide('framework.resources');
-elgg.provide('framework.ajax');
-elgg.provide('framework.ajax.scenarios');
-elgg.provide('framework.loaders');
+	elgg.provide('framework');
+	elgg.provide('framework.data');
+	elgg.provide('framework.data.lists');
+	elgg.provide('framework.resources');
+	elgg.provide('framework.ajax');
+	elgg.provide('framework.ajax.scenarios');
+	elgg.provide('framework.loaders');
 
-framework.loaders.circle = $('<div>').attr('id', 'framework-loader-circle').addClass('hj-ajax-loader').addClass('hj-loader-circle');
-framework.loaders.indicator = $('<div>').attr('id', 'framework-loader-indicator').addClass('hj-ajax-loader').addClass('hj-loader-indicator');
-framework.loaders.bar = $('<div>').attr('id', 'framework-loader-bar').addClass('hj-ajax-loader').addClass('hj-loader-bar');
+	framework.loaders.overlay = $('<div>').addClass('hj-ajax-loader').addClass('hj-loader-overlay');
+	framework.loaders.circle = $('<div>').addClass('hj-ajax-loader').addClass('hj-loader-circle');
+	framework.loaders.indicator = $('<div>').addClass('hj-ajax-loader').addClass('hj-loader-indicator');
+	framework.loaders.bar = $('<div>').addClass('hj-ajax-loader').addClass('hj-loader-bar');
 
-framework.ajax.fetchOnSystemInit = function() {
-	if (framework.resources.length <= 0) {
-		framework.resources = new Array();
-	} else {
-		return;
-	}
-
-	// get loaded scripts
-	$('script')
-	.each(function() {
-		framework.resources.push($(this).attr('src'));
-	})
-
-	$('link')
-	.each(function() {
-		framework.resources.push($(this).attr('href'));
-	})
-}
-
-/**
- * Check if any new scripts and stylesheets need to be loaded
- */
-framework.ajax.fetchOnAjaxSuccess = function(name, type, params, value) {
-	if (!params) return;
-	var resources = params.resources;
-
-	if (!resources) return;
-
-	for (var i=0;i < resources.js.length;i++) {
-		if ($.inArray(resources.js[i], framework.resources) == -1) {
-			$('head').append($('<script>').attr('type', 'text/javascript').attr('src', resources.js[i]));
-			framework.resources.push(resources.js[i]);
-		}
-	}
-
-	for (var i=0;i < resources.css.length;i++) {
-		if ($.inArray(resources.css[i], framework.resources) == -1) {
-			$('head').append($('<link>').attr('rel', 'stylesheet').attr('type', 'text/css').attr('href', resources.css[i]));
-			framework.resources.push(resources.css[i]);
-		}
-	}
-}
-
-framework.ajax.init = function() {
-
-	$('[data-scenario]')
-	.live('click', function(event) {
-		framework.ajax.scenarios[$(this).data('scenario')]($(this), event);
-	})
-
-	$('.hj-ajaxed-cancel-form')
-	.live('click', function(event) {
-		event.preventDefault();
-		if ($(this).closest('#fancybox-content').length > 0) {
-			$.fancybox.close();
+	/**
+	 * Create a record of loaded scripts and stylesheets
+	 */
+	framework.ajax.fetchOnSystemInit = function() {
+		if (framework.resources.length <= 0) {
+			framework.resources = new Array();
 		} else {
-			window.history.back();
+			return;
 		}
-	})
-}
 
-framework.ajax.scenarios.newListItem = function($element, event) {
+		// get loaded scripts
+		$('script')
+		.each(function() {
+			framework.resources.push($(this).attr('src'));
+		})
 
-	event.preventDefault();
-
-	var $dialog = $('<div style="display:none"></div>')
-	.html(framework.loaders.circle)
-	.appendTo('body');
-
-	var buttons = new Object();
-	buttons[elgg.echo('cancel')] = function() {
-		$(this).dialog('close');
+		$('link')
+		.each(function() {
+			framework.resources.push($(this).attr('href'));
+		})
 	}
-				
-	$dialog.dialog({
-		close: function(event, ui) {
-			$dialog.remove();
-		},
-		buttons: buttons,
-		title: elgg.echo('framework:ajax:loading_form'),
-		width:650,
-		maxHeight:500,
-		autoResize:true
-	});
 
-	var data = new Object();
-	var data = $(this).data();
-	data.view = 'json';
+	/**
+	 * Check if any new scripts and stylesheets need to be loaded
+	 */
+	framework.ajax.fetchOnAjaxSuccess = function(name, type, params, value) {
+		if (!params) return;
+		var resources = params.resources;
 
-	elgg.post($element.attr('href'), {
-		data : data,
-		dataType: 'json',
-		success : function(response) {
-			$dialog.html(response.output.body.content);
-				
-			$title = $dialog.find('.elgg-head');
-			var title_text = $title.text();
-			if (!title_text.length) {
-				title_text = response.output.title;
+		if (!resources) return;
+
+		for (var i=0;i < resources.js.length;i++) {
+			if ($.inArray(resources.js[i], framework.resources) == -1) {
+				$('head').append($('<script>').attr('type', 'text/javascript').attr('src', resources.js[i]));
+				framework.resources.push(resources.js[i]);
 			}
-			$submit_button = $dialog.find('input[type=submit]');
-			$cancel_button = $dialog.find('input.hj-ajaxed-cancel-form');
-			submit_button_text = $submit_button.val();
-			cancel_button_text = $cancel_button.val();
-
-			var buttons = new Object();
-			buttons[submit_button_text] = function() {
-				$dialog.find('form').trigger('submit');
-			}
-			buttons[cancel_button_text] = function() {
-				$(this).dialog('close');
-			}
-
-			$dialog.dialog({
-				title: title_text,
-				buttons: buttons
-			});
-
-			$submit_button.remove();
-			$cancel_button.remove();
-			$title.remove();
-
-			var params = new Object();
-			params.event = 'getForm';
-			params.response = response;
-			params.data = data;
-
-			elgg.trigger_hook('success', 'ajax', params, true);
-
-			$dialog
-			.find('form')
-			.submit(function(eventSubmit) {
-
-				$form = $(this);
-				
-				if (!$element.data('list')) {
-					return true;
-				}
-
-				var data = $element.data();
-				data['X-Requested-With'] = 'XMLHttpRequest';
-				data['view'] = 'json';
-					
-				var params = ({
-					beforeSend : function() {
-						$dialog.html(framework.loaders.circle);
-						$dialog.focus();
-						$dialog.dialog({buttons:null});
-						return true;
-					},
-					dataType : 'json',
-					data : data,
-					success : function(response, status, xhr) {
-						$dialog.dialog('close');
-
-						var hookParams = new Object();
-						hookParams.event = 'submitForm';
-						hookParams.response = response;
-						hookParams.data = $form.serialize();
-
-						elgg.system_message(response.system_messages.success);
-						elgg.trigger_hook('success', 'ajax', hookParams, true);
-
-						var refreshParams = new Object();
-						refreshParams.element = $element;
-						refreshParams.list = $element.data('list');
-						elgg.trigger_hook('reload', 'lists', refreshParams, true);
-					}
-				});
-
-				if ($form.find('input[type=file]')) {
-					params.iframe = true;
-				} else {
-					params.iframe = false;
-				}
-
-				$form.ajaxSubmit(params);
-
-				return false;
-			})
-
 		}
-	})
 
-}
-
-framework.ajax.scenarios.paginateList = function($element, event) {
-
-	event.preventDefault();
-	
-	var refreshParams = new Object();
-	refreshParams.element = $element;
-	refreshParams.list = $element.data('list');
-	elgg.trigger_hook('reload', 'lists', refreshParams, true);
-
-	window.history.pushState(null, null, $element.attr('href'));
-	window.location.hash = $element.data('list');
-	
-}
-	
-framework.ajax.success = function(hook, type, params) {
-
-	//	if (params.data.length && params.data.list) {
-	//		framework.ajax.refreshList(params.data.list, params);
-	//	}
-
-}
-
-framework.ajax.getUpdatedList = function(hook, type, params) {
-
-	var list_id = params.list_id;
-	var $element = params.element;
-
-	var lists = new Object();
-	if (list_id) {
-		lists[list_id] = framework.data.lists[list_id];
-	} else {
-		lists = framework.data.lists;
+		for (var i=0;i < resources.css.length;i++) {
+			if ($.inArray(resources.css[i], framework.resources) == -1) {
+				$('head').append($('<link>').attr('rel', 'stylesheet').attr('type', 'text/css').attr('href', resources.css[i]));
+				framework.resources.push(resources.css[i]);
+			}
+		}
 	}
 
-	if ($element) {
-		var postURL = $element.attr('href');
-	} else {
-		var postURL = document.URL;
+	framework.ajax.init = function() {
+
+		$('form .elg-button-cancel')
+		.live('click', function(event) {
+			event.preventDefault();
+			if ($(this).closest('#fancybox-content').length > 0) {
+				$.fancybox.close();
+			} else {
+				window.history.back();
+			}
+		})
+
+		$('a.sort-control, a.sort-title, .hj-framework-list-pagination > li > a')
+		.live('click', framework.ajax.getUpdatedList);
+
+		$('.hj-framework-list-filter form')
+		.live('submit', framework.ajax.filterList);
+
+		$('.hj-framework-list-filter form select')
+		.live('change', function() {
+			$(this).closest('form').trigger('submit');
+		});
+		
+		$('.elgg-button-create-entity')
+		.live('click', framework.ajax.scenarios.createEntity);
+
+		$('.elgg-button-edit-entity')
+		.live('click', framework.ajax.scenarios.editEntity);
+
+		$('.elgg-button-delete-entity')
+		.live('click', framework.ajax.scenarios.deleteEntity);
+
 	}
-	$.each(lists, function(listId, currentList) {
-		var $list = $('#' + listId);
-		currentList.view = 'json';
-		elgg.post(postURL, {
+
+	framework.ajax.scenarios.createEntity = function(event) {
+
+		$element = $(this);
+
+		if ($element.data('toggle') !== 'dialog') { // Make sure element's data-toggle attribute is set to dialog
+			return true;
+		}
+
+		var params = {
+			element : $element,
+			event : event
+		}
+
+		return elgg.trigger_hook('form:dialog', 'framework', params, false);
+
+	}
+
+	framework.ajax.scenarios.editEntity = function(event) {
+
+		$element = $(this);
+
+		if ($element.data('toggle') !== 'dialog') { // Make sure element's data-toggle attribute is set to dialog
+			return true;
+		}
+
+		var params = {
+			element : $element,
+			event : event
+		}
+
+		return elgg.trigger_hook('form:dialog', 'framework', params, false);
+
+	}
+
+	framework.ajax.scenarios.deleteEntity = function(event) {
+
+		$element = $(this);
+
+		var uid = $element.data('uid');
+		var action = $element.attr('href');
+
+		var params = {
+			element : $element,
+			action : action,
+			uid : uid
+		}
+
+		return elgg.trigger_hook('delete:entity', 'framework', params, false);
+
+	}
+
+	framework.ajax.formDialog = function(name, type, params, value) {
+
+		var data = $(this).data();
+		data['X-Requested-With'] = 'XMLHttpRequest';
+		data.view = 'xhr'; // set viewtype
+		data.endpoint = 'layout'; // 'pageshell', 'layout', 'layout-elements'
+
+		elgg.post($element.attr('href'), {
+			data : data,
+			dataType: 'json',
 			beforeSend : function() {
-				$("body").css("cursor", "progress");
-				$list.prepend($('<li>').html(framework.loaders.bar));
+				$dialog = $('<div>')
+				.html(framework.loaders.circle)
+				.appendTo('body')
+				.dialog({
+					dialogClass: 'hj-framework-dialog',
+					title : elgg.echo('hj:framework:ajax:loading'),
+					buttons : false,
+					modal : true,
+					autoResize : true,
+					width : 650,
+					maxHeight : 500
+				});
 			},
-			data : currentList,
-			dataType : 'json',
 			complete : function() {
-				$("body").css("cursor", "auto");
-				$list.children('li').first().hide();
+
 			},
 			success : function(response) {
 
-				var updatedList, $firstItem, $lastItem;
+				$content = $(response.output.body.content);
 
-				updatedList = response.output.body.content;
-				$firstItem = $list.children('li').first();
-				$lastItem = $firstItem;
-					
-				$.each(updatedList.item_uids, function(pos, itemUid) {
-					if ($.inArray(itemUid, framework.data.lists[listId].item_uids) < 0) {
-						$lastItem.after(updatedList.item_views["uid" + itemUid]);
-					}
-					$lastItem = $lastItem.next();
-				})
-					
-				$.each(framework.data.lists[listId].item_uids, function(pos, itemUid) {
-					if ($.inArray(itemUid, updatedList.item_uids) < 0) {
-						$list.find('li[data-uid=' + itemUid + ']').remove();
-					}
-				})
-					
-				$firstItem.remove();
-				framework.data.lists[listId].item_uids = updatedList.item_uids;
-
-				if (updatedList.pagination.length) {
-					console.log(updatedList.pagination);
-					$('.elgg-pagination[data-list="' + listId + '"]').replaceWith(updatedList.pagination);
+				$title = $content.find('.elgg-head');
+				var title = $title.text();
+				if (!title.length) {
+					title = response.output.body.title;
 				}
+
+				$($title, $content).remove();
+
+				$dialog
+				.html($content)
+				.dialog({
+					title: title
+				});
+
+				$dialog.find('.elgg-button-cancel').click(function(e) {
+					e.preventDefault();
+					$dialog.dialog('close');
+				})
+
+
+				var params = new Object();
+				params.event = 'getForm';
+				params.response = response;
+				params.data = data;
+
+				elgg.trigger_hook('ajax:success', 'framework', params, true);
+
+				$dialog
+				.find('form')
+				.submit(function(eventSubmit) {
+
+					if (!$element.data('callback')) {
+						return true;
+					}
+					
+					$form = $(this);
+
+					var data = $element.data();
+					data['X-Requested-With'] = 'XMLHttpRequest';
+					data.view = 'xhr'; // set viewtype
+					data.endpoint = 'layout'; // 'pageshell', 'layout', 'layout-elements'
+
+					var params = ({
+						dataType : 'json',
+						data : data,
+						beforeSend : function() {
+							$dialog.html(framework.loaders.circle);
+							$dialog.focus();
+							$dialog.dialog({
+								title : elgg.echo('hj:framework:ajax:saving'),
+								buttons:null
+							});
+							return true;
+						},
+						complete : function() {
+							$dialog.dialog('close');
+						},
+						success : function(response, status, xhr) {
+
+							var hookParams = new Object();
+							response.event = 'submitForm';
+							hookParams.response = response;
+							hookParams.element = $element;
+							hookParams.data = $form.serialize();
+
+							elgg.trigger_hook('ajax:success', 'framework', hookParams, true);
+
+							if (response.status < 0) {
+								$dialog.remove();
+								$element.trigger('click');
+								return false;
+							}
+
+							if ($element.data('callback')) {
+								var hook = $element.data('callback').split('::');
+								elgg.trigger_hook(hook[0], hook[1], hookParams);
+							}
+						}
+					});
+
+					if ($form.find('input[type=file]')) {
+						params.iframe = true;
+					} else {
+						params.iframe = false;
+					}
+
+					$form.ajaxSubmit(params);
+
+					return false;
+				})
+
+			}
+		})
+
+		return false;
+
+	}
+
+	framework.ajax.deleteEntity = function(name, type, params, value) {
+
+		//		var uid = params.uid;
+		var action = params.action;
+		var $element = params.element;
+
+		var confirmText = elgg.echo('question:areyousure');
+		if (!confirm(confirmText)) {
+			return false;
+		}
+		
+		elgg.action(action, {
+			dataType : 'json',
+			//			data : {
+			//				guid : uid
+			//			},
+			beforeSend : function() {
+				elgg.system_message(elgg.echo('hj:framework:ajax:deleting'));
+				$element.addClass('loading')
+			},
+			complete : function() {
+				$element.removeClass('loading')
+			},
+			success : function(response) {
+				//elgg.trigger_hook('ajax:success', 'framework', {response : response});
+				if (response.status < 0) {
+
+				} else {
+					var uid = response.output.guid;
+					$('[data-uid="' + uid + '"], [id="elgg-object-' + uid + '"]')
+					.each(function() { $(this).remove()})
+				}
+			}
+
+		})
+
+		return false;
+	}
+
+	framework.ajax.success = function(hook, type, params) {
+		elgg.register_error(params.response.system_messages.error);
+		elgg.system_message(params.response.system_messages.success);
+	}
+
+	framework.ajax.getUpdatedList = function(e) {
+		elgg.trigger_hook('refresh:lists', 'framework', { element : $(this), href : $(this).attr('href')});
+		return false;
+	}
+
+	framework.ajax.filterList = function(e) {
+		var params = $(this).serialize();
+		var href = framework.ajax.updateUrlQuery(window.location.href, params);
+		elgg.trigger_hook('refresh:lists', 'framework', { element : $(this), href : href });
+		return false;
+	}
+
+	framework.ajax.getUpdatedLists = function(hook, type, params) {
+
+		var $element = params.element;
+		if ($element) {
+			var $container = $element.closest('.hj-framework-list-wrapper');
+		} else {
+			var $container = $('.hj-framework-list-wrapper');
+		}
+
+		console.log(params.href);
+		if (params.href) {
+			var href = params.href;
+		} else {
+			var href = window.location.href;
+		}
+		
+		elgg.post(href, {
+
+			beforeSend : function() {
+				$('.hj-ajax-loader', $container).show();
+			},
+
+			complete : function() {
+				$('.hj-ajax-loader', $container).hide();
+			},
+
+			data : {
+				'X-Requested-With' : 'XMLHttpRequest',
+				'view' : 'xhr',
+				'endpoint' : 'global_xhr_output'
+			},
+			dataType : 'json',
+
+			success : function(response) {
+
+				var updatedLists = response.output.body.lists;
+
+				$.each(updatedLists, function(key, listParams) {
+
+					var		updatedList = listParams,
+					listType = updatedList.list_type,
+
+					$currentList = $('#' + updatedList.list_id),
+					$currentListItems = $('.elgg-item', $currentList),
+
+					updatedListItemUids = new Array(), currentListItemUids = new Array(), updatedListItemViews = new Array();
+
+					$currentListItems.each(function() {
+						currentListItemUids.push($(this).data('uid'));
+					});
+					
+					if (!updatedList.items) {
+						updatedList.items = new Array();
+					}
+					switch (listType) {
+
+						case 'list' :
+							var $listBody = $currentList;
+							break;
+
+						case 'table' :
+							$currentList.children('thead').replaceWith(updatedList.head);
+							var $listBody = $currentList.children('tbody');
+							break;
+
+					}
+
+					$.each(updatedList.items, function(pos, itemView) {
+						var itemUid = $(itemView).data('uid');
+						updatedListItemUids.push(itemUid);
+						updatedListItemViews[itemUid] = itemView;
+						$new = $(itemView).addClass('hj-framework-list-item-new');
+						$existing = $currentList.find('.elgg-item[data-uid=' + itemUid + ']:first');
+						if (($existing.length == 0) || ($existing.length && $new.data('ts') > $existing.data('ts'))) {
+							$append = $new;
+						} else if ($existing.length && $new.data('ts') <= $existing.data('ts')) {
+							$append = $existing.clone();
+						}
+						$existing.remove();
+						$listBody.append($new);
+					})
+
+					$.each(currentListItemUids, function(pos, itemUid) {
+						if ($.inArray(itemUid, updatedListItemUids) < 0) {
+							$currentList.find('[data-uid=' + itemUid + ']').remove();
+						}
+					});
+
+					console.log(currentListItemUids);
+					console.log(updatedListItemUids);
+					//$('[rel=placeholder]', $currentList).remove();
+
+					$('.hj-framework-list-pagination-wrapper', $currentList.closest('.hj-framework-list-wrapper')).replaceWith(updatedList.pagination);
+					//$('.hj-framework-list-filter', $currentList.closest('.hj-framework-list-wrapper')).replaceWith(updatedList.filter);
+					
+					window.history.replaceState(null, response.output.title, response.href);
+				
+				})
 			}
 		})
 	}
-)
-}
 
+	framework.ajax.getUpdatedPage = function(hook, type, params) {
 
-//	framework.loaders.circle = '<div class="hj-ajax-loader hj-loader-circle"></div>';
-//
-//	$('.framework-ajax-view')
-//	.live('click', framework.ajax.view);
-//
-//
-//	$('.hj-ajaxed-add')
-//	.unbind('click')
-//	.bind('click', framework.ajax.view);
-//
-//	$('.hj-ajaxed-edit')
-//	.unbind('click')
-//	.bind('click', framework.ajax.view);
-//
-//	$('.hj-ajaxed-view')
-//	.unbind('click')
-//	.bind('click', framework.ajax.view);
-//
-//	$('.hj-ajaxed-remove')
-//	.die()
-//	.unbind('click')
-//	.bind('click', framework.ajax.remove);
-//
-//	$('.hj-ajaxed-delete')
-//	.die()
-//	.unbind('click')
-//	.bind('click', framework.ajax.remove);
-//
-//	$('.hj-ajaxed-save')
-//	.attr('onsubmit','')
-//	.unbind('submit')
-//	.bind('submit', framework.ajax.save);
-//
-//	$('.hj-ajaxed-addwidget')
-//	.unbind('click')
-//	.bind('click', framework.ajax.addwidget);
-//
-//	$('.elgg-widget-edit > form')
-//	.die()
-//	.bind('submit', framework.ajax.reloadwidget);
-//
-//	$('.hj-ajaxed-gallery')
-//	.unbind('click')
-//	.bind('click', framework.ajax.gallery);
-//
-//	$('a.elgg-widget-delete-button')
-//	.die()
-//	.live('click', elgg.ui.widgets.remove);
-//
-//	if ($('.elgg-input-date').length) {
-//		elgg.ui.initDatePicker();
-//	}
-//
-//	$('.elgg-widgets-add-panel li.elgg-state-available').unbind('click').click(elgg.ui.widgets.add);
-//
-//	$('.hj-ajaxed-cancel-form')
-//	.unbind('click')
-//	.bind('click', function(event) {
-//		event.preventDefault();
-//
-//		if (!$.fancybox.close()) {
-//			framework.location.href = document.referrer;
-//		}
-//
-//	});
-//
-//	$('.hj-pagination-next')
-//	.unbind()
-//	.bind('click', framework.ajax.paginateNext);
-//
-//	var current_time = new Date();
-//	var current_timestamp = current_time.getTime();
-//
-//	framework.ajax.triggerRefresh();
-//
-//	$('.hj-entity-head-menu')
-//	.live('click', function() {$(this).hide()});
-//
-//	$('body')
-//	.unbind('click.headmenu')
-//	.bind('click.headmenu', function() {
-//		$('.hj-entity-head-menu').each(function() {$(this).hide()});
-//	})
-//
-//	$('.hj-overlay-sidebar-open')
-//	.unbind('click')
-//	.bind('click', function(event) {
-//		event.preventDefault();
-//		var open = $(this);
-//		open.hide();
-//		$(this).closest('.hj-overlay-sidebar').find('.hj-overlay-sidebar-content').show().find('.hj-overlay-sidebar-close').unbind('click').bind('click', function(event) {
-//			event.preventDefault();
-//			$(this).closest('.hj-overlay-sidebar').find('.hj-overlay-sidebar-content').hide();
-//			open.show();
-//		});
-//	})
+		window.location.reload();
 
+	}
 
-//framework.ajax.view = function(event) {
-//
-//	var action = $(this).attr('href'),
-//	values = $(this).data('options'),
-//	rel = $(this).attr('rel');
-//
-//	if (values) {
-//		targetContainer = '#'+values.params.target;
-//	}
-//
-//	if (rel == 'fancybox') {
-//		$.fancybox({
-//			content : framework.loaders.circle
-//		});
-//	} else {
-//		$(targetContainer)
-//		.fadeIn()
-//		.html(framework.loaders.circle);
-//	}
-//
-//	elgg.post(action, {
-//		data : values,
-//		dataType : 'json',
-//		success : function(output) {
-//			if (rel == 'fancybox') {
-//				$.fancybox({
-//					padding: '30',
-//					content : output.output.body,
-//					autoDimensions : true,
-//					//						width : values.params.fbox_x || '500',
-//					//						height : values.params.fbox_y || '500',
-//					onComplete : function() {
-//						elgg.trigger_hook('success', 'ajax');
-//					}
-//				});
-//				$.fancybox.resize();
-//			} else {
-//				$(targetContainer)
-//				.slideDown(800)
-//				.html(output.output.body);
-//				elgg.trigger_hook('success', 'ajax');
-//
-//			}
-//		}
-//	});
-//
-//	event.preventDefault();
-//
-//}
-//
-//framework.ajax.remove = function(event) {
-//	var action = $(this).attr('href'),
-//	subjectGuid = $(this).attr('id').replace('hj-ajaxed-remove-', ''),
-//	targetContainer = 'elgg-object-'+subjectGuid,
-//	options = $(this).data('options'),
-//	sourceContainer = options.params.source,
-//	confirmText = $(this).attr('rel') || elgg.echo('question:areyousure');
-//
-//	if (!subjectGuid.length) {
-//		return true;
-//	}
-//
-//	$(this).attr('rel', '');
-//	$(this).attr('confirm', '');
-//
-//	event.preventDefault();
-//
-//	if (confirm(confirmText)) {
-//		elgg.system_message(elgg.echo('framework:processing'));
-//		elgg.action(action, {
-//			success : function(output) {
-//				$('[id="'+targetContainer+'"]')
-//				.each(function() {
-//					$(this).fadeOut(800, function() {
-//						$(this).remove()
-//					})
-//				});
-//				$('[id="'+sourceContainer+'"]')
-//				.each(function() {
-//					$(this).fadeOut(800, function() {
-//						$(this).remove()
-//					})
-//				});
-//
-//			}
-//		});
-//
-//	}
-//}
-//
-//framework.ajax.gallery = function(event) {
-//	event.preventDefault();
-//
-//	var values = $(this).data('options'),
-//	targetContainer = $(this).attr('href'),
-//	rel = $(this).attr('rel');
-//
-//	var fbox_content = $(targetContainer).html();
-//	$.fancybox({
-//		content : fbox_content,
-//		autoDimensions : false,
-//		'width' : values.params.fbox_x || framework.width - 200,
-//		'height' : values.params.fbox_y || framework.height - 200,
-//		'padding' : '20'
-//	});
-//}
-//
-//framework.ajax.save = function(event) {
+	framework.ajax.updateUrlQuery = function(url, params) {
+		if (elgg.isString(url)) {
+			var parts = elgg.parse_url(url),
+			args = {},
+			base = '';
+
+			if (parts['host'] == undefined) {
+				if (url.indexOf('?') === 0) {
+					base = '?';
+					args = elgg.parse_str(parts['query']);
+				}
+			} else {
+				if (parts['query'] != undefined) {
+					// with query string
+					args = elgg.parse_str(parts['query']);
+				}
+				var split = url.split('?');
+				base = split[0] + '?';
+			}
+
+			if (elgg.isString(params)) {
+				params = elgg.parse_str(params);
+			}
+
+			$.each(params, function(key, value) {
+				args[key] = value;
+			})
+
+			return base + $.param(args);
+		}
+	}
+
+	// JS and CSS fetching
+	elgg.register_hook_handler('init', 'system', framework.ajax.fetchOnSystemInit, 1);
+	elgg.register_hook_handler('ajax:success', 'framework', framework.ajax.fetchOnAjaxSuccess, 1);
 	
-//
-//}
-//
-//framework.ajax.addwidget = function(event) {
-//	event.preventDefault();
-//	var action = $(this).attr('href'),
-//	values = $(this).data('options');
-//
-//	elgg.system_message(elgg.echo('framework:processing'));
-//
-//	elgg.action(action, {
-//		data : values,
-//		success: function(json) {
-//			$('#elgg-widget-col-1').prepend(json.output);
-//			elgg.trigger_hook('success', 'ajax');
-//		}
-//	});
-//}
-//
-//framework.ajax.reloadwidget = function(event) {
-//	event.preventDefault();
-//	event.stopPropagation();
-//
-//	var action = $(this).attr('action');
-//	var widgetGuid = $(this).parent().attr('id').replace('widget-edit-','');
-//
-//	var sourceContainer = $('#elgg-widget-'+widgetGuid);
-//
-//	$(sourceContainer)
-//	.removeClass()
-//	.wrap('<div></div>')
-//	.html(framework.loaders.circle);
-//
-//	elgg.action(action, {
-//		data : $(this).serialize(),
-//		success : function() {
-//			elgg.action('action/framework/widget/load', {
-//				data : {
-//					e : widgetGuid
-//				},
-//				success : function(output) {
-//					$(sourceContainer)
-//					.parent('div')
-//					.slideDown(800)
-//					.html(output.output.data);
-//					elgg.trigger_hook('success', 'ajax');
-//
-//				}
-//			});
-//		}
-//	});
-//}
-//
-//framework.ajax.paginateNext = function(event) {
-//	event.preventDefault();
-//	var button = $(this),
-//	list_id = $(this).attr('rel'),
-//	list = $('#' + list_id);
-//
-//	if ($(window).data('ajaxready') == false) return;
-//	var loader = $('<span>').addClass('hj-ajax-loader hj-loader-bar');
-//	var last = list.find('li.elgg-item').last();
-//
-//	if (!last.length) {
-//		last = list;
-//	}
-//	$(window).data('ajaxready', false);
-//	var guid = last.attr('id').replace('elgg-object-', '');
-//	var pagination_data = framework.data.lists[list_id].pagination;
-//	var url = pagination_data.baseurl;
-//	framework.data.lists[list_id].sync = 'old';
-//	button.prepend(loader);
-//
-//	elgg.ajax(url, {
-//		data : {
-//			listdata : framework.data.lists[list_id]
-//		},
-//		dataType : 'json',
-//		type : 'POST',
-//		success : function(output) {
-//			if (output.output) {
-//				$.each(output.output, function(key, val) {
-//					var append_guid = parseInt(val['guid']);
-//					if (!isNaN(append_guid)) {
-//						if (pagination_data.inverse_order) {
-//							framework.data.lists[list_id].items.unshift(append_guid);
-//							list.prepend(val['html']);
-//						} else {
-//							framework.data.lists[list_id].items.push(append_guid);
-//							list.append(val['html']);
-//						}
-//					}
-//				});
-//				$(window).data('ajaxready', true);
-//				elgg.trigger_hook('success', 'ajax');
-//
-//				var params = new Object();
-//				params.list_id = list_id;
-//				params.data = output.output;
-//				elgg.trigger_hook('new_lists', 'ajax', params, true);
-//			}
-//			if ((!output.output) || (framework.data.lists[list_id].items.length >= pagination_data.count) || (output.output && pagination_data.limit == 0)) {
-//				$(window).data('ajaxready', true);
-//				button.hide();
-//			}
-//			loader.remove();
-//		}
-//	});
-//}
-//framework.ajax.triggerRefresh = function() {
-//	if (!framework.data) {
-//		return;
-//	}
-//	var time = 30000; // frequency at which lists on the page are refreshed
-//
-//	var time_current = new Date().getTime();
-//	if (time_current - framework.hjLastUpdate >= time) {
-//		framework.ajax.listRefresh();
-//	}
-//	framework.hjLastUpdate = new Date().getTime();
-//}
-//
-//framework.ajax.listRefresh = function(list_id) {
-//	var lists = new Object();
-//	if (list_id) {
-//		lists[list_id] = framework.data.lists[list_id];
-//	} else {
-//		lists = framework.data.lists;
-//	}
-//	$.each(lists, function(k, v) {
-//		v.sync = 'new';
-//		if (v.pagination.autorefresh === false) {
-//
-//		} else {
-//			if (v.pagination.baseurl.length) {
-//				var url = v.pagination.baseurl;
-//			} else {
-//				var url = "framework/sync/";
-//			}
-//			var list = $('#' + k);
-//			var k_id = k;
-//
-//			elgg.ajax(url, {
-//				data : {
-//					listdata : v
-//				},
-//				dataType : 'json',
-//				type : 'POST',
-//				success : function(output) {
-//					if (output.output && output.output.length > 0) {
-//						$.each(output.output, function(key, val) {
-//							var append_guid = parseInt(val['guid']);
-//							if (!isNaN(append_guid)) {
-//								if (v.pagination.inverse_order) {
-//									framework.data.lists[k_id].items.push(append_guid);
-//									list.append(val['html']);
-//								} else {
-//									framework.data.lists[k_id].items.unshift(append_guid);
-//									list.prepend(val['html']);
-//								}
-//							}
-//						});
-//
-//						$(window).data('ajaxready', true);
-//						elgg.trigger_hook('success', 'ajax');
-//
-//						var params = new Array();
-//						params['list_id'] = k_id;
-//						params['data'] = output.output;
-//
-//						elgg.trigger_hook('new_lists', 'ajax', params);
-//					}
-//				}
-//
-//			});
-//		}
-//	});
-//
-//}
+	elgg.register_hook_handler('init', 'system', framework.ajax.init);
 
-// JS and CSS fetching
-elgg.register_hook_handler('init', 'system', framework.ajax.fetchOnSystemInit, 1);
-elgg.register_hook_handler('success', 'ajax', framework.ajax.fetchOnAjaxSuccess, 1);
-elgg.register_hook_handler('init', 'system', framework.ajax.init);
-elgg.register_hook_handler('reload', 'lists', framework.ajax.getUpdatedList);
-//elgg.register_hook_handler('refresh:complete', 'lists', framework.ajax);
+	elgg.register_hook_handler('ajax:success', 'framework', framework.ajax.success);
+	if (elgg.tinymce) {
+		elgg.register_hook_handler('ajax:success', 'framework', elgg.tinymce.init);
+	}
 
+	elgg.register_hook_handler('form:dialog', 'framework', framework.ajax.formDialog);
+	elgg.register_hook_handler('refresh:lists', 'framework', framework.ajax.getUpdatedLists);
+	elgg.register_hook_handler('reload:page', 'framework', framework.ajax.getUpdatedPage);
+
+	elgg.register_hook_handler('delete:entity', 'framework', framework.ajax.deleteEntity);
 
 <?php if (FALSE) : ?></script><?php
 endif;

@@ -1,11 +1,12 @@
 <?php
 
-elgg_push_context('table-view');
+elgg_push_context('list-view');
 
-$list_id = elgg_extract('list_id', $vars);
+$list_id = $output['list_id'] = elgg_extract('list_id', $vars);
 $entities = elgg_extract('entities', $vars);
 $count = elgg_extract('count', $vars);
 $list_options = elgg_extract('list_options', $vars);
+$output['list_type'] = $list_options['list_type'];
 $getter_options = elgg_extract('getter_options', $vars);
 $viewer_options = elgg_extract('viewer_options', $vars);
 $getter = elgg_extract('getter', $vars);
@@ -17,8 +18,11 @@ if (isset($list_options['list_class'])) {
 	$class = "$class {$list_options['list_class']}";
 }
 
+$id = $vars['list_id'];
 
-$table_head = elgg_view('page/components/grids/elements/table/head', $vars);
+$output['head'] = elgg_view('page/components/grids/elements/list/head', $vars);
+
+$output['items'] = array();
 
 if (is_array($entities) && count($entities) > 0) {
 
@@ -32,10 +36,7 @@ if (is_array($entities) && count($entities) > 0) {
 		if (elgg_instanceof($item)) {
 			$id = "elgg-entity-$item->guid";
 			$uid = $item->guid;
-			$timestamps[] = $item->time_created;
-			$timestamps[] = $item->time_updated;
-			$timestamps[] = $item->last_action;
-			$ts = max($timestamps);
+			$ts = max(array($item->time_created, $item->time_updated, $item->last_action));
 		} elseif ($item instanceof ElggRiverItem) {
 			$id = "elgg-river-{$item->id}";
 			$uid = $item->id;
@@ -54,24 +55,21 @@ if (is_array($entities) && count($entities) > 0) {
 				'data-ts' => $ts
 			);
 
-			$table_body .= elgg_view('page/components/grids/elements/table/row', array(
+			$view_params = array_merge($viewer_options, array(
 				'entity' => $item,
 				'attributes' => $attr,
 				'list_options' => $list_options
 					));
+			$output['items'][] = elgg_view('page/components/grids/elements/list/item', $view_params);
 		}
 	}
 } else {
-	$table_body = elgg_view('page/components/grids/elements/table/placeholder', array(
+	$output['items'][] = elgg_view('page/components/grids/elements/list/placeholder', array(
 		'class' => $item_class,
 		'data-uid' => -1,
 		'data-ts' => time(),
-		'colspan' => count($list_options['list_view_options']['table']['head'])
 			));
 }
-
-$table_body = '<tbody>' . $table_body . '</tbody>';
-$table = "<table id=\"$list_id\" class=\"$class\">$table_head$table_body</table>";
 
 $show_pagination = elgg_extract('pagination', $list_options, true);
 
@@ -82,16 +80,9 @@ if ($show_pagination) {
 }
 
 $pagination = '<div class="hj-framework-list-pagination-wrapper row-fluid">' . $pagination . '</div>';
-$position = elgg_extract('pagination_position', $list_options, 'after');
 
-if ($position == 'both') {
-	$table = "$pagination $table $pagination";
-} else if ($position == 'before') {
-	$table = "$pagination $table";
-} else {
-	$table = "$table $pagination";
-}
+$output['pagination'] = $pagination;
 
-echo $table;
+echo json_encode($output);
 
 elgg_pop_context();

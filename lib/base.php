@@ -1,7 +1,5 @@
 <?php
 
-elgg_register_viewtype_fallback('json');
-
 /**
  * Check the current plugin release and load $plugin_id/lib/upgrade.php script if the release is newer
  *

@@ -7,7 +7,8 @@ $subtypes = array(
 	'hjfile' => 'hjFile', // file class extention
 	'hjfilefolder' => 'hjFileFolder', // fill folder class
 	'hjsegment' => 'hjSegment', // content segment class
-	'hjannotation' => 'hjAnnotation' // annotation class
+	'hjannotation' => 'hjAnnotation', // annotation class
+	'hjcategory' => 'hjCategory'
 );
 
 foreach ($subtypes as $subtype => $class) {

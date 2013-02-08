@@ -16,7 +16,6 @@ function hj_framework_view_form($form_name, $params = array()) {
 	$attributes['body'] = elgg_view('framework/bootstrap/form', $params);
 
 	return elgg_view('input/form', $attributes);
-	
 }
 
 function hj_framework_prepare_form($form_name, $params = array()) {
@@ -50,7 +49,7 @@ function hj_framework_prepare_form($form_name, $params = array()) {
 			$params['form']['fields'][$attr] = array(
 				'name' => $attr,
 				'input_type' => 'hidden',
-				'value' => ($params['entity']) ? $params['entity']->$attr : get_input($attr, '')
+				'value' => ($params['entity']) ? $params['entity']->$attr : elgg_extract($attr, $params)
 			);
 		}
 	}
@@ -60,6 +59,11 @@ function hj_framework_prepare_form($form_name, $params = array()) {
 
 		foreach ($fields as $name => $options) {
 
+			if (!$options || empty($options)) {
+				unset($fields['name']);
+				continue;
+			}
+			
 			$field['name'] = $name;
 
 			if (isset($sticky_values[$name])) {
@@ -135,13 +139,15 @@ function hj_framework_validate_form($form_name = null) {
 
 		foreach ($fields as $name => $options) {
 
+			if (!$options) continue;
+			
 			$type = elgg_extract('input_type', $options, 'text');
 
 			$valid['status'] = true;
 			$valid['msg'] = elgg_echo('hj:framework:input:validation:success');
 
 
-			if ($options['required'] === true || $options['required'] == 'required') {
+			if ($options['required'] === true || $options['required'] == 'required' || $options['ltrequired'] == true) {
 				$value = get_input($name, '');
 
 				if (empty($value)) {
@@ -171,6 +177,7 @@ function hj_framework_validate_form($form_name = null) {
 	}
 
 	if ($error) {
+		elgg_make_sticky_form($form_name);
 		register_error(elgg_echo('hj:framework:form:validation:error'));
 		return false;
 	}
@@ -422,7 +429,6 @@ function hj_framework_process_add_to_river_input($hook, $type, $return, $params)
 	add_to_river($view, "$event", elgg_get_logged_in_user_guid(), $entity->guid);
 
 	return true;
-
 }
 
 function hj_framework_process_category_input($hook, $type, $return, $params) {
@@ -436,10 +442,6 @@ function hj_framework_process_category_input($hook, $type, $return, $params) {
 		$category_guids = array($category_guids);
 	}
 
-	foreach ($category_guids as $key => $value) {
-		$category_guids[$key] = (int)$value;
-	}
-
 	$current_categories = elgg_get_entities_from_relationship(array(
 		'relationship' => 'filed_in',
 		'relationship_guid' => $entity->guid,
@@ -448,21 +450,16 @@ function hj_framework_process_category_input($hook, $type, $return, $params) {
 	if (is_array($current_categories)) {
 		foreach ($current_categories as $current_category) {
 			if (!in_array($current_category->guid, $category_guids)) {
-				remove_entity_relationship($entity->guid, 'filed_in', $current_category->guid);
+				$entity->unsetCategory($current_category->guid);
 			}
 		}
 	}
 
 	if ($category_guids) {
 		foreach ($category_guids as $category_guid) {
-			$category = get_entity($category_guid);
-			while (elgg_instanceof($category)) {
-				add_entity_relationship($entity->guid, 'filed_in', $category->guid);
-				$category = $category->getContainerEntity();
-			}
+			$entity->setCategory($category_guid);
 		}
 	}
 
 	return true;
-
 }

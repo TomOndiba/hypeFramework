@@ -1,19 +1,27 @@
 <?php
 
 elgg_register_css('bootstrap-responsive', 'mod/hypeFramework/vendors/bootstrap/css/bootstrap-responsive.min.css', 120);
-elgg_load_css('bootstrap-responsive');
+elgg_register_css('jquery.ui', 'mod/hypeFramework/vendors/jquery.ui/jquery.ui.all.css', 140);
 
+$path = elgg_get_simplecache_url('css', 'framework/base');
+elgg_register_css('framework.base', $path);
+elgg_register_simplecache_view('css/framework/base');
+
+elgg_load_css('bootstrap-responsive');
+elgg_load_css('jquery.ui');
+elgg_load_css('framework.base');
 
 $path = elgg_get_simplecache_url('js', 'framework/ajax');
 elgg_register_js('framework.ajax', $path);
 elgg_register_simplecache_view('js/framework/ajax');
 
-$path = elgg_get_simplecache_url('js', 'framework/lists');
-elgg_register_js('framework.lists', $path);
-elgg_register_simplecache_view('js/framework/lists');
+$path = elgg_get_simplecache_url('js', 'framework/ui');
+elgg_register_js('framework.ui', $path);
+elgg_register_simplecache_view('js/framework/ui');
 
+elgg_load_js('jquery.form');
 elgg_load_js('framework.ajax');
-elgg_load_js('framework.lists');
+elgg_load_js('framework.ui');
 
 
 //$hj_js_ui = elgg_get_simplecache_url('js', 'framework/ui');
@@ -65,12 +73,7 @@ elgg_load_js('framework.lists');
 //elgg_register_js('framework.multifile', $hj_js_uploadify_init);
 //elgg_register_simplecache_view('js/vendors/uploadify/multifile.init');
 //
-//elgg_load_js('jquery.form');
 //
-//$css = elgg_get_simplecache_url('css', 'framework/base');
-//elgg_register_css('framework', $css);
-//elgg_register_simplecache_view('css/framework/base');
-//elgg_load_css('framework');
 //
 //// Load the 960 Grid
 //elgg_extend_view('css/elgg', 'css/framework/grid');

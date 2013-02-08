@@ -1,8 +1,16 @@
 <?php
 
 $field_source = $field = elgg_extract('field', $vars, array());
-$sticky_value = elgg_extract('sticky_value', $vars, false);
-$validation_status = elgg_extract('validation_status', $vars, array());
+
+if (isset($field['sticky_value'])) {
+	$sticky_value = elgg_extract('sticky_value', $field);
+	unset($field['sticky_value']);
+}
+
+if (isset($field['validation_status'])) {
+	$validation_status = elgg_extract('validation_status', $field);
+	unset($field['validation_status']);
+}
 
 // Get input type to use / default to text
 if (isset($field['input_type'])) {
@@ -101,6 +109,9 @@ if (isset($field['override_view'])) {
 	}
 	unset($field['override_view']);
 }
+
+unset($field['form_name']);
+
 $input = elgg_view($view, $field);
 
 $wrapper_params = array(

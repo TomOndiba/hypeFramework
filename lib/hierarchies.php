@@ -91,19 +91,35 @@ function hj_framework_get_order_by_descendant_count_clauses($subtypes, $directio
 
 	$subtype_ids_str = implode(',', $subtype_ids);
 
-	if (empty($subtype_ids_str)) return $options;
+	if (empty($subtype_ids_str))
+		return $options;
 
 	$dbprefix = elgg_get_config('dbprefix');
-	
+
 	$options['selects'][] = "COUNT(r_descendant.guid_one)";
 
 	$options['joins'][] = "JOIN {$dbprefix}entities e_descendant ON (e_descendant.subtype IN ($subtype_ids_str))";
 	$options['joins'][] = "LEFT JOIN {$dbprefix}entity_relationships r_descendant ON (e.guid = r_descendant.guid_two AND r_descendant.relationship = 'descendant' AND r_descendant.guid_one = e_descendant.guid)";
 
 	$options['wheres'][] = get_access_sql_suffix('e_descendant');
-	
+
 	$options['group_by'] = 'e.guid';
 	$options['order_by'] = "count(r_descendant.guid_one) $direction, e.time_created DESC";
 
 	return $options;
+}
+
+function hj_framework_get_descendant_offset($descendant_guid, $options) {
+
+	$dbprefix = elgg_get_config('dbprefix');
+
+	$options['count'] = true;
+
+	if ($options['order_by'] == 'e.time_created ASC') {
+		$options['wheres'][] = "(e.guid < $descendant_guid)";
+	} else if ($options['order_by'] == 'e.time_created DESC') {
+		$options['wheres'][] = "(e.guid > $descendant_guid)";
+	}
+
+	return elgg_get_entities($options);
 }
