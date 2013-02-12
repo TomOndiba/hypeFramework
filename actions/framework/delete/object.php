@@ -9,7 +9,7 @@ if (!$entity instanceof hjObject) {
 }
 
 $container = $entity->getContainerEntity();
-if ($entity->canDelete() && $entity->delete()) {
+if ($entity->canEdit() && $entity->delete()) {
 	system_message(elgg_echo('hj:framework:delete:success'));
 } else {
 	register_error(elgg_echo('hj:framework:delete:error:unknown'));

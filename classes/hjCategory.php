@@ -14,6 +14,16 @@ class hjCategory extends hjObject {
 		$this->attributes['subtype'] = 'hjcategory';
 	}
 
+	public function save() {
+		$return = parent::save();
+
+		if ($return) {
+			$this->setAncestry();
+		}
+
+		return $return;
+	}
+	
 	public function getMenuItem(ElggMenuItem $parent, $top_only = false) {
 		if ($parent) {
 			$menu_item = array(

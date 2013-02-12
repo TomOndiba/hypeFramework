@@ -24,9 +24,12 @@ if (isset($form['description'][$event])) {
 
 if ($fields && count($fields)) {
 	foreach ($fields as $name => $options) {
+		if (!$options)
+			continue;
+
 		$options['form_name'] = $form_name;
 		$params['field'] = $options;
-		$content .= elgg_view('framework/bootstrap/form_elements/field', $params);
+		$content .= elgg_view('framework/bootstrap/form/elements/field', $params);
 	}
 }
 
@@ -35,14 +38,18 @@ $footer .= elgg_view('input/hidden', array(
 	'value' => $form_name
 		));
 
-$footer .= elgg_view('input/submit', array(
-	'value' => elgg_echo('submit'),
-	'class' => 'elgg-button-submit'
-));
-$footer .= elgg_view('input/button', array(
-	'value' => elgg_echo('cancel'),
-	'class' => 'elgg-button-cancel'
-		));
+if (isset($form['buttons'])) {
+	$footer .= $vars['buttons'];
+} else {
+	$footer .= elgg_view('input/submit', array(
+		'value' => elgg_echo('submit'),
+		'class' => 'elgg-button-submit'
+			));
+	$footer .= elgg_view('input/button', array(
+		'value' => elgg_echo('cancel'),
+		'class' => 'elgg-button-cancel'
+			));
+}
 
 echo elgg_view_module('form', $title, $content, array(
 	'footer' => $footer

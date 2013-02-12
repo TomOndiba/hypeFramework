@@ -33,6 +33,11 @@ function hj_framework_view_list($list_id, $getter_options = array(), $list_optio
 		$getter_options = call_user_func_array($list_options['filter_callback'], array($list_id, $getter_options));
 	}
 
+	$getter_options = elgg_trigger_plugin_hook('custom_sql_clause', 'framework:lists', array(
+		'list_options' => $list_options,
+		'viewer_options' => $viewer_options
+	), $getter_options);
+
 	$getter_options['count'] = true;
 	$count = $getter($getter_options);
 

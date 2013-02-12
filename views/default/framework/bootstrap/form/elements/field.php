@@ -40,7 +40,7 @@ if ($field['label'] !== false && $input_type != 'hidden' && $value_type != 'hidd
 		$field['label']['for'] = $field['name'];
 	}
 
-	$field['label']['required'] = $field['required'];
+	$field['label']['required'] = ($field['required'] || $field['ltrequired']);
 
 	if (isset($field['label']['override_view'])) {
 		$label_view = $field['label']['override_view'];
@@ -48,7 +48,7 @@ if ($field['label'] !== false && $input_type != 'hidden' && $value_type != 'hidd
 	if ($label_view && elgg_view_exists($label_view)) {
 		$label = elgg_view($label_view, $field['label']);
 	} else {
-		$label = elgg_view('framework/bootstrap/form_elements/label', $field['label']);
+		$label = elgg_view('framework/bootstrap/form/elements/label', $field['label']);
 	}
 
 	unset($field['label']);
@@ -66,7 +66,7 @@ if (isset($field['hint']) && $field['hint'] !== false) {
 	if ($hint_view && elgg_view_exists($hint_view)) {
 		$hint = elgg_view($hint_view, $field['hint']);
 	} else {
-		$hint = elgg_view('framework/bootstrap/form_elements/hint', $field['hint']);
+		$hint = elgg_view('framework/bootstrap/form/elements/hint', $field['hint']);
 	}
 
 	unset($field['hint']);
@@ -94,7 +94,7 @@ if (isset($validation_status['status'])) {
 
 	$validation_message = elgg_extract('msg', $validation_status, null);
 	if ($validation_message) {
-		$validation_message = elgg_view('framework/bootstrap/form_elements/validation_message', array('msg' => $validation_message));
+		$validation_message = elgg_view('framework/bootstrap/form/elements/validation_message', array('msg' => $validation_message));
 	}
 }
 
@@ -123,4 +123,4 @@ $wrapper_params = array(
 	'field' => $field_source
 );
 
-echo elgg_view('framework/bootstrap/form_elements/wrapper', $wrapper_params);
+echo elgg_view('framework/bootstrap/form/elements/wrapper', $wrapper_params);

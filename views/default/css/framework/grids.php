@@ -35,3 +35,16 @@
 		min-height: auto;
 		padding: 3px 10px;
 	}
+
+	.table-header.table-header-menu {
+		width: 125px;
+	}
+
+	.table-cell-menu .elgg-menu {
+		float: none;
+		height: auto;
+	}
+
+	.table-cell-menu .elgg-menu a,  .table-cell-menu .elgg-menu span {
+		font-size:0.9em
+	}

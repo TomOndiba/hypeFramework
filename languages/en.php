@@ -7,6 +7,7 @@ $english = array(
 	'hj:framework:error:plugin_order' => '%s can not be activated. Please check your plugin order and ensure that it\'s below hypeFramework in the plugin list',
 	'hj:framework:geocode:error' => 'There was a problem with geocoding the location field. The item will not appear on maps or other interfaces that rely on coordinates',
 	'hj:framework:list:empty' => 'There are no items to show',
+	'hj:framework:list:limit' => 'Show',
 
 	'hj:framework:ajax:loading' => 'Loading...',
 	'hj:framework:ajax:saving' => 'Saving...',
@@ -33,6 +34,8 @@ $english = array(
 	'hj:framework:delete:success' => 'Item successfully removed',
 	'hj:framework:delete:error:unknown' => 'An unknown error occured',
 	
+	'hj:framework:success:accessidset' => 'Visibility level was successfully changed',
+	'hj:framework:error:cantsetaccess' => 'Can not change the visibility level',
 	
 );
 

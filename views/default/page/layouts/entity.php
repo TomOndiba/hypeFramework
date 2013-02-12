@@ -25,12 +25,19 @@ foreach ($ancestry as $ancestor) {
 $title = $entity->getTitle();
 elgg_push_breadcrumb($title);
 
-$menu = elgg_view_menu('hjentityhead', array(
-	'entity' => $entity,
-	'full_view' => true,
+$title = elgg_view_title($title, array('class' => 'elgg-heading-main'));
+
+$buttons = elgg_view_menu('title', array(
 	'sort_by' => 'priority',
-	'class' => 'elgg-menu-title elgg-menu-hz'
+	'class' => 'elgg-menu-hz',
+	'entity' => $entity
 		));
+
+$header = <<<HTML
+<div class="elgg-head clearfix">
+	$title$buttons
+</div>
+HTML;
 
 $entity->logView();
 
@@ -39,7 +46,10 @@ $params = array(
 	'content' => elgg_view_entity($entity, array(
 		'full_view' => true
 	)),
-	'filter' => false
+	'filter' => false,
+	'header_override' => $header
 );
+
+$params = array_merge($vars, $params);
 
 echo elgg_view('page/layouts/content', $params);

@@ -5,6 +5,7 @@ $path_actions = $shortcuts['actions'];
 
 elgg_register_action('framework/edit/object', $path_actions . 'framework/edit/object.php');
 elgg_register_action('framework/delete/object', $path_actions . 'framework/delete/object.php');
+elgg_register_action('framework/access/set', $path_actions . 'framework/access/set.php');
 
 function hj_framework_edit_object_action() {
 	$form_name = get_input('form_name', false);

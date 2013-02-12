@@ -7,7 +7,7 @@
  * @param mixed $subtypes
  * @return boolean|array
  */
-function hj_framework_set_ancestry($guid, $subtypes = null) {
+function hj_framework_set_ancestry($guid) {
 
 	$entity = get_entity($guid);
 
@@ -33,12 +33,10 @@ function hj_framework_set_ancestry($guid, $subtypes = null) {
 		remove_entity_relationships($entity->guid, 'descendant', false);
 
 		foreach ($ancestry as $ancestor) {
-			if ($ancestor instanceof ElggObject &&
-					(is_null($subtypes) ||
-					(is_array($subtypes) && in_array($ancestor->getSubtype(), $subtypes)))) {
+			if (elgg_instanceof($ancestor, 'object')) {
 				update_entity_last_action($ancestor->guid, $entity->time_created);
-				add_entity_relationship($entity->guid, 'descendant', $ancestor->guid);
 			}
+			add_entity_relationship($entity->guid, 'descendant', $ancestor->guid);
 		}
 
 		$entity->hierarchy_hash = sha1(serialize($ancestry_guids));

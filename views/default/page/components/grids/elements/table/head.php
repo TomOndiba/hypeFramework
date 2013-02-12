@@ -15,6 +15,9 @@ $offset_key = $list_options['offset_key'];
 $order_by = get_input($order_by_key, false);
 $direction = get_input($direction_key, 'DESC');
 
+$base_url = elgg_extract('base_url', $vars, current_page_url());
+$base_url = elgg_http_remove_url_query_element($base_url, '__goto');
+
 foreach ($headers as $key => $value) {
 
 	if (!$value)
@@ -38,7 +41,7 @@ foreach ($ungrouped_headers as $header => $options) {
 	$controls[$header]['asc'] = elgg_view('output/url', array(
 		'text' => '&#9652;',
 		'title' => elgg_echo('hj:framework:sort:ascending'),
-		'href' => elgg_http_add_url_query_elements(full_url(), array($order_by_key => $options['sort_key'], $direction_key => 'ASC', $offset_key => 0)),
+		'href' => elgg_http_add_url_query_elements($base_url, array($order_by_key => $options['sort_key'], $direction_key => 'ASC', $offset_key => 0)),
 		'class' => "sort-control sort-control-asc $active_class"
 			));
 
@@ -46,14 +49,14 @@ foreach ($ungrouped_headers as $header => $options) {
 	$controls[$header]['desc'] = elgg_view('output/url', array(
 		'text' => '&#9662;',
 		'title' => elgg_echo('hj:framework:sort:descending'),
-		'href' => elgg_http_add_url_query_elements(full_url(), array($order_by_key => $options['sort_key'], $direction_key => 'DESC', $offset_key => 0)),
+		'href' => elgg_http_add_url_query_elements($base_url, array($order_by_key => $options['sort_key'], $direction_key => 'DESC', $offset_key => 0)),
 		'class' => "sort-control sort-control-desc $active_class"
 			));
 
 	if ($order_by != $options['sort_key'] || ($order_by == $options['sort_key'] && $direction == 'DESC')) {
-		$title_url = elgg_http_add_url_query_elements(full_url(), array($order_by_key => $options['sort_key'], $direction_key => 'ASC', $offset_key => 0));
+		$title_url = elgg_http_add_url_query_elements($base_url, array($order_by_key => $options['sort_key'], $direction_key => 'ASC', $offset_key => 0));
 	} else {
-		$title_url = elgg_http_add_url_query_elements(full_url(), array($order_by_key => $options['sort_key'], $direction_key => 'DESC', $offset_key => 0));
+		$title_url = elgg_http_add_url_query_elements($base_url, array($order_by_key => $options['sort_key'], $direction_key => 'DESC', $offset_key => 0));
 	}
 
 	$title_class = ($order_by == $options['sort_key']) ? 'elgg-state-active' : 'elgg-state-selectable';

@@ -4,8 +4,10 @@
  * 	Rendering and validation of forms
  * 
  * @example mod/hypeFramework/documentation/examples/form.php An example of how to create / render form
- * @link mod/hypeFramework/views/default/framework/bootstrap/form.php
+ * @link mod/hypeFramework/views/default/framework/bootstrap/form/body.php
  */
+
+
 function hj_framework_view_form($form_name, $params = array()) {
 
 	$params = hj_framework_prepare_form($form_name, $params);
@@ -13,9 +15,23 @@ function hj_framework_view_form($form_name, $params = array()) {
 	$form = elgg_extract('form', $params, array());
 	$attributes = elgg_extract('attributes', $form, array());
 
-	$attributes['body'] = elgg_view('framework/bootstrap/form', $params);
+	$attributes['body'] = elgg_view('framework/bootstrap/form/body', $params);
 
 	return elgg_view('input/form', $attributes);
+}
+
+/**
+ * Rendering of a form body
+ * 
+ * @param str $form_name
+ * @param mixed $params
+ */
+function hj_framework_view_form_body($form_name, $params = array()) {
+
+	$params = hj_framework_prepare_form($form_name, $params);
+
+	return elgg_view('framework/bootstrap/form/body', $params);
+	
 }
 
 function hj_framework_prepare_form($form_name, $params = array()) {

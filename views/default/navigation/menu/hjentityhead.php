@@ -14,7 +14,11 @@ $vars['name'] = preg_replace('/[^a-z0-9\-]/i', '-', $vars['name']);
 $headers = elgg_extract('show_section_headers', $vars, false);
 $item_class = elgg_extract('item_class', $vars, '');
 
-$class = "elgg-menu";
+if ($vars['dropdown']) {
+	$class = "elgg-menu elgg-menu-hjentityhead";
+} else {
+	$class = "elgg-menu elgg-menu-entity";
+}
 if (isset($vars['class'])) {
 	$class .= " {$vars['class']}";
 }

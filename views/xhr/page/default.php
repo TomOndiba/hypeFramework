@@ -37,11 +37,27 @@ $resources = array(
 	'css' => array()
 );
 
+/** @hack	Prevent js/css from loading again if cached in default viewtype * */
+$lastcached_xhr = datalist_get("simplecache_lastcached_xhr");
+$lastcached_default = datalist_get("simplecache_lastcached_default");
+
 foreach ($js as $script) {
+	if (elgg_is_simplecache_enabled()) {
+		$script = str_replace('cache/js/xhr', 'cache/js/default', $script);
+	} else {
+		$script = str_replace('view=xhr', 'view=default', $script);
+	}
+	$script = str_replace($lastcached_xhr, $lastcached_default, $script);
 	$resources['js'][] = $script;
 }
 
 foreach ($css as $link) {
+	if (elgg_is_simplecache_enabled()) {
+		$link = str_replace('cache/css/xhr', 'cache/css/default', $link);
+	} else {
+		$link = str_replace('view=xhr', 'view=default', $link);
+	}
+	$link = str_replace($lastcached_xhr, $lastcached_default, $link);
 	$resources['css'][] = $link;
 }
 
@@ -65,11 +81,7 @@ if (isset($system_messages['error'])) {
 	$params['status'] = -1;
 }
 
-if (stripos($_SERVER['HTTP_ACCEPT'], 'application/json') === FALSE) {
-	header("Content-type: text/plain");
-} else {
-	header("Content-type: application/json");
-}
+header("Content-type: application/json");
 
 echo json_encode($params);
 exit();

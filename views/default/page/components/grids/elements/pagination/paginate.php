@@ -20,6 +20,8 @@ if (!$limit = (int) elgg_extract('limit', $getter_options, 10)) {
 $count = (int) elgg_extract('count', $vars, 0);
 
 $base_url = elgg_extract('base_url', $vars, current_page_url());
+$base_url = elgg_http_remove_url_query_element($base_url, '__goto');
+
 $num_pages = elgg_extract('num_pages', $vars, 5);
 
 $delta = ceil($num_pages / 2);
@@ -118,11 +120,12 @@ if ($count <= $limit && $offset == 0) {
 	$pager .= '</ul>';
 }
 
+$filter .= '<label class="hj-framework-list-limit-select pull-left">' . elgg_echo('hj:framework:list:limit') . '</label>';
 $filter .= elgg_view('input/dropdown', array(
 	'name' => $limit_key,
 	'value' => $limit,
 	'options' => array(10, 25, 50, 100),
-	'class' => 'hj-framework-list-limit-select'
+	'class' => 'hj-framework-list-limit-select pull-right'
 		));
 
 // Limit dropdown
@@ -132,7 +135,8 @@ if ($count > 10) {
 		'method' => 'GET',
 		'action' => '',
 		'disable_security' => true,
-		'body' => $filter
+		'body' => $filter,
+		'class' => 'clearfix'
 	));
 }
 echo '</div>';

@@ -130,25 +130,24 @@ $graphics_url = $base_url . 'mod/hypeFramework/graphics/';
 	
 	.elgg-menu-hjentityhead > li {
 		position:relative;
+		padding:4px;
 	}
 
 	.elgg-menu-hjentityhead > li > a {
-		z-index:101;
 	}
 
 	.elgg-menu-hjentityhead .elgg-child-menu {
 		min-width: 200px;
-		background: #f4f4f4;
+		background:white;
 		border: 1px solid #B0B0B0;
-		-moz-box-shadow: 0 0 4px #B0B0B0;
-		-webkit-box-shadow: 0 0 4px #B0B0B0;
-		box-shadow: 0 0 4px #B0B0B0;
+		-moz-box-shadow: 2px 2px 5px #B0B0B0;
+		-webkit-box-shadow: 2px 2px 5px #B0B0B0;
+		box-shadow: 2px 2px 5px #B0B0B0;
 		position:absolute;
-		right:-5px;
-		top:5px;
+		right:0px;
+		top:23px;
 		display:none;
-		z-index:100;
-		padding-top:30px;
+		z-index:101;
 	}
 
 	.elgg-menu-hjentityhead .elgg-child-menu > li {
@@ -182,8 +181,11 @@ $graphics_url = $base_url . 'mod/hypeFramework/graphics/';
 		background:#f4f4f4;
 	}
 
-	.elgg-menu-hjentityhead .elgg-icon-hjtoggler-down {
-		margin-top:12px;
+	.elgg-menu-hjentityhead .elgg-child-menu > li.elgg-state-selected a {
+		font-weight:bold;
+		padding-left:20px;
+		background: transparent url(<?php echo elgg_get_site_url(); ?>_graphics/elgg_sprites.png) no-repeat left;
+		background-position: 0 -1477px;
 	}
 
 	.hj-framework-cover-image {
