@@ -7,6 +7,14 @@ elgg_register_action('framework/edit/object', $path_actions . 'framework/edit/ob
 elgg_register_action('framework/delete/object', $path_actions . 'framework/delete/object.php');
 elgg_register_action('framework/access/set', $path_actions . 'framework/access/set.php');
 
+elgg_register_action('framework/bookmark', $path_actions . 'framework/bookmark/default.php');
+elgg_register_action('framework/bookmark/create', $path_actions . 'framework/bookmark/create.php');
+elgg_register_action('framework/bookmark/remove', $path_actions . 'framework/bookmark/remove.php');
+
+elgg_register_action('framework/subscription', $path_actions . 'framework/subscription/default.php');
+elgg_register_action('framework/subscription/create', $path_actions . 'framework/subscription/create.php');
+elgg_register_action('framework/subscription/remove', $path_actions . 'framework/subscription/remove.php');
+
 function hj_framework_edit_object_action() {
 	$form_name = get_input('form_name', false);
 
@@ -48,7 +56,7 @@ function hj_framework_edit_object_action() {
 	}
 
 	if ($guid) { // Entity already exists
-		if ((int)get_input('container_guid', 0) > 0) {
+		if ((int) get_input('container_guid', 0) > 0) {
 			$entity->container_guid = get_input('container_guid', ELGG_ENTITIES_ANY_VALUE);
 		}
 
@@ -122,21 +130,29 @@ function hj_framework_edit_object_action() {
 				$value = get_input($name);
 				set_input($name, null);
 
-				if (!$value)
+				if (!$value) {
+					elgg_delete_metadata(array(
+						'guid' => $entity->guid,
+						'metadata_name' => $name
+					));
+
 					continue;
+				}
 
-				elgg_delete_metadata(array(
-					'guid' => $entity->guid,
-					'metadata_name' => $name
-				));
-
-				if (is_array($value)) {
+				if (is_array($value) && count($value) > 1) {
+					elgg_delete_metadata(array(
+						'guid' => $entity->guid,
+						'metadata_name' => $name
+					));
 					foreach ($value as $val) {
 						if (!empty($val)) {
 							create_metadata($entity->guid, $name, $val, '', $entity->owner_guid, $accesslevel_id, true);
 						}
 					}
 				} else {
+					if (is_array($value)) {
+						$value = implode(',', $value);
+					}
 					create_metadata($entity->guid, $name, $value, '', $entity->owner_guid, $accesslevel_id);
 				}
 			}

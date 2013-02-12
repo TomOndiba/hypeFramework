@@ -1,5 +1,9 @@
 <?php
 
+if (!HYPEFRAMEWORK_INTERFACE_LOCATION) {
+	return true;
+}
+
 // elgg_geocode_location() hook
 elgg_register_plugin_hook_handler('geocode', 'location', 'hj_framework_geocode_location');
 

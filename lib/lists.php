@@ -128,12 +128,12 @@ function hj_framework_get_order_by_clause($porder_by = 'e.time_created', $pdirec
 			switch ($column) {
 
 				case 'priority' :
-					$options['selects'][] = "CAST(eprioritymsv.string AS SIGNED) AS epriority";
+					$options['selects'][] = "CAST(eprioritymsv.string AS SIGNED) epriority";
 					$options['joins'][] = "JOIN {$dbprefix}metadata eprioritymd ON e.guid = eprioritymd.entity_guid";
-					$options['joins'][] = "LEFT JOIN {$dbprefix}metastrings eprioritymsn ON (eprioritymd.name_id = eprioritymsn.id AND eprioritymsn.string = 'priority')";
-					$options['joins'][] = "LEFT JOIN {$dbprefix}metastrings eprioritymsv ON (eprioritymd.value_id = eprioritymsv.id)";
+					$options['joins'][] = "JOIN {$dbprefix}metastrings eprioritymsn ON (eprioritymsn.string = 'priority')";
+					$options['joins'][] = "LEFT JOIN {$dbprefix}metastrings eprioritymsv ON (eprioritymd.name_id = eprioritymsn.id AND eprioritymd.value_id = eprioritymsv.id)";
 					$options['group_by'] = 'e.guid';
-					$order_by = "epriority ASC, e.time_created DESC";
+					$order_by = "ISNULL(epriority), epriority ASC, e.time_created DESC";
 
 					break;
 
@@ -157,10 +157,9 @@ function hj_framework_get_order_by_clause($porder_by = 'e.time_created', $pdirec
 
 				default :
 					$options['joins'][] = "JOIN {$dbprefix}metadata md_order_by ON md_order_by.entity_guid = e.guid";
-					$options['joins'][] = "JOIN {$dbprefix}metastrings msn_order_by ON msn_order_by.id = md_order_by.name_id";
-					$options['joins'][] = "JOIN {$dbprefix}metastrings msv_order_by ON msv_order_by.id = md_order_by.value_id";
-					$options['wheres'][] = "(msn_order_by.string = '$column')";
-					$order_by = "msv_order_by.string $direction, e.time_created $direction";
+					$options['joins'][] = "JOIN {$dbprefix}metastrings msn_order_by ON msn_order_by.string = '$column'";
+					$options['joins'][] = "JOIN {$dbprefix}metastrings msv_order_by ON (msn_order_by.id = md_order_by.name_id AND msv_order_by.id = md_order_by.value_id)";
+					$order_by = "ISNULL(msv_order_by.string), msv_order_by.string $direction, e.time_created DESC";
 					break;
 			}
 

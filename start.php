@@ -12,6 +12,9 @@
 
 define('HYPEFRAMEWORK_RELEASE', 1356044864);
 
+define('HYPEFRAMEWORK_INTERFACE_AJAX', elgg_get_plugin_setting('interface_ajax', 'hypeFramework'));
+define('HYPEFRAMEWORK_INTERFACE_LOCATION', elgg_get_plugin_setting('interface_location', 'hypeFramework'));
+
 elgg_register_event_handler('init', 'system', 'hj_framework_init', 100);
 
 function hj_framework_init() {

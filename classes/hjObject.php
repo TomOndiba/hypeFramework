@@ -55,6 +55,22 @@ class hjObject extends ElggObject {
 	}
 
 	/**
+	 * Get bookmark action URL
+	 * @return str
+	 */
+	public function getBookmarkURL() {
+		return elgg_add_action_tokens_to_url(elgg_get_site_url() . "action/framework/bookmark?guid=$this->guid");
+	}
+
+	/**
+	 * Get subscribe action URL
+	 * @return str
+	 */
+	public function getSubscriptionURL() {
+		return elgg_add_action_tokens_to_url(elgg_get_site_url() . "action/framework/subscription?guid=$this->guid");
+	}
+
+	/**
 	 * Add entity to a category
 	 * @param int $category_guid
 	 * @param bool $recursive	Traverse up the category tree?
@@ -165,4 +181,122 @@ class hjObject extends ElggObject {
 		return $this->getAnnotationsSum('log:preview');
 	}
 
+	/** 
+	 * Subscribe user to notifications
+	 * 
+	 * @param mixed $user
+	 * @return boolean
+	 */
+	public function createSubscription($user = null) {
+        if (!$user) {
+            $user = elgg_get_logged_in_user_entity();
+        }
+
+        if (!$this->isSubscribed()) {
+            return add_entity_relationship($user->guid, 'subscribed', $this->guid);
+        }
+
+        return false;
+    }
+
+	/**
+	 * Unsubscribe user from notifications
+	 *
+	 * @param mixed $user
+	 * @return boolean
+	 */
+    public function removeSubscription($user = null) {
+        if (!$user) {
+            $user = elgg_get_logged_in_user_entity();
+        }
+
+        if ($this->isSubscribed()) {
+            return remove_entity_relationship($user->guid, 'subscribed', $this->guid);
+        }
+
+        return false;
+    }
+
+	/**
+	 * Check subscription status
+	 *
+	 * @param mixed $user
+	 * @return boolean
+	 */
+    public function isSubscribed($user = null) {
+        if (!$user) {
+            $user = elgg_get_logged_in_user_entity();
+        }
+
+        return check_entity_relationship($user->guid, 'subscribed', $this->guid);
+    }
+
+	/**
+	 * Get a list of users subscribed to this entity
+	 * @return type
+	 */
+    public function getSubscribedUsers() {
+
+        $options = array(
+            'type' => 'user',
+            'relationship' => 'subscribed',
+            'relationship_guid' => $this->guid,
+            'inverse_relationship' => true,
+            'limit' => 0
+        );
+
+        $users = elgg_get_entities_from_relationship($options);
+
+        return $users;
+    }
+
+	/**
+	 * Bookmark entity
+	 *
+	 * @param mixed $user
+	 * @return boolean
+	 */
+	public function createBookmark($user = null) {
+		if (!$user) {
+			$user = elgg_get_logged_in_user_entity();
+		}
+
+		if (!$this->isBookmarked()) {
+			return add_entity_relationship($user->guid, 'bookmarked', $this->guid);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Remove bookmark
+	 *
+	 * @param mixed $user
+	 * @return boolean
+	 */
+	public function removeBookmark($user = null) {
+		if (!$user) {
+			$user = elgg_get_logged_in_user_entity();
+		}
+
+		if ($this->isBookmarked()) {
+			return remove_entity_relationship($user->guid, 'bookmarked', $this->guid);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if entity has been bookmarked
+	 *
+	 * @param mixed $user
+	 * @return boolean
+	 */
+	public function isBookmarked($user = null) {
+		if (!$user) {
+			$user = elgg_get_logged_in_user_entity();
+		}
+
+		return check_entity_relationship($user->guid, 'bookmarked', $this->guid);
+	}
 }

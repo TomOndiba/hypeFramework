@@ -479,3 +479,31 @@ function hj_framework_process_category_input($hook, $type, $return, $params) {
 
 	return true;
 }
+
+elgg_register_plugin_hook_handler('init', 'form:edit:plugin:hypeframework', 'hj_framework_init_plugin_settings_form');
+
+function hj_framework_init_plugin_settings_form($hook, $type, $return, $params) {
+
+	$entity = elgg_extract('entity', $params);
+
+	$settings = array(
+		'interface_ajax',
+		'interface_location'
+	);
+
+	foreach ($settings as $s) {
+		$config['fields']["params[$s]"] = array(
+			'input_type' => 'dropdown',
+			'options_values' => array(
+				0 => elgg_echo('disable'),
+				1 => elgg_echo('enable')
+			),
+			'value' => $entity->$s,
+			'hint' => elgg_echo("hj:framework:settings:hint:$s")
+		);
+	}
+
+	$config['buttons'] = false;
+
+	return $config;
+}

@@ -37,7 +37,26 @@ $english = array(
 	'hj:framework:success:accessidset' => 'Visibility level was successfully changed',
 	'hj:framework:error:cantsetaccess' => 'Can not change the visibility level',
 	
-);
+	'hj:framework:bookmark:create' => 'Bookmark',
+	'hj:framework:bookmark:remove' => 'Remove Bookmark',
+	'hj:framework:bookmark:create:error' => 'Item can not be bookmarked',
+	'hj:framework:bookmark:create:success' => 'Item successfully bookmarked',
+	'hj:framework:bookmark:remove:error' => 'Bookmark can not be removed',
+	'hj:framework:bookmark:remove:success' => 'Bookmark successfully removed',
+
+	'hj:framework:subscription:create' => 'Subscribe',
+	'hj:framework:subscription:remove' => 'Unsubscribe',
+	'hj:framework:subscription:create:error' => 'You can\'t subscribe to this item',
+	'hj:framework:subscription:create:success' => 'You have successfully subscribed to notifications',
+	'hj:framework:subscription:remove:error' => 'Subscription can not be removed',
+	'hj:framework:subscription:remove:success' => 'Subscription has been cancelled',
+
+	'edit:plugin:hypeframework:params[interface_ajax]' => 'Enable AJAX Interface',
+	'edit:plugin:hypeframework:params[interface_location]' => 'Enable Location Interface',
+
+	'hj:framework:settings:hint:interface_ajax' => 'AJAX interface provides some interactive functionalities, that allow users to perform actions and refresh UI elements without having to reload the entire page',
+	'hj:framework:settings:hint:interface_location' => 'Location interface allows to geocode and cache coordinates whenever "location" metadata is attached to an entity. This maybe helpful, when other plugins relying on geo-coordiates are enabled'
+		);
 
 
 add_translation("en", $english);
