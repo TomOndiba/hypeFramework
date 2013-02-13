@@ -120,7 +120,7 @@
 
 	framework.ajax.init = function() {
 
-		$('form .elgg-button-cancel')
+		$('form .elgg-button-cancel-trigger')
 		.live('click', function(event) {
 			event.preventDefault();
 			if ($(this).closest('#fancybox-content').length > 0) {
