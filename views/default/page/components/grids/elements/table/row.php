@@ -20,14 +20,17 @@ if (isset($vars['item_class'])) {
 $headers = $vars['list_options']['list_view_options']['table']['head'];
 
 if ($headers) {
-
 	$item_view = '';
 	foreach ($headers as $header => $options) {
+		if (!$options) continue;
+
 		$colspan = '';
 		if (elgg_view_exists("$type/$subtype/elements/$header")) {
 			$cell = elgg_view("$type/$subtype/elements/$header", $vars);
 		} else if (isset($options['colspan'])) {
+			$cell = '';
 			foreach ($options['colspan'] as $col_header => $col_options) {
+				if (!$col_options) continue;
 				if (elgg_view_exists("$type/$subtype/elements/$col_header")) {
 					$cell .= elgg_view("$type/$subtype/elements/$col_header", $vars);
 				} else {

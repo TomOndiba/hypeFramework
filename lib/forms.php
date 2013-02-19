@@ -6,8 +6,6 @@
  * @example mod/hypeFramework/documentation/examples/form.php An example of how to create / render form
  * @link mod/hypeFramework/views/default/framework/bootstrap/form/body.php
  */
-
-
 function hj_framework_view_form($form_name, $params = array()) {
 
 	$params = hj_framework_prepare_form($form_name, $params);
@@ -31,7 +29,6 @@ function hj_framework_view_form_body($form_name, $params = array()) {
 	$params = hj_framework_prepare_form($form_name, $params);
 
 	return elgg_view('framework/bootstrap/form/body', $params);
-	
 }
 
 function hj_framework_prepare_form($form_name, $params = array()) {
@@ -79,7 +76,7 @@ function hj_framework_prepare_form($form_name, $params = array()) {
 				unset($fields['name']);
 				continue;
 			}
-			
+
 			$field['name'] = $name;
 
 			if (isset($sticky_values[$name])) {
@@ -155,8 +152,9 @@ function hj_framework_validate_form($form_name = null) {
 
 		foreach ($fields as $name => $options) {
 
-			if (!$options) continue;
-			
+			if (!$options)
+				continue;
+
 			$type = elgg_extract('input_type', $options, 'text');
 
 			$valid['status'] = true;
@@ -329,6 +327,11 @@ function hj_framework_process_tags_input($hook, $type, $return, $params) {
 
 	$value = string_to_tag_array($value);
 
+	elgg_delete_metadata(array(
+		'guid' => $entity->guid,
+		'metadata_names' => $name
+	));
+	
 	if ($value) {
 		foreach ($value as $val) {
 			create_metadata($entity->guid, $name, $val, '', $entity->owner_guid, $access_id, true);
@@ -345,22 +348,25 @@ function hj_framework_process_file_input($hook, $type, $return, $params) {
 
 	$entity = elgg_extract('entity', $params, false);
 
-	if (!elgg_instanceof($entity))
+	if (!elgg_instanceof($entity)) {
 		return false;
+	}
 
-	global $_FILES;
+
 	$name = elgg_extract('name', $params, 'file');
 
-	$file = $_FILES[$name];
+	$files = hj_framework_prepare_files_global($_FILES);
+	$files = $files['name'];
 
 	// Maybe someone doesn't want us to save the file in this particular way
 	if (!empty($file['name'])) {
-		if (!elgg_trigger_plugin_hook('fileupload', 'form:input:file', array(
+		if (!elgg_trigger_plugin_hook('process:upload', 'form:input:type:file', array(
 					'entity' => $entity,
-					'file' => $file,
-					'name' => $name), false
-		)) {
-			hj_framework_process_file_upload($file, $entity, $name);
+					'files' => $files,
+					'name' => $name
+						), false)
+		) {
+			hj_framework_process_file_upload($name, $entity);
 		}
 	}
 	return true;
@@ -373,7 +379,7 @@ function hj_framework_process_entity_icon_input($hook, $type, $return, $params) 
 
 	global $_FILES;
 	if ((isset($_FILES[$name])) && (substr_count($_FILES[$name]['type'], 'image/'))) {
-		hj_framework_generate_entity_icons($entity, $name);
+		hj_framework_generate_entity_icons($entity, $_FILES[$name]);
 	}
 	return true;
 }

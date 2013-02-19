@@ -122,9 +122,12 @@
 
 		$('form .elgg-button-cancel-trigger')
 		.live('click', function(event) {
-			event.preventDefault();
 			if ($(this).closest('#fancybox-content').length > 0) {
 				$.fancybox.close();
+				return false;
+			} else if ($(this).closest('#dialog').length > 0) {
+				$(this).closest('#dialog').dialog('close');
+				return false;
 			} else {
 				window.history.back();
 			}
@@ -136,7 +139,7 @@
 			$(this).closest('form').resetForm().trigger('submit');
 		})
 
-		$('a.sort-control, a.sort-title, .hj-framework-list-pagination > li > a')
+		$('a.list-filter-control, a.sort-control, a.sort-title, .hj-framework-list-pagination > li > a')
 		.live('click', framework.ajax.getUpdatedList);
 
 		$('.hj-framework-list-filter form')
@@ -254,15 +257,15 @@
 			data : data,
 			dataType: 'json',
 			beforeSend : function() {
-				$dialog = $('<div>')
+				$dialog = $('<div id="dialog">')
 				.html(framework.loaders.circle)
 				.appendTo('body')
 				.dialog({
 					dialogClass: 'hj-framework-dialog',
 					title : elgg.echo('hj:framework:ajax:loading'),
 					buttons : false,
-					modal : true,
-					autoResize : true,
+					//modal : true,
+					//autoResize : true,
 					width : 650,
 					maxHeight : 500
 				});
@@ -287,12 +290,6 @@
 				.dialog({
 					title: title
 				});
-
-				$dialog.find('.elgg-button-cancel').click(function(e) {
-					e.preventDefault();
-					$dialog.dialog('close');
-				})
-
 
 				var params = new Object();
 				params.event = 'getForm';
@@ -493,6 +490,10 @@
 					switch (listType) {
 
 						case 'list' :
+							var $listBody = $currentList;
+							break;
+
+						case 'gallery' :
 							var $listBody = $currentList;
 							break;
 

@@ -463,41 +463,6 @@ function hj_framework_get_email_url() {
 	}
 }
 
-function hj_framework_generate_entity_icons($entity, $name = 'icon') {
-
-	$icon_sizes = hj_framework_get_thumb_sizes($entity->getSubtype());
-
-	$prefix = "icons/" . $entity->guid;
-
-	$filehandler = new ElggFile();
-	$filehandler->owner_guid = elgg_get_logged_in_user_guid();
-	$filehandler->setFilename($prefix . ".jpg");
-	$filehandler->open("write");
-	$filehandler->write(get_uploaded_file($name));
-	$filehandler->close();
-
-	foreach ($icon_sizes as $size => $values) {
-		$thumb_resized = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), $values['w'], $values['h'], $values['square']);
-
-		if ($thumb_resized) {
-			$thumb = new ElggFile();
-			$thumb->owner_guid = elgg_get_logged_in_user_guid();
-			$thumb->setMimeType('image/jpeg');
-
-			$thumb->setFilename($prefix . "$size.jpg");
-			$thumb->open("write");
-			$thumb->write($thumb_resized);
-			$thumb->close();
-			$icontime = true;
-		}
-	}
-	if ($icontime) {
-		$entity->icontime = time();
-		$entity->hjicontime = time();
-	}
-	return;
-}
-
 /**
  * Unset values from vars
  * @param array $vars
@@ -525,36 +490,4 @@ function hj_framework_clean_vars($vars) {
 		unset($vars[$key]);
 	}
 	return $vars;
-}
-
-/**
- * Adds an element or elements to a URL's query string.
- *
- * @param str   $url      The URL
- * @param array $elements Key/value pairs to add to the URL
- *
- * @return str The new URL with the query strings added
- */
-function hj_framework_http_add_url_query_elements($url, array $elements) {
-	$url_array = parse_url($url);
-
-	if (isset($url_array['query'])) {
-		$query = elgg_parse_str($url_array['query']);
-	} else {
-		$query = array();
-	}
-
-	foreach ($elements as $k => $v) {
-		$k = elgg_parse_str("$k=$v");
-		if (!is_array($k)) {
-			$query[$k] = $v;
-		} else {
-			$query = array_merge($query, $k);
-		}
-	}
-
-	$url_array['query'] = http_build_query($query);
-	$string = elgg_http_build_url($url_array, false);
-
-	return $string;
 }

@@ -10,4 +10,4 @@ if (!$entity->icontime) {
 	return;
 }
 
-echo '<div class="hj-framework-cover-image" style="background-image:url(' . $entity->getIconURL('master') . ')"></div>';
+echo '<div class="hj-framework-cover-image" style="background-image:url(' . $entity->getIconURL('cover') . ')"></div>';

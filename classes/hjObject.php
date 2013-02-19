@@ -299,4 +299,17 @@ class hjObject extends ElggObject {
 
 		return check_entity_relationship($user->guid, 'bookmarked', $this->guid);
 	}
+
+	/**
+	 * Set last action on an entity | helpful when updating a parent entity
+	 * @param int $timestamp
+	 */
+	public function setLastAction($timestamp = null) {
+
+		if (!$timestamp) {
+			$timestamp = time();
+		}
+
+		update_entity_last_action($this->guid, $timestamp);
+	}
 }

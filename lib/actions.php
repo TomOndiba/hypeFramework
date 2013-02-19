@@ -15,6 +15,8 @@ elgg_register_action('framework/subscription', $path_actions . 'framework/subscr
 elgg_register_action('framework/subscription/create', $path_actions . 'framework/subscription/create.php');
 elgg_register_action('framework/subscription/remove', $path_actions . 'framework/subscription/remove.php');
 
+elgg_register_action('framework/file/temp', $path_actions . 'framework/file/temp.php');
+
 function hj_framework_edit_object_action() {
 	$form_name = get_input('form_name', false);
 
@@ -111,6 +113,9 @@ function hj_framework_edit_object_action() {
 			if (in_array($name, $ignore_fields))
 				continue;
 
+			if (!$options)
+				continue;
+			
 			$type = elgg_extract('input_type', $options, 'text');
 
 			$accesslevel_id = (isset($accesslevel[$name])) ? $accesslevel[$name] : $entity->access_id;

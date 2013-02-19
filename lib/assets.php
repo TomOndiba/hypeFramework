@@ -20,6 +20,12 @@ if (HYPEFRAMEWORK_INTERFACE_AJAX) {
 	elgg_load_js('framework.ajax');
 }
 
+elgg_register_js('jquery.filedrop.js', 'mod/hypeFramework/vendors/filedrop/jquery.filedrop.js');
+elgg_register_js('framework.filedrop', elgg_get_simplecache_url('js', 'framework/filedrop'));
+elgg_register_simplecache_view('js/framework/filedrop');
+elgg_register_css('framework.filedrop', elgg_get_simplecache_url('css', 'framework/filedrop'));
+elgg_register_simplecache_view('css/framework/filedrop');
+
 //$hj_js_ui = elgg_get_simplecache_url('js', 'framework/ui');
 //elgg_register_js('framework.ui', $hj_js_ui);
 //elgg_load_js('framework.ui');

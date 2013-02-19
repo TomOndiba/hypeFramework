@@ -128,31 +128,13 @@ function hj_framework_get_order_by_clause($porder_by = 'e.time_created', $pdirec
 			switch ($column) {
 
 				case 'priority' :
-					$options['selects'][] = "CAST(eprioritymsv.string AS SIGNED) epriority";
+
+					$options['selects'][] = "SUM(eprioritymsv.string) epriority";
 					$options['joins'][] = "JOIN {$dbprefix}metadata eprioritymd ON e.guid = eprioritymd.entity_guid";
 					$options['joins'][] = "JOIN {$dbprefix}metastrings eprioritymsn ON (eprioritymsn.string = 'priority')";
 					$options['joins'][] = "LEFT JOIN {$dbprefix}metastrings eprioritymsv ON (eprioritymd.name_id = eprioritymsn.id AND eprioritymd.value_id = eprioritymsv.id)";
 					$options['group_by'] = 'e.guid';
-					$order_by = "ISNULL(epriority), epriority ASC, e.time_created DESC";
-
-					break;
-
-				case 'distance' :
-					$user = elgg_get_logged_in_user_entity();
-					if (!$user || !$latitude = $user->getLatitude() || !$longitude = $user->getLongitude()) {
-						register_error(elgg_echo('hj:framework:nousergeocode'));
-					} else {
-						$options['joins'][] = "JOIN {$dbprefix}metadata md_geo_lat ON md_geo_lat.entity_guid = e.guid";
-						$options['joins'][] = "JOIN {$dbprefix}metastrings msn_geo_lat ON msn_geo_lat.id = md_geo_lat.name_id";
-						$options['joins'][] = "JOIN {$dbprefix}metastrings msv_geo_lat ON msv_geo_lat.id = md_geo_lat.value_id";
-						$options['joins'][] = "JOIN {$dbprefix}metadata md_geo_long ON md_geo_long.entity_guid = e.guid";
-						$options['joins'][] = "JOIN {$dbprefix}metastrings msn_geo_long ON msn_geo_long.id = md_geo_long.name_id";
-						$options['joins'][] = "JOIN {$dbprefix}metastrings msv_geo_long ON msv_geo_long.id = md_geo_long.value_id";
-						$options['wheres'][] = "(msn_geo_lat.string = 'geo:lat' AND msn_geo_long.string = 'geo:long')";
-						$options['wheres'][] = "(msv_geo_lat.string NOT NULL AND msv_get_long.string NOT NULL)";
-						$options['selects'][] = "(((acos(sin(($latitude*pi()/180)) * sin((msv_geo_lat.string*pi()/180))+cos(($latitude*pi()/180)) * cos((msv_geo_lat.string*pi()/180)) * cos((($longitude - msv_geo_long.string)*pi()/180))))*180/pi())*60*1.1515*1.609344) as distance";
-						$order_by = "distance $direction";
-					}
+					$order_by = "ISNULL(SUM(eprioritymsv.string)), SUM(eprioritymsv.string) = 0, SUM(eprioritymsv.string) ASC, e.time_created DESC";
 					break;
 
 				default :

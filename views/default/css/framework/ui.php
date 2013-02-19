@@ -83,6 +83,9 @@ $graphics_url = $base_url . 'mod/hypeFramework/graphics/';
 	.hj-draggable-element-placeholder {
 		border:2px dashed #ccc;
 	}
+	tr.hj-draggable-element-placeholder {
+		background:#f4f4f4;
+	}
 
 	/** Toggler Icons **/
 

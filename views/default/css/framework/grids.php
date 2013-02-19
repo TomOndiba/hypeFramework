@@ -5,7 +5,9 @@
 	.hj-framework-list-wrapper {
 		position:relative;
 	}
-
+	.hj-framework-list-wrapper th {
+		float:none;
+	}
 	tr.hj-framework-list-item-new {
 		/*border-left: 5px solid #666;*/
 	}
@@ -30,6 +32,7 @@
 
 	.hj-framework-list-filter {
 		font-size: .9em;
+		text-align:right;
 	}
 	.hj-framework-list-filter input[type=text] {
 		min-height: auto;
@@ -47,4 +50,26 @@
 
 	.table-cell-menu .elgg-menu a,  .table-cell-menu .elgg-menu span {
 		font-size:0.9em
+	}
+
+	.elgg-menu-list-filter {
+		display: inline-block;
+		margin: 5px 10px;
+	}
+	.elgg-menu-list-filter > li {
+		display: inline-block;
+		padding: 0 5px;
+		border-right:1px solid #e8e8e8;
+	}
+
+	.elgg-menu-list-filter > li.elgg-state-selected a {
+		color: #ccc;
+		font-weight: bold;
+	}
+	.elgg-menu-list-filter > li:last-child {
+		border: 0;
+	}
+
+	.elgg-table-alt.hj-framework-table-view td:first-child {
+		width:auto;
 	}
