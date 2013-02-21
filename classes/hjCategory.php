@@ -19,6 +19,8 @@ class hjCategory extends hjObject {
 
 		if ($return) {
 			$this->setAncestry();
+			if (!isset($this->priority))
+				$this->priority = 0;
 		}
 
 		return $return;

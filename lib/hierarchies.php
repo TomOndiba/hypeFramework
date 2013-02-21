@@ -36,7 +36,8 @@ function hj_framework_set_ancestry($guid) {
 			if (elgg_instanceof($ancestor, 'object')) {
 				update_entity_last_action($ancestor->guid, $entity->time_created);
 			}
-			add_entity_relationship($entity->guid, 'descendant', $ancestor->guid);
+			if (!check_entity_relationship($entity->guid, 'descendant', $ancestor->guid))
+				add_entity_relationship($entity->guid, 'descendant', $ancestor->guid);
 		}
 
 		$entity->hierarchy_hash = sha1(serialize($ancestry_guids));

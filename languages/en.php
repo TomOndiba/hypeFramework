@@ -60,12 +60,13 @@ $english = array(
 	'hj:framework:notification:full_link' => 'You can view this item %s',
 	'hj:framework:notification:link' => 'here',
 
-	'hj:framework:input:file:add' => 'Add another file',
+	'hj:framework:input:file:add' => 'Add file',
 	'hj:framework:filedrop:filetypenotallowed' => 'You can not upload files of this type',
 	'hj:framework:filedrop:browsernotsupported' => 'Your browser does not support drag&drop functionality. Please select each file manually, or switch to Chrome/Mozilla',
 	'hj:framework:filedrop:instructions' => 'Drop images here to upload',
+	'hj:framework:filedrop:fallback' => 'Upload images one by one',
 
-	'hj:framework:entity:created' => 'Created %s',
+	'hj:framework:entity:created' => '%s',
 	
 		);
 

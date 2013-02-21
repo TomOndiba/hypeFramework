@@ -128,7 +128,6 @@ function hj_framework_get_order_by_clause($porder_by = 'e.time_created', $pdirec
 			switch ($column) {
 
 				case 'priority' :
-
 					$options['selects'][] = "SUM(eprioritymsv.string) epriority";
 					$options['joins'][] = "JOIN {$dbprefix}metadata eprioritymd ON e.guid = eprioritymd.entity_guid";
 					$options['joins'][] = "JOIN {$dbprefix}metastrings eprioritymsn ON (eprioritymsn.string = 'priority')";

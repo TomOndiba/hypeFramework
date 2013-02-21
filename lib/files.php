@@ -9,6 +9,7 @@
  */
 function hj_framework_process_file_upload($name, $entity = null) {
 
+	// Normalize the $_FILES array
 	if (is_array($_FILES[$name]['name'])) {
 		$files = hj_framework_prepare_files_global($_FILES);
 		$files = $files[$name];
@@ -17,17 +18,17 @@ function hj_framework_process_file_upload($name, $entity = null) {
 		$files = array($files);
 	}
 
-	// Is this file an attachment or a file entity?
-	$file_subtypes = elgg_trigger_plugin_hook('file:subtypes', 'framework:config', null, array('file', 'hjfile'));
-	$is_attachment = false;
-
 	if (elgg_instanceof($entity)) {
-		if (!in_array($entity->getSubtype(), $file_subtypes)) {
+		if (!$entity instanceof hjFile) {
 			$is_attachment = true;
 		}
+		$subtype = $entity->getSubtype();
 	}
 
 	foreach ($files as $file) {
+		if ($file['error']) {
+			continue;
+		}
 		if ($is_attachment) {
 			$filehandler = new hjFile();
 		} else {
@@ -44,17 +45,44 @@ function hj_framework_process_file_upload($name, $entity = null) {
 			$filestorename = $filehandler->getFilename();
 			$filestorename = elgg_substr($filestorename, elgg_strlen($prefix));
 		} else {
-			$filestorename = elgg_strtolower($file['name']);
+			$filestorename = elgg_strtolower(time() . $file['name']);
 		}
 
 		$filehandler->setFilename($prefix . $filestorename);
-		$filehandler->setMimeType($file['type']);
+
+		$mime_type = ElggFile::detectMimeType($file['tmp_name'], $file['type']);
+
+		// hack for Microsoft zipped formats
+		$info = pathinfo($file['name']);
+		$office_formats = array('docx', 'xlsx', 'pptx');
+		if ($mime_type == "application/zip" && in_array($info['extension'], $office_formats)) {
+			switch ($info['extension']) {
+				case 'docx':
+					$mime_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+					break;
+				case 'xlsx':
+					$mime_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+					break;
+				case 'pptx':
+					$mime_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+					break;
+			}
+		}
+
+		// check for bad ppt detection
+		if ($mime_type == "application/vnd.ms-office" && $info['extension'] == "ppt") {
+			$mime_type = "application/vnd.ms-powerpoint";
+		}
+
+		$filehandler->setMimeType($mime_type);
+
 		$filehandler->originalfilename = $file['name'];
-		$filehandler->simpletype = hj_framework_get_simple_type($file['type']);
+		$filehandler->simpletype = hj_framework_get_simple_type($mime_type);
 		$filehandler->filesize = $file['size'];
 
 		$filehandler->open("write");
 		$filehandler->close();
+
 		move_uploaded_file($file['tmp_name'], $filehandler->getFilenameOnFilestore());
 
 		if ($filehandler->save()) {
@@ -63,8 +91,24 @@ function hj_framework_process_file_upload($name, $entity = null) {
 				make_attachment($entity->guid, $filehandler->getGUID());
 			}
 
+			// Generate icons for images
 			if ($filehandler->simpletype == "image") {
-				hj_framework_generate_entity_icons($filehandler);
+
+				if (!elgg_instanceof($entity) || $is_attachment) { // no entity provided or this is an attachment generating icons for self
+					hj_framework_generate_entity_icons($filehandler, $filehandler);
+				} else if (elgg_instanceof($entity)) {
+					hj_framework_generate_entity_icons($entity, $filehandler);
+				}
+
+				// the settings tell us not to keep the original image file, so downsizing to master
+				if (!HYPEFRAMEWORK_FILES_KEEP_ORIGINALS) {
+					$icon_sizes = hj_framework_get_thumb_sizes($subtype);
+					$values = $icon_sizes['master'];
+					$master = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), $values['w'], $values['h'], $values['square'], 0, 0, 0, 0, $values['upscale']);
+					$filehandler->open('write');
+					$filehandler->write($master);
+					$filehandler->close();
+				}
 			}
 
 			$return[$file['name']] = $filehandler->getGUID();
@@ -76,7 +120,14 @@ function hj_framework_process_file_upload($name, $entity = null) {
 	return $return;
 }
 
+/**
+ * Normalize $_FILES global
+ * @param array $_files
+ * @param bool $top
+ * @return array
+ */
 function hj_framework_prepare_files_global(array $_files, $top = TRUE) {
+
 	$files = array();
 	foreach ($_files as $name => $file) {
 		if ($top) {
@@ -102,85 +153,103 @@ function hj_framework_prepare_files_global(array $_files, $top = TRUE) {
 	return $files;
 }
 
-function hj_framework_generate_entity_icons($entity, $file = array()) {
+/**
+ * Generate icons for an entity
+ *
+ * @param ElggEntity $entity
+ * @param ElggFile $filehandler		Valid $filehandler on Elgg filestore to grab the file from | can be null if $entity is instance of ElggFile
+ * @param array $coords				Coordinates for cropping
+ * @return boolean
+ */
+function hj_framework_generate_entity_icons($entity, $filehandler = null, $coords = array()) {
 
 	$icon_sizes = hj_framework_get_thumb_sizes($entity->getSubtype());
 
-	$prefix = "icons/" . $entity->guid;
-
-	if ($entity instanceof hjFile) {
+	if (!$filehandler && $entity instanceof hjFile) {
 		$filehandler = $entity;
-	} else {
-		$filehandler = new ElggFile();
-		$filehandler->owner_guid = elgg_get_logged_in_user_guid();
-		$filehandler->setFilename($prefix . ".jpg");
-		$filehandler->open("write");
-		$filehandler->write(file_get_contents($file['tmp_name']));
-		$filehandler->close();
 	}
 
+	if (!$filehandler)
+		return false;
+
+	$prefix = "icons/" . $entity->getGUID();
+
 	foreach ($icon_sizes as $size => $values) {
-		$thumb_resized = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), $values['w'], $values['h'], $values['square']);
+
+		if (!empty($coords) && in_array($size, array('topbar', 'tiny', 'small', 'medium', 'large'))) {
+			$thumb_resized = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), $values['w'], $values['h'], $values['square'], $coords['x1'], $coords['y1'], $coords['x2'], $coords['y2'], $values['upscale']);
+		} else if (empty($coords)) {
+			$thumb_resized = get_resized_image_from_existing_file($filehandler->getFilenameOnFilestore(), $values['w'], $values['h'], $values['square'], 0, 0, 0, 0, $values['upscale']);
+		}
 
 		if ($thumb_resized) {
-			$thumb = new ElggFile();
-			$thumb->owner_guid = elgg_get_logged_in_user_guid();
-			$thumb->setMimeType('image/jpeg');
 
+			$thumb = new hjFile();
+			$thumb->owner_guid = $entity->owner_guid;
+			$thumb->setMimeType('image/jpeg');
 			$thumb->setFilename($prefix . "$size.jpg");
 			$thumb->open("write");
 			$thumb->write($thumb_resized);
 			$thumb->close();
+
 			$icontime = true;
 		}
 	}
+
 	if ($icontime) {
 		$entity->icontime = time();
+		return true;
 	}
-	return;
+
+	return false;
 }
 
+/**
+ * Config array of icon sizes
+ *
+ * @param string $handler	e.g. entity subtype, can be helpful for plugin specific dimensions
+ * @return array
+ */
 function hj_framework_get_thumb_sizes($handler = null) {
+
 	$thumb_sizes = elgg_get_config('icon_sizes');
 
 	$thumb_sizes['large'] = array(
 		'w' => 200,
 		'h' => 200,
-		'square' => true
+		'square' => true,
+		'upscale' => true
 	);
+
 	$thumb_sizes['preview'] = array(
 		'w' => 400,
 		'h' => 400,
-		'square' => true
-	);
-	$thumb_sizes['master'] = array(
-		'w' => 600,
-		'h' => 600,
-		'square' => false
-	);
-	$thumb_sizes['full'] = array(
-		'w' => 1024,
-		'h' => 1024,
-		'square' => false
-	);
-	$thumb_sizes['cover'] = array(
-		'w' => 850,
-		'h' => 315,
-		'square' => false
+		'square' => false,
+		'upscale' => true
 	);
 
-	$thumb_sizes = elgg_trigger_plugin_hook('icon_sizes', 'formwork:config', array('handler' => $handler), $thumb_sizes);
-	return $thumb_sizes;
+	return elgg_trigger_plugin_hook('icon_sizes', 'framework:config', array('handler' => $handler), $thumb_sizes);
 }
 
+/**
+ * Copy of file_get_simple_type()
+ * Redefined in case file plugin is disabled
+ *
+ * @param string $mimetype
+ * @return string
+ */
 function hj_framework_get_simple_type($mimetype) {
 
 	switch ($mimetype) {
 		case "application/msword":
+		case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
 			return "document";
 			break;
 		case "application/pdf":
 			return "document";
+			break;
+		case "application/ogg":
+			return "audio";
 			break;
 	}
 
@@ -205,40 +274,4 @@ function hj_framework_get_simple_type($mimetype) {
 	}
 
 	return "general";
-}
-
-function hj_framework_get_mime_type($filename) {
-
-	// our list of mime types
-	$mime_types = array(
-		"pdf" => "application/pdf"
-		, "exe" => "application/octet-stream"
-		, "zip" => "application/zip"
-		, "docx" => "application/msword"
-		, "doc" => "application/msword"
-		, "xls" => "application/vnd.ms-excel"
-		, "ppt" => "application/vnd.ms-powerpoint"
-		, "gif" => "image/gif"
-		, "png" => "image/png"
-		, "jpeg" => "image/jpg"
-		, "jpg" => "image/jpg"
-		, "mp3" => "audio/mpeg"
-		, "wav" => "audio/x-wav"
-		, "mpeg" => "video/mpeg"
-		, "mpg" => "video/mpeg"
-		, "mpe" => "video/mpeg"
-		, "mov" => "video/quicktime"
-		, "avi" => "video/x-msvideo"
-		, "3gp" => "video/3gpp"
-		, "css" => "text/css"
-		, "jsc" => "application/javascript"
-		, "js" => "application/javascript"
-		, "php" => "text/html"
-		, "htm" => "text/html"
-		, "html" => "text/html"
-	);
-
-	$extension = strtolower(end(explode('.', $filename)));
-
-	return $mime_types[$extension];
 }

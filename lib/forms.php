@@ -331,7 +331,7 @@ function hj_framework_process_tags_input($hook, $type, $return, $params) {
 		'guid' => $entity->guid,
 		'metadata_names' => $name
 	));
-	
+
 	if ($value) {
 		foreach ($value as $val) {
 			create_metadata($entity->guid, $name, $val, '', $entity->owner_guid, $access_id, true);
@@ -346,29 +346,11 @@ function hj_framework_process_file_input($hook, $type, $return, $params) {
 	if (!elgg_is_logged_in())
 		return false;
 
-	$entity = elgg_extract('entity', $params, false);
-
-	if (!elgg_instanceof($entity)) {
-		return false;
-	}
-
-
-	$name = elgg_extract('name', $params, 'file');
-
-	$files = hj_framework_prepare_files_global($_FILES);
-	$files = $files['name'];
-
 	// Maybe someone doesn't want us to save the file in this particular way
-	if (!empty($file['name'])) {
-		if (!elgg_trigger_plugin_hook('process:upload', 'form:input:type:file', array(
-					'entity' => $entity,
-					'files' => $files,
-					'name' => $name
-						), false)
-		) {
-			hj_framework_process_file_upload($name, $entity);
-		}
+	if (!elgg_trigger_plugin_hook('process:upload', 'form:input:type:file', $params, false)) {
+		hj_framework_process_file_upload($params['name'], $params['entity']);
 	}
+
 	return true;
 }
 
@@ -378,8 +360,18 @@ function hj_framework_process_entity_icon_input($hook, $type, $return, $params) 
 	$name = elgg_extract('name', $params);
 
 	global $_FILES;
-	if ((isset($_FILES[$name])) && (substr_count($_FILES[$name]['type'], 'image/'))) {
-		hj_framework_generate_entity_icons($entity, $_FILES[$name]);
+	if ((isset($_FILES[$name])) && (substr_count($_FILES[$name]['type'], 'image/')) && !$_FILES[$name]['error']) {
+
+		$file = new hjFile();
+		$file->owner_guid = $entity->guid;
+		$file->setFilename('hjfile/' . time() . $_FILES[$name]['name']);
+		$file->open("write");
+		$file->close();
+		move_uploaded_file($_FILES[$name]['tmp_name'], $file->getFilenameOnFilestore());
+		
+		hj_framework_generate_entity_icons($entity, $file);
+
+		$file->delete();
 	}
 	return true;
 }
@@ -460,6 +452,14 @@ function hj_framework_process_category_input($hook, $type, $return, $params) {
 
 	$category_guids = get_input($name, 0);
 
+	if (is_string($category_guids) && !is_numeric($category_guids)) {
+		return false;
+	}
+
+	if (!$category_guids || empty($category_guids)) {
+		return false;
+	}
+
 	if ($category_guids && !is_array($category_guids)) {
 		$category_guids = array($category_guids);
 	}
@@ -472,14 +472,26 @@ function hj_framework_process_category_input($hook, $type, $return, $params) {
 	if (is_array($current_categories)) {
 		foreach ($current_categories as $current_category) {
 			if (!in_array($current_category->guid, $category_guids)) {
-				$entity->unsetCategory($current_category->guid);
+				$category = get_entity($current_category->guid);
+				while ($category instanceof hjCategory) {
+					if (!check_entity_relationship($entity->guid, 'filed_in', $category->guid)) {
+						remove_entity_relationship($entity->guid, 'filed_in', $category->guid);
+					}
+					$category = $category->getContainerEntity();
+				}
 			}
 		}
 	}
 
 	if ($category_guids) {
 		foreach ($category_guids as $category_guid) {
-			$entity->setCategory($category_guid);
+			$category = get_entity($category_guid);
+			while ($category instanceof hjCategory) {
+				if (!check_entity_relationship($entity->guid, 'filed_in', $category->guid)) {
+					add_entity_relationship($entity->guid, 'filed_in', $category->guid);
+				}
+				$category = $category->getContainerEntity();
+			}
 		}
 	}
 
@@ -494,7 +506,8 @@ function hj_framework_init_plugin_settings_form($hook, $type, $return, $params) 
 
 	$settings = array(
 		'interface_ajax',
-		'interface_location'
+		'interface_location',
+		'files_keep_originals',
 	);
 
 	foreach ($settings as $s) {

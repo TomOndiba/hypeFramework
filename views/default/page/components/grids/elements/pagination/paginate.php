@@ -120,7 +120,7 @@ $filter .= '<label class="hj-framework-list-limit-select pull-left">' . elgg_ech
 $filter .= elgg_view('input/dropdown', array(
 	'name' => $limit_key,
 	'value' => $limit,
-	'options' => array(10, 25, 50, 100),
+	'options' => (is_array($list_options['limit_select_options'])) ? $list_options['limit_select_options'] : array(10, 25, 50, 100),
 	'class' => 'hj-framework-list-limit-select pull-right'
 		));
 

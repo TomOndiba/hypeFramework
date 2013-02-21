@@ -12,6 +12,7 @@
 			e.preventDefault();
 			$clone = $(this).closest('.filedrop-fallback').find('.filedrop-fallback-template:first').clone();
 			$(this).before($clone.removeClass('filedrop-fallback-template').removeClass('hidden'));
+			$clone.trigger('click');
 		});
 		
 		$('[data-toggle="filedrop"]')
@@ -59,7 +60,7 @@
 						case 'BrowserNotSupported':
 							elgg.register_error(elgg.echo('hj:framework:filedrop:browsernotsupported'));
 							$filedrop.hide();
-							$filedropfallback.show();
+							//$filedropfallback.show();
 							break;
 
 						case 'FileTypeNotAllowed':

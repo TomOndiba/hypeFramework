@@ -108,6 +108,8 @@ if (isset($field['override_view'])) {
 		$view = $field['override_view'];
 	}
 	unset($field['override_view']);
+} else if (!elgg_view_exists($view)) {
+	$view = 'input/text';
 }
 
 unset($field['form_name']);

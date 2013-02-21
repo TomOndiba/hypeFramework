@@ -1,6 +1,6 @@
 <?php
 
-class hjAnnotation extends ElggObject {
+class hjAnnotation extends hjObject {
 
 	protected function initializeAttributes() {
 		parent::initializeAttributes();
@@ -27,7 +27,7 @@ class hjAnnotation extends ElggObject {
 				}
 			}
 			$notify_settings = elgg_trigger_plugin_hook('hj:notification:setting', 'annotation', null, '');
-			if (in_array($this->annotation_name, $notify_settings)) {
+			if ($notify_settings && in_array($this->annotation_name, $notify_settings)) {
 				$this->sendNotification();
 			}
 			return $this->guid;

@@ -2,12 +2,8 @@
 
 $entity = elgg_extract('entity', $vars, false);
 
-if (!$entity instanceof hjObject) {
+if (!elgg_instanceof($entity)) {
 	return true;
-}
-
-if (!$entity instanceof hjObject) {
-	return false;
 }
 
 $ancestry = hj_framework_get_ancestry($entity->guid);
@@ -22,8 +18,14 @@ foreach ($ancestry as $ancestor) {
 	}
 }
 
-$title = $entity->getTitle();
-elgg_push_breadcrumb($title);
+$title = strip_tags($entity->title);
+elgg_push_breadcrumb($title, $entity->getURL());
+
+if (isset($vars['context_nav']) && is_array($vars['context_nav'])) {
+	foreach ($vars['context_nav'] as $bc => $link) {
+		elgg_push_breadcrumb($bc, $link);
+	}
+}
 
 $title = elgg_view_title($title, array('class' => 'elgg-heading-main'));
 
@@ -39,11 +41,11 @@ $header = <<<HTML
 </div>
 HTML;
 
-$entity->logView();
+$entity->views++;
 
 $params = array(
-	'title' => $entity->getTitle() . $menu,
-	'content' => elgg_view_entity($entity, array(
+	'title' => $title . $menu,
+	'content' => (!empty($vars['content'])) ? $vars['content'] : elgg_view_entity($entity, array(
 		'full_view' => true
 	)),
 	'filter' => false,
@@ -52,4 +54,4 @@ $params = array(
 
 $params = array_merge($vars, $params);
 
-echo elgg_view('page/layouts/content', $params);
+echo elgg_view_layout('content', $params);

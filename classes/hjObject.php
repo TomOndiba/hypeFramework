@@ -76,17 +76,15 @@ class hjObject extends ElggObject {
 	 * @param bool $recursive	Traverse up the category tree?
 	 */
 	public function setCategory($category_guid, $recursive = true) {
-		if ($recursive) {
-			$category = get_entity($category_guid);
-			while ($category instanceof hjCategory) {
-				if (!check_entity_relationship($this->guid, 'filed_in', $category_guid)) {
-					add_entity_relationship($this->guid, 'filed_in', $category->guid);
-				}
-				if ($recursive) {
-					$category = $category->getContainerEntity();
-				} else {
-					$category = null;
-				}
+		$category = get_entity($category_guid);
+		while ($category instanceof hjCategory) {
+			if (!check_entity_relationship($this->guid, 'filed_in', $category->guid)) {
+				add_entity_relationship($this->guid, 'filed_in', $category->guid);
+			}
+			if ($recursive) {
+				$category = $category->getContainerEntity();
+			} else {
+				$category = null;
 			}
 		}
 	}
@@ -97,17 +95,15 @@ class hjObject extends ElggObject {
 	 * @param bool $recursive
 	 */
 	public function unsetCategory($category_guid, $recursive = true) {
-		if ($recursive) {
-			$category = get_entity($category_guid);
-			while ($category instanceof hjCategory) {
-				if (!check_entity_relationship($this->guid, 'filed_in', $category_guid)) {
-					remove_entity_relationship($this->guid, 'filed_in', $category->guid);
-				}
-				if ($recursive) {
-					$category = $category->getContainerEntity();
-				} else {
-					$category = null;
-				}
+		$category = get_entity($category_guid);
+		while ($category instanceof hjCategory) {
+			if (!check_entity_relationship($this->guid, 'filed_in', $category->guid)) {
+				remove_entity_relationship($this->guid, 'filed_in', $category->guid);
+			}
+			if ($recursive) {
+				$category = $category->getContainerEntity();
+			} else {
+				$category = null;
 			}
 		}
 	}
@@ -181,23 +177,23 @@ class hjObject extends ElggObject {
 		return $this->getAnnotationsSum('log:preview');
 	}
 
-	/** 
+	/**
 	 * Subscribe user to notifications
-	 * 
+	 *
 	 * @param mixed $user
 	 * @return boolean
 	 */
 	public function createSubscription($user = null) {
-        if (!$user) {
-            $user = elgg_get_logged_in_user_entity();
-        }
+		if (!$user) {
+			$user = elgg_get_logged_in_user_entity();
+		}
 
-        if (!$this->isSubscribed()) {
-            return add_entity_relationship($user->guid, 'subscribed', $this->guid);
-        }
+		if (!$this->isSubscribed()) {
+			return add_entity_relationship($user->guid, 'subscribed', $this->guid);
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 	/**
 	 * Unsubscribe user from notifications
@@ -205,17 +201,17 @@ class hjObject extends ElggObject {
 	 * @param mixed $user
 	 * @return boolean
 	 */
-    public function removeSubscription($user = null) {
-        if (!$user) {
-            $user = elgg_get_logged_in_user_entity();
-        }
+	public function removeSubscription($user = null) {
+		if (!$user) {
+			$user = elgg_get_logged_in_user_entity();
+		}
 
-        if ($this->isSubscribed()) {
-            return remove_entity_relationship($user->guid, 'subscribed', $this->guid);
-        }
+		if ($this->isSubscribed()) {
+			return remove_entity_relationship($user->guid, 'subscribed', $this->guid);
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 	/**
 	 * Check subscription status
@@ -223,32 +219,32 @@ class hjObject extends ElggObject {
 	 * @param mixed $user
 	 * @return boolean
 	 */
-    public function isSubscribed($user = null) {
-        if (!$user) {
-            $user = elgg_get_logged_in_user_entity();
-        }
+	public function isSubscribed($user = null) {
+		if (!$user) {
+			$user = elgg_get_logged_in_user_entity();
+		}
 
-        return check_entity_relationship($user->guid, 'subscribed', $this->guid);
-    }
+		return check_entity_relationship($user->guid, 'subscribed', $this->guid);
+	}
 
 	/**
 	 * Get a list of users subscribed to this entity
 	 * @return type
 	 */
-    public function getSubscribedUsers() {
+	public function getSubscribedUsers() {
 
-        $options = array(
-            'type' => 'user',
-            'relationship' => 'subscribed',
-            'relationship_guid' => $this->guid,
-            'inverse_relationship' => true,
-            'limit' => 0
-        );
+		$options = array(
+			'type' => 'user',
+			'relationship' => 'subscribed',
+			'relationship_guid' => $this->guid,
+			'inverse_relationship' => true,
+			'limit' => 0
+		);
 
-        $users = elgg_get_entities_from_relationship($options);
+		$users = elgg_get_entities_from_relationship($options);
 
-        return $users;
-    }
+		return $users;
+	}
 
 	/**
 	 * Bookmark entity
@@ -312,4 +308,5 @@ class hjObject extends ElggObject {
 
 		update_entity_last_action($this->guid, $timestamp);
 	}
+
 }

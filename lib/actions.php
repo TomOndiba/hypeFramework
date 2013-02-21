@@ -95,7 +95,7 @@ function hj_framework_edit_object_action() {
 		register_error(elgg_echo('hj:framework:error:cannotcreateentity'));
 		return false;
 	} else {
-		$entity = get_entity($guid);
+		//$entity = get_entity($guid);
 
 		$accesslevel = get_input('accesslevel', false);
 
@@ -128,7 +128,7 @@ function hj_framework_edit_object_action() {
 				'entity' => $entity,
 				'event' => $event
 			);
-
+			
 			if (!elgg_trigger_plugin_hook('process:input', "form:input:name:$name", $params, false)
 					&& !elgg_trigger_plugin_hook('process:input', "form:input:type:$type", $params, false)) {
 

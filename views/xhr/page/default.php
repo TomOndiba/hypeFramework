@@ -81,7 +81,12 @@ if (isset($system_messages['error'])) {
 	$params['status'] = -1;
 }
 
-header("Content-type: application/json");
+$response = json_encode($params);
 
-echo json_encode($params);
+if (!get_input('X-PlainText-Response')) {
+	header("Content-type: application/json");
+	print $response;
+} else {
+	print '<textarea>' . $response . '</textarea>'; // workaround for IE bugs
+}
 exit();

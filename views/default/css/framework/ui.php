@@ -199,3 +199,8 @@ $graphics_url = $base_url . 'mod/hypeFramework/graphics/';
 		background-repeat: no-repeat;
 		background-size: 100%;
 	}
+
+	.elgg-menu-entity > li.hidden,
+	.elgg-menu-title > li.hidden {
+		display:none;
+	}

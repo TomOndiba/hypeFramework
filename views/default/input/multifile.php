@@ -24,16 +24,27 @@ echo "<div id=\"filedrop-$name\" class=\"filedrop\" data-allowedfiletypes=\"$typ
 echo '<span class="filedrop-message">' . elgg_echo('hj:framework:filedrop:instructions') . '</span>';
 echo '</div>';
 
-echo "<div id=\"filedrop-fallback-$name\" class=\"filedrop-fallback hidden\">";
-echo elgg_view('input/file', array(
-	'class' => 'filedrop-fallback-template hidden',
-	'name' => "{$vars['name']}[]"
-));
-echo elgg_view('output/url', array(
-	'href' => '#',
-	'text' => elgg_echo('hj:framework:input:file:add'),
-	'class' => 'filedrop-fallback-clone',
-));
+echo '<label>' . elgg_echo('hj:framework:filedrop:fallback') . '</label>';
+echo "<div id=\"filedrop-fallback-$name\" class=\"filedrop-fallback \">";
+
+for ($i=0;$i<5;$i++) {
+	echo elgg_view('input/file', array(
+		'name' => $vars['name'] . '[]'
+	));
+}
+
+/** @todo: adding input files dynamically violates security policies in IE. Figure out a workaround */
+
+//echo elgg_view('input/file', array(
+//	'class' => 'filedrop-fallback-template hidden',
+//	'name' => "{$vars['name']}[]"
+//));
+//echo elgg_view('output/url', array(
+//	'href' => '#',
+//	'text' => elgg_echo('hj:framework:input:file:add'),
+//	'class' => 'filedrop-fallback-clone',
+//));
+
 echo '</div>';
 
 echo '</div>';
