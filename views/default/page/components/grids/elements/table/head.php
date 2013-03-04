@@ -21,7 +21,7 @@ $order_by = get_input($order_by_key, false);
 $direction = get_input($direction_key, 'DESC');
 
 $base_url = elgg_extract('base_url', $vars, current_page_url());
-$base_url = elgg_http_remove_url_query_element($base_url, '__goto');
+$base_url = hj_framework_http_remove_url_query_element($base_url, '__goto');
 
 if ($headers) {
 	foreach ($headers as $key => $value) {

@@ -1,45 +1,87 @@
 <?php
 
-$entity = elgg_extract('entity', $vars, false);
-$attributes = elgg_format_attributes(elgg_extract('attributes', $vars, array()));
+$item = elgg_extract('entity', $vars);
+$class = elgg_extract('class', $vars);
 
-if (!$entity) {
+if (!$item) {
 	return true;
 }
 
-$type = $entity->getType();
-$subtype = $entity->getSubtype();
-if (!$subtype)
-	$subtype = 'default';
+$type = $item->getType();
+$subtype = $item->getSubtype();
 
-$class = "hj-framework-table-row elgg-$type-$subtype";
-if (isset($vars['item_class'])) {
-	$class = "$class {$vars['item_class']}";
+$view = "object/$type/$subtype/grids/table";
+
+if (elgg_view_exists($view)) {
+	echo elgg_view($view, $vars);
+	return true;
 }
+
+$class = "elgg-item hj-framework-table-row $class elgg-$type-$subtype";
+
+$id = false;
+
+if (elgg_instanceof($item)) {
+	$id = "elgg-entity-$item->guid";
+	$uid = $item->guid;
+	$ts = max(array($item->time_created, $item->time_updated, $item->last_action));
+} elseif ($item instanceof ElggRiverItem) {
+	$id = "elgg-river-{$item->id}";
+	$uid = $item->id;
+	$ts = $item->posted;
+} elseif ($item instanceof ElggAnnotation) { // Thanks to Matt Beckett for the fix
+	$id = "item-{$item->name}-{$item->id}";
+	$uid = $item->id;
+	$ts = $item->time_created;
+}
+
+if (!$id) {
+	return true;
+}
+
+$attr = array(
+	'id' => $id,
+	'class' => $class,
+	'data-uid' => $uid,
+	'data-ts' => $ts
+);
+
+$attributes = elgg_format_attributes($attr);
+
 
 $headers = $vars['list_options']['list_view_options']['table']['head'];
 
 if ($headers) {
 	$item_view = '';
 	foreach ($headers as $header => $options) {
-		if (!$options) continue;
+		if (!$options)
+			continue;
 
 		$colspan = '';
-		if (elgg_view_exists("$type/$subtype/elements/$header")) {
+		if (isset($options['override_view']) && elgg_view_exists($options['override_view'])) {
+			$cell = elgg_view($options['override_view'], $vars);
+		} else if (elgg_view_exists("$type/$subtype/elements/$header")) {
 			$cell = elgg_view("$type/$subtype/elements/$header", $vars);
+		} else if (elgg_view_exists("framework/bootstrap/$type/elements/$header")) {
+			$cell = elgg_view("framework/bootstrap/$type/elements/$header", $vars);
 		} else if (isset($options['colspan'])) {
 			$cell = '';
 			foreach ($options['colspan'] as $col_header => $col_options) {
-				if (!$col_options) continue;
-				if (elgg_view_exists("$type/$subtype/elements/$col_header")) {
+				if (!$col_options)
+					continue;
+				if (isset($col_options['override_view']) && elgg_view_exists($col_options['override_view'])) {
+					$cell = elgg_view($col_options['override_view'], $vars);
+				} else if (elgg_view_exists("$type/$subtype/elements/$col_header")) {
 					$cell .= elgg_view("$type/$subtype/elements/$col_header", $vars);
+				} else if (elgg_view_exists("framework/bootstrap/$type/elements/$col_header")) {
+					$cell .= elgg_view("framework/bootstrap/$type/elements/$col_header", $vars);
 				} else {
-					$cell .= '<div>' . $entity->$col_header . '</div>';
+					$cell .= '<div>' . $item->$col_header . '</div>';
 				}
 			}
 			$colspan = ' colspan="' . count($options['colspan']) . '"';
 		} else {
-			$cell = '<div>' . $entity->$header . '</div>';
+			$cell = '<div>' . $item->$header . '</div>';
 		}
 		$item_view .= "<td $colspan class=\"table-cell-$header\">$cell</td>";
 	}

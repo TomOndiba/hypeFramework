@@ -12,11 +12,11 @@ $num_columns = sizeof($content);
 if (!$grid) {
     $equal = 12 / $num_columns;
     foreach ($content as $column_content) {
-        $page .= "<div class=\"span$equal\">$column_content</div>";
+        $page .= "<div class=\"span$equal clearfix\">$column_content</div>";
     }
 } else {
     foreach ($content as $column => $column_content) {
-        $page .= "<div class=\"span$grid[$column]\">$column_content</div>";
+        $page .= "<div class=\"span$grid[$column] clearfix\">$column_content</div>";
     }
 }
     

@@ -34,6 +34,7 @@ function hj_framework_view_list($list_id, $getter_options = array(), $list_optio
 	}
 
 	$getter_options = elgg_trigger_plugin_hook('custom_sql_clause', 'framework:lists', array(
+		'list_id' => $list_id,
 		'list_options' => $list_options,
 		'viewer_options' => $viewer_options
 	), $getter_options);
@@ -41,6 +42,8 @@ function hj_framework_view_list($list_id, $getter_options = array(), $list_optio
 	$getter_options['count'] = true;
 	$count = $getter($getter_options);
 
+	error_log(print_r($getter_options, true));
+	
 	$getter_options['count'] = false;
 	$entities = $getter($getter_options);
 

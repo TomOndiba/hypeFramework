@@ -2,7 +2,7 @@
 $file_guid = (int)get_input("guid");
 $file = get_entity($file_guid);
 
-if (!$file || $file->getSubtype() != "hjfile") {
+if (!$file || !$file instanceof ElggFile) {
     exit;
 }
 

@@ -1,7 +1,7 @@
 <?php
 
 $entity = elgg_extract('entity', $vars, false);
-$size = elgg_extract('size', $vars, 'medium');
+$size = elgg_extract('size', $vars, 'small');
 
 if (!$entity) return true;
 

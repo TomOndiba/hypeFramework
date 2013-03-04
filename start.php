@@ -43,9 +43,6 @@ function hj_framework_init() {
 		'lists',
 		'hierarchies',
 		'location',
-		'calendar',
-		'media',
-		'relationships',
 		'knowledge'
 	);
 

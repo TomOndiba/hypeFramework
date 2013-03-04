@@ -415,26 +415,3 @@ function hj_framework_get_country_list() {
     }
     return $return;
 }
-
-function hj_framework_mime_mapping() {
-    return $mapping = array(
-        'application/excel' => 'xls',
-        'application/msword' => 'doc',
-        'application/pdf' => 'pdf',
-        'application/powerpoint' => 'ppt',
-        'application/vnd.ms-excel' => 'xls',
-        'application/vnd.ms-powerpoint' => 'ppt',
-        'application/vnd.oasis.opendocument.text' => 'doc',
-        'application/x-gzip' => 'gzip',
-        'application/x-rar-compressed' => 'rar',
-        'application/zip' => 'zip',
-        'text/directory' => 'vcard',
-        'text/v-card' => 'vcard',
-        'application/octet-stream' => 'exe',
-        'application' => 'application',
-        'audio' => 'music',
-        'text' => 'text',
-        'video' => 'video',
-        'image' => 'image'
-    );
-}

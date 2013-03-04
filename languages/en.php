@@ -53,9 +53,11 @@ $english = array(
 
 	'edit:plugin:hypeframework:params[interface_ajax]' => 'Enable AJAX Interface',
 	'edit:plugin:hypeframework:params[interface_location]' => 'Enable Location Interface',
+	'edit:plugin:hypeframework:params[files_keep_originals]' => 'Preserve original size image files',
 
 	'hj:framework:settings:hint:interface_ajax' => 'AJAX interface provides some interactive functionalities, that allow users to perform actions and refresh UI elements without having to reload the entire page',
 	'hj:framework:settings:hint:interface_location' => 'Location interface allows to geocode and cache coordinates whenever "location" metadata is attached to an entity. This maybe helpful, when other plugins relying on geo-coordiates are enabled',
+	'hj:framework:settings:hint:files_keep_originals' => 'By default, images uploaded via hypeframework will be downsampled to master icon dimensions (default is proportionally to 550px at longer side)',
 
 	'hj:framework:notification:full_link' => 'You can view this item %s',
 	'hj:framework:notification:link' => 'here',

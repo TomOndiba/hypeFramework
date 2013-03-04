@@ -48,7 +48,7 @@ foreach ($js as $script) {
 		$script = str_replace('view=xhr', 'view=default', $script);
 	}
 	$script = str_replace($lastcached_xhr, $lastcached_default, $script);
-	$resources['js'][] = $script;
+	$resources['js'][] = html_entity_decode($script);
 }
 
 foreach ($css as $link) {
@@ -58,7 +58,7 @@ foreach ($css as $link) {
 		$link = str_replace('view=xhr', 'view=default', $link);
 	}
 	$link = str_replace($lastcached_xhr, $lastcached_default, $link);
-	$resources['css'][] = $link;
+	$resources['css'][] = html_entity_decode($link);
 }
 
 $params = array(

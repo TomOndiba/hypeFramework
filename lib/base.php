@@ -491,3 +491,25 @@ function hj_framework_clean_vars($vars) {
 	}
 	return $vars;
 }
+
+/**
+ * Replacement for Elgg'd native function which returns a malformatted url
+ */
+function hj_framework_http_remove_url_query_element($url, $element) {
+	$url_array = parse_url($url);
+
+	if (isset($url_array['query'])) {
+		$query = elgg_parse_str($url_array['query']);
+	} else {
+		// nothing to remove. Return original URL.
+		return $url;
+	}
+
+	if (array_key_exists($element, $query)) {
+		unset($query[$element]);
+	}
+
+	$url_array['query'] = http_build_query($query);
+	$string = elgg_http_build_url($url_array, false);
+	return $string;
+}

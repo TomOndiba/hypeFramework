@@ -164,8 +164,21 @@ function hj_framework_validate_form($form_name = null) {
 			if ($options['required'] === true || $options['required'] == 'required' || $options['ltrequired'] == true) {
 				$value = get_input($name, '');
 
-				if (empty($value)) {
+				$fail = false;
 
+				if (is_array($value)) {
+					$empty = 0;
+					foreach ($value as $val) {
+						if (!$val || empty($val)) $empty++;
+					}
+					if ($empty == count($value)) {
+						$fail = true;
+					}
+				} else if (!$value || empty($value)) {
+					$fail = true;
+				}
+
+				if ($fail) {
 					if (is_string($options['label'])) {
 						$options['label'] = array('text' => $options['label']);
 					}

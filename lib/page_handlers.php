@@ -31,6 +31,11 @@ function hj_framework_page_handlers($page) {
 			include $path_pages . "icon/icon.php";
 			break;
 
+		case 'download':
+			set_input('guid', $page[1]);
+			include $path_pages . "file/download.php";
+			break;
+
 		default :
 			return false;
 			break;

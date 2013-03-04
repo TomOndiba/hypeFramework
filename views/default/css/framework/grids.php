@@ -30,11 +30,11 @@
 		margin: 8px;
 	}
 
-	.hj-framework-list-filter {
+	.hj-framework-list-wrapper .hj-framework-list-filter {
 		font-size: .9em;
 		text-align:right;
 	}
-	.hj-framework-list-filter input[type=text] {
+	.hj-framework-list-wrapper .hj-framework-list-filter input[type=text] {
 		min-height: auto;
 		padding: 3px 10px;
 	}
