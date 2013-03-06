@@ -522,7 +522,7 @@
 				})
 
 				window.history.replaceState(null, response.output.title, response.href);
-
+				elgg.trigger_hook('ajax:success', 'framework', { response : response, element : $element});
 			}
 		})
 	}
@@ -568,6 +568,7 @@
 			updatedList.items = new Array();
 		}
 
+		var $newList = $listBody.clone(true).html('');
 		$.each(updatedList.items, function(pos, itemView) {
 			var itemUid = $(itemView).data('uid');
 			updatedListItemUids.push(itemUid);
@@ -577,19 +578,13 @@
 			if (($existing.length == 0) || ($existing.length && $new.data('ts') > $existing.data('ts'))) {
 				var $append = $new;
 			} else if ($existing.length && $new.data('ts') <= $existing.data('ts')) {
-				var $append = $existing.clone();
+				var $append = $existing;
 			}
-			$existing.remove();
-			$listBody.append($new);
+			$newList.append($append);
 		})
+		$listBody.replaceWith($newList);
 
-		$.each(currentListItemUids, function(pos, itemUid) {
-			if ($.inArray(itemUid, updatedListItemUids) < 0) {
-				$currentList.find('[data-uid=' + itemUid + ']').remove();
-			}
-		});
-
-		$('.hj-framework-list-pagination-wrapper', $currentList.closest('.hj-framework-list-wrapper')).replaceWith(updatedList.pagination);
+		$('.hj-framework-list-pagination-wrapper', $newList.closest('.hj-framework-list-wrapper')).replaceWith(updatedList.pagination);
 
 	}
 

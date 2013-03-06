@@ -26,7 +26,7 @@ if (isset($vars['class'])) {
 foreach ($vars['menu'] as $section => $menu_items) {
 	echo elgg_view('navigation/menu/elements/hjentityhead/section', array(
 		'items' => $menu_items,
-		'class' => "$class elgg-menu-{$vars['name']}-$section",
+		'class' => "$class elgg-menu-entity-$section",
 		'section' => $section,
 		'name' => $vars['name'],
 		'show_section_headers' => $headers,
