@@ -77,7 +77,7 @@ if ($headers) {
 				));
 	}
 
-	echo '<tr class="table-header">';
+	echo '<tr class="table-headers">';
 
 	foreach ($headers as $key => $options) {
 		if (!$options)

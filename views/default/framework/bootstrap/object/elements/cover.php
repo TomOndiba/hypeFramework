@@ -2,11 +2,7 @@
 
 $entity = $vars['entity'];
 
-if (!$entity) {
-	return;
-}
-
-if (!$entity->icontime) {
+if (!$entity || !$entity->icontime) {
 	return;
 }
 

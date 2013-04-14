@@ -28,6 +28,8 @@ if (isset($vars['context_nav']) && is_array($vars['context_nav'])) {
 }
 
 $title = elgg_view_title($title, array('class' => 'elgg-heading-main'));
+$type = $entity->getType();
+$subtype = $entity->getSubtype();
 
 $buttons = elgg_view_menu('title', array(
 	'sort_by' => 'priority',
@@ -46,10 +48,11 @@ $entity->views++;
 $params = array(
 	'title' => $title . $menu,
 	'content' => (!empty($vars['content'])) ? $vars['content'] : elgg_view_entity($entity, array(
-		'full_view' => true
-	)),
+				'full_view' => true
+			)),
 	'filter' => false,
-	'header_override' => $header
+	'header_override' => $header,
+	'class' => "elgg-layout-entity-$type-$subtype"
 );
 
 $params = array_merge($vars, $params);

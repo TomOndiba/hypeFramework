@@ -46,7 +46,7 @@ function hj_framework_view_list($list_id, $getter_options = array(), $list_optio
 	
 	$getter_options['count'] = false;
 	$entities = $getter($getter_options);
-
+	
 	$params = array(
 		'list_id' => $list_id,
 		'entities' => $entities,
@@ -121,6 +121,26 @@ function hj_framework_get_order_by_clause($porder_by = 'e.time_created', $pdirec
 				case 'description' :
 					$options['joins'][] = "JOIN {$dbprefix}objects_entity oe_order_by ON oe_order_by.guid = e.guid";
 					$order_by = "oe_order_by.$column $direction, e.time_created $direction";
+					break;
+			}
+
+			break;
+
+		case 'ue' :
+			switch ($column) {
+
+				case 'name' :
+				case 'username' :
+				case 'email' :
+				case 'language' :
+				case 'admin' :
+				case 'banned' :
+				case 'last_action' :
+				case 'prev_last_action' :
+				case 'last_login' :
+				case 'prev_last_login' :
+					$options['joins'][] = "JOIN {$dbprefix}users_entity ue_order_by ON ue_order_by.guid = e.guid";
+					$order_by = "ue_order_by.$column $direction, e.time_created $direction";
 					break;
 			}
 

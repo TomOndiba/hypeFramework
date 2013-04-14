@@ -83,7 +83,8 @@ if ($headers) {
 		} else {
 			$cell = '<div>' . $item->$header . '</div>';
 		}
-		$item_view .= "<td $colspan class=\"table-cell-$header\">$cell</td>";
+		$header_ns = preg_replace('/[^a-z0-9\-]/i', '-', $header);
+		$item_view .= "<td $colspan class=\"table-cell-$header_ns\">$cell</td>";
 	}
 } else {
 	$item_view .= elgg_view_list_item($entity, $vars);

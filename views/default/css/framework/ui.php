@@ -51,23 +51,25 @@ $graphics_url = $base_url . 'mod/hypeFramework/graphics/';
 
 	/** jQuery UI Dialog */
 	.hj-framework-dialog {
-		border: 1px solid #ccc;
+		border: 1px solid #e8e8e8;
 		border-radius: 0;
 		padding: 0;
 	}
 	.hj-framework-dialog .ui-dialog-titlebar {
 		border-radius: 0;
 		border: 0;
-		border-bottom: 1px solid #ccc;
+		border-bottom: 1px solid #e8e8e8;
 		background: #f4f4f4;
 		line-height: 30px;
+		margin:2px;
+		box-sizing:border-box;
 	}
 	.hj-framework-dialog .ui-dialog-titlebar-close {
 		margin: -10px 7px 0 0;
 	}
 	.hj-framework-dialog .ui-dialog-buttonpane {
 		border: 0;
-		border-top: 1px solid #ccc;
+		border-top: 1px solid #e8e8e8;
 	}
 	.hj-framework-dialog .elgg-module-form > .elgg-body {
 		border: 0;
@@ -81,7 +83,7 @@ $graphics_url = $base_url . 'mod/hypeFramework/graphics/';
 	}
 
 	.hj-draggable-element-placeholder {
-		border:2px dashed #ccc;
+		border:2px dashed #e8e8e8;
 	}
 	tr.hj-draggable-element-placeholder {
 		background:#f4f4f4;

@@ -3,8 +3,8 @@
 	<?php endif; ?>
 
 	.elgg-module-form > .elgg-body {
-		border-top:1px solid #e8e8e8;
-		border-bottom:1px solid #e8e8e8;
+/*		border-top:1px solid #e8e8e8;
+		border-bottom:1px solid #e8e8e8;*/
 		padding:5px 0;
 		margin:5px 0;
 	}
@@ -24,9 +24,7 @@
 	}
 
 	.elgg-input-wrapper label {
-		display:inline-block;
-		width:200px;
-		margin:0 5px 5px 0;
+		display:block;
 		cursor:default;
 	}
 

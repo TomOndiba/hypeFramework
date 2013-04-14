@@ -2,7 +2,7 @@
 
 $entity = elgg_extract('entity', $vars, false);
 
-if (!$entity)
+if (!$entity || empty($entity->description))
 	return true;
 
 echo elgg_view('output/longtext', array(
