@@ -85,24 +85,24 @@ if ($headers) {
 
 		if (isset($options['colspan'])) {
 			$colspan = count($options['colspan']);
-			$class = "table-header table-header-spanned table-header-$key";
+			$class = "table-header table-header-join table-header-$key";
 			if (isset($options['class'])) {
 				$class = "$class {$options['class']}";
 			}
-			echo "<th colspan=\"$colspan\" class=\"$class\">";
+			echo "<th class=\"$class\">";
 			foreach ($options['colspan'] as $col_key => $col_options) {
 				if (!$col_options)
 					continue;
-				echo '<div>';
 				if (isset($controls[$col_key])) {
+					echo '<div class="table-header-sortable-col">';
 					echo $controls[$col_key]['title'];
 					echo $controls[$col_key]['asc'];
 					echo $controls[$col_key]['desc'];
+					echo '</div>';
 				} else {
 					$text = (isset($col_options['text'])) ? $col_options['text'] : elgg_echo("table:head:$header");
 					echo $text;
 				}
-				echo '</div>';
 			}
 			echo '</th>';
 		} else {

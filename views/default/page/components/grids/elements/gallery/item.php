@@ -17,7 +17,7 @@ if (elgg_view_exists($view)) {
 	return true;
 }
 
-$class = "$class elgg-$type-$subtype";
+$class = "$class elgg-$type elgg-$type-$subtype";
 
 $id = false;
 

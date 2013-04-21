@@ -17,7 +17,7 @@ if (elgg_view_exists($view)) {
 	return true;
 }
 
-$class = "elgg-item hj-framework-table-row $class elgg-$type-$subtype";
+$class = "elgg-item hj-framework-table-row elgg-$type elgg-$type-$subtype";
 
 $id = false;
 
@@ -79,7 +79,7 @@ if ($headers) {
 					$cell .= '<div>' . $item->$col_header . '</div>';
 				}
 			}
-			$colspan = ' colspan="' . count($options['colspan']) . '"';
+			//$colspan = ' colspan="' . count($options['colspan']) . '"';
 		} else {
 			$cell = '<div>' . $item->$header . '</div>';
 		}

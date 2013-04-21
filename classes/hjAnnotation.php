@@ -5,8 +5,6 @@ class hjAnnotation extends hjObject {
 	protected function initializeAttributes() {
 		parent::initializeAttributes();
 		$this->attributes['subtype'] = 'hjannotation';
-		$this->attributes['owner_guid'] = elgg_get_logged_in_user_entity()->guid;
-		$this->attributes['access_id'] = ACCESS_DEFAULT;
 	}
 
 	public function __construct($guid = null) {

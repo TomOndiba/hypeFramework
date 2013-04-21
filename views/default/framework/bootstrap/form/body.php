@@ -28,6 +28,7 @@ if ($fields && count($fields)) {
 			continue;
 
 		$options['form_name'] = $form_name;
+		$options['name'] = $name;
 		$params['field'] = $options;
 		$content .= elgg_view('framework/bootstrap/form/elements/field', $params);
 	}
@@ -38,9 +39,9 @@ $footer .= elgg_view('input/hidden', array(
 	'value' => $form_name
 		));
 
-if (isset($form['buttons'])) {
+if ($form['buttons']) {
 	$footer .= $vars['buttons'];
-} else {
+} else if ($form['buttons'] !== false) {
 	$footer .= elgg_view('input/submit', array(
 		'value' => elgg_echo('submit'),
 		'class' => 'elgg-button-submit'

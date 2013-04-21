@@ -72,11 +72,11 @@ $params = array(
 	'href' => full_url()
 );
 
-if (isset($system_messages['success'])) {
+if (isset($system_messages['success']) && count($system_messages['success'])) {
 	$params['system_messages']['success'] = $system_messages['success'];
 }
 
-if (isset($system_messages['error'])) {
+if (isset($system_messages['error']) && count($system_messages['error'])) {
 	$params['system_messages']['error'] = $system_messages['error'];
 	$params['status'] = -1;
 }

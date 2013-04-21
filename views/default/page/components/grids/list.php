@@ -42,7 +42,8 @@ if ($show_pagination) {
 	$pagination = elgg_view("page/components/grids/elements/pagination/$pagination_type", $vars);
 }
 
-$pagination = '<div class="hj-framework-list-pagination-wrapper row-fluid">' . $pagination . '</div>';
+$pagination = '<div class="hj-framework-list-pagination-wrapper row-fluid" for="' . $list_id . '">' . $pagination . '</div>';
+
 $position = elgg_extract('pagination_position', $list_options, 'after');
 
 if ($position == 'both') {

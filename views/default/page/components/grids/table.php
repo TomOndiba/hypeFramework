@@ -9,7 +9,7 @@ $list_options = elgg_extract('list_options', $vars);
 $viewer_options = elgg_extract('viewer_options', $vars);
 $vars = array_merge($vars, $viewer_options);
 
-$class = "elgg-table-alt hj-framework-table-view";
+$class = "elgg-table hj-framework-table-view";
 $item_class = trim("elgg-item " . elgg_extract('item_class', $list_options, ''));
 
 if (isset($list_options['list_class'])) {
@@ -47,7 +47,8 @@ if ($show_pagination) {
 	$pagination = elgg_view("page/components/grids/elements/pagination/$pagination_type", $vars);
 }
 
-$pagination = '<div class="hj-framework-list-pagination-wrapper row-fluid">' . $pagination . '</div>';
+$pagination = '<div class="hj-framework-list-pagination-wrapper row-fluid" for="' . $list_id . '">' . $pagination . '</div>';
+
 $position = elgg_extract('pagination_position', $list_options, 'after');
 
 if ($position == 'both') {

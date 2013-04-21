@@ -111,7 +111,7 @@ function hj_framework_entity_dropdown_menu($hook, $type, $return, $params) {
 			}
 		}
 		foreach ($return as $name => $item) {
-			if (in_array($item->getName(), $parents)) {
+			if ($parents && in_array($item->getName(), $parents)) {
 				unset($return[$name]);
 			}
 		}

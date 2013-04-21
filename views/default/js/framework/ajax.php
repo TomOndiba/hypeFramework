@@ -251,7 +251,7 @@ framework.ajax.formDialog = function(name, type, params, value) {
 	var data = $(this).data();
 	data['X-Requested-With'] = 'XMLHttpRequest';
 	data.view = 'xhr'; // set viewtype
-	data.endpoint = 'layout'; // 'pageshell', 'layout', 'layout-elements'
+	data.endpoint = 'content';
 
 	elgg.post($element.attr('href'), {
 		data : data,
@@ -369,7 +369,7 @@ framework.ajax.deleteEntity = function(name, type, params, value) {
 
 			} else {
 				var uid = response.output.guid;
-				$('[data-uid="' + uid + '"], [id="elgg-object-' + uid + '"]')
+				$('.elgg-object[data-uid="' + uid + '"], .elgg-user[data-uid="' + uid + '"], .elgg-group[data-uid="' + uid + '"], [id="elgg-object-' + uid + '"]')
 				.each(function() { $(this).remove()})
 			}
 		}
@@ -389,7 +389,7 @@ framework.ajax.submit = function(event) {
 	data['X-Requested-With'] = 'XMLHttpRequest';
 	data['X-PlainText-Response'] = true;
 	data.view = 'xhr'; // set viewtype
-	data.endpoint = 'layout'; // 'pageshell', 'layout', 'layout-elements'
+	data.endpoint = 'content';
 
 	var params = ({
 		dataType : 'json',
@@ -502,7 +502,7 @@ framework.ajax.getUpdatedLists = function(hook, type, params) {
 		data : {
 			'X-Requested-With' : 'XMLHttpRequest',
 			'view' : 'xhr',
-			'endpoint' : 'global_xhr_output'
+			'endpoint' : 'xhr_global'
 		},
 		dataType : 'json',
 
@@ -586,7 +586,7 @@ framework.ajax.processUpdatedList = function(hook, type, updatedList) {
 	})
 	$listBody.replaceWith($newList);
 
-	$('.hj-framework-list-pagination-wrapper', $newList.closest('.hj-framework-list-wrapper')).replaceWith(updatedList.pagination);
+	$('.hj-framework-list-pagination-wrapper[for=' + updatedList.list_id + ']').replaceWith(updatedList.pagination);
 
 }
 

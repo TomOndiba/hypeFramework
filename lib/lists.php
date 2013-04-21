@@ -1,5 +1,8 @@
 <?php
 
+global $NESTED_LIST;
+$NESTED_LIST = FALSE;
+
 function hj_framework_view_list($list_id, $getter_options = array(), $list_options = array(), $viewer_options = array(), $getter = 'elgg_get_entities') {
 
 	$default_list_options = array(
@@ -13,6 +16,7 @@ function hj_framework_view_list($list_id, $getter_options = array(), $list_optio
 		'offset_key' => "__off_$list_id",
 		'order_by_key' => "__ord_$list_id",
 		'direction_key' => "__dir_$list_id",
+		'reverse_list' => false
 	);
 
 	$list_options = array_merge($default_list_options, $list_options);
@@ -37,15 +41,19 @@ function hj_framework_view_list($list_id, $getter_options = array(), $list_optio
 		'list_id' => $list_id,
 		'list_options' => $list_options,
 		'viewer_options' => $viewer_options
-	), $getter_options);
+			), $getter_options);
 
 	$getter_options['count'] = true;
 	$count = $getter($getter_options);
 
-	error_log(print_r($getter_options, true));
-	
+	//error_log(print_r($getter_options, true));
+
 	$getter_options['count'] = false;
 	$entities = $getter($getter_options);
+
+	if ($list_options['reverse_list']) {
+		$entities = array_reverse($entities);
+	}
 	
 	$params = array(
 		'list_id' => $list_id,
@@ -58,14 +66,20 @@ function hj_framework_view_list($list_id, $getter_options = array(), $list_optio
 	);
 
 	if (elgg_view_exists("page/components/grids/{$list_options['list_type']}")) {
-		$list = elgg_view("page/components/grids/{$list_options['list_type']}", $params);
+		$list = elgg_view("page/components/grids/{$list_options['list_type']}", $params, false, false, 'default');
 	} else {
-		$list = elgg_view("page/components/grids/list", $params);
+		$list = elgg_view("page/components/grids/list", $params, false, false, 'default');
 	}
 
 	if (elgg_is_xhr() && get_input('view') == 'xhr') {
-		global $XHR_OUTPUT;
-		$XHR_OUTPUT['lists'][$list_id] = $list;
+		if (elgg_view_exists("page/components/grids/{$list_options['list_type']}")) {
+			$json_list = elgg_view("page/components/grids/{$list_options['list_type']}", $params, false, false, 'xhr');
+		} else {
+			$json_list = elgg_view("page/components/grids/list", $params, false, false, 'xhr');
+		}
+
+		global $XHR_GLOBAL;
+		$XHR_GLOBAL['lists'][$list_id] = $json_list;
 	}
 
 	return elgg_view('page/components/grids/wrapper', array(

@@ -25,11 +25,16 @@
 	.sort-control.elgg-state-active {
 		color: black;
 	}
-
 	.hj-framework-list-limit-select {
-		margin: 8px;
-	}
+		margin: 6px;
 
+		max-width: 77px;
+		padding: 1px;
+		vertical-align: middle;
+		display: inline-block;
+		float: none;
+		font-size: 12px;
+	}
 	.hj-framework-list-wrapper .hj-framework-list-filter {
 		font-size: .9em;
 		text-align:right;
@@ -46,6 +51,14 @@
 	.table-cell-menu .elgg-menu {
 		float: none;
 		height: auto;
+		margin:0;
+		padding:0;
+	}
+	.table-cell-menu .elgg-menu > li {
+		float:none;
+		display:block;
+		margin:2px 0;
+		padding:0;
 	}
 
 	.table-cell-menu .elgg-menu a,  .table-cell-menu .elgg-menu span {
@@ -70,6 +83,6 @@
 		border: 0;
 	}
 
-	.elgg-table-alt.hj-framework-table-view td:first-child {
+	.elgg-table.hj-framework-table-view td:first-child {
 		width:auto;
 	}
