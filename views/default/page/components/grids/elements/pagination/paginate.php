@@ -81,7 +81,7 @@ if ($count <= $limit && $offset == 0) {
 		$pages->items = array_merge($pages->items, range($current_page + 1, $last_page));
 	}
 
-	$pager .= "<ul class=\"elgg-pagination hj-framework-list-pagination pull-left\">";
+	$pager .= "<ul class=\"elgg-pagination hj-framework-list-pagination float\">";
 	if ($pages->prev['href']) {
 		$link = elgg_view('output/url', $pages->prev);
 		$pager .= "<li>$link</li>";
@@ -116,12 +116,12 @@ if ($count <= $limit && $offset == 0) {
 	$pager .= '</ul>';
 }
 
-$filter .= '<label class="hj-framework-list-limit-select pull-left">' . elgg_echo('hj:framework:list:limit') . '</label>';
+$filter .= '<label class="hj-framework-list-limit-select float">' . elgg_echo('hj:framework:list:limit') . '</label>';
 $filter .= elgg_view('input/dropdown', array(
 	'name' => $limit_key,
 	'value' => $limit,
 	'options' => (is_array($list_options['limit_select_options'])) ? $list_options['limit_select_options'] : array(10, 25, 50, 100),
-	'class' => 'hj-framework-list-limit-select pull-right'
+	'class' => 'hj-framework-list-limit-select float-alt'
 		));
 
 // Limit dropdown

@@ -1,13 +1,11 @@
 <?php
 
 // UI
-elgg_register_css('bootstrap-responsive', 'mod/hypeFramework/vendors/bootstrap/css/bootstrap-responsive.min.css', 120);
 elgg_register_css('jquery.ui', 'mod/hypeFramework/vendors/jquery.ui/css/jquery-ui.custom.css', 140);
 
 elgg_register_simplecache_view('css/framework/base');
 elgg_register_css('framework.base', elgg_get_simplecache_url('css', 'framework/base'));
 
-elgg_load_css('bootstrap-responsive');
 elgg_load_css('jquery.ui');
 elgg_load_css('framework.base');
 
