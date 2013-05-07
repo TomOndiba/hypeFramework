@@ -288,13 +288,13 @@
 	}
 	.hj-framework-list-limit-select {
 		margin: 6px;
-
-		max-width: 77px;
+		max-width: 50px;
 		padding: 1px;
 		vertical-align: middle;
 		display: inline-block;
 		float: none;
 		font-size: 12px;
+
 	}
 	.hj-framework-list-wrapper .hj-framework-list-filter {
 		font-size: .9em;
