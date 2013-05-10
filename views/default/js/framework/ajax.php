@@ -159,40 +159,6 @@ framework.ajax.init = function() {
 	$('.elgg-button-delete-entity')
 	.live('click', framework.ajax.scenarios.deleteEntity);
 
-	$('.elgg-button-subscription')
-	.live('click', function(e) {
-		e.preventDefault();
-		$element = $(this);
-		elgg.action($(this).attr('href'), {
-			success : function(response) {
-				if (response.status >= 0) {
-					if ($element.text() == elgg.echo('hj:framework:subscription:remove')) {
-						$element.text(elgg.echo('hj:framework:subscription:create'));
-					} else {
-						$element.text(elgg.echo('hj:framework:subscription:remove'));
-					}
-				}
-			}
-		})
-	})
-
-	$('.elgg-button-bookmark')
-	.live('click', function(e) {
-		e.preventDefault();
-		$element = $(this);
-		elgg.action($(this).attr('href'), {
-			success : function(response) {
-				if (response.status >= 0) {
-					if ($element.text() == elgg.echo('hj:framework:bookmark:remove')) {
-						$element.text(elgg.echo('hj:framework:bookmark:create'));
-					} else {
-						$element.text(elgg.echo('hj:framework:bookmark:remove'));
-					}
-				}
-			}
-		})
-	})
-
 }
 
 framework.ajax.scenarios.createEntity = function(event) {

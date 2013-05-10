@@ -1,13 +1,23 @@
 <?php
 
 $guid = get_input('guid');
-$entity = get_entity($guid);
 
-if ($entity instanceof hjObject) {
-	if ($entity->createBookmark()) {
-		system_message(elgg_echo('hj:framework:bookmark:create:success'));
-		forward(REFERER);
-	}
+if (!check_entity_relationship(elgg_get_logged_in_user_guid(), 'bookmarked', $guid)) {
+	add_entity_relationship(elgg_get_logged_in_user_guid(), 'bookmarked', $guid);
+	
+	$count = elgg_get_entities_from_relationship(array(
+		'types' => 'user',
+		'relationship' => 'bookmarked',
+		'relationship_guid' => $guid,
+		'inverse_relationship' => true,
+		'count' => true
+			));
+
+	print json_encode(array('count' => $count));
+
+	system_message(elgg_echo('hj:framework:bookmark:create:success'));
+	forward(REFERER);
 }
 
 register_error(elgg_echo('hj:framework:bookmark:create:error'));
+forward(REFERER);

@@ -1,14 +1,11 @@
 <?php
 
 $guid = get_input('guid');
-$entity = get_entity($guid);
 
-if ($entity instanceof hjObject) {
-	if ($entity->isSubscribed()) {
-		action('framework/subscription/remove');
-	} else {
-		action('framework/subscription/create');
-	}
+if (check_entity_relationship(elgg_get_logged_in_user_guid(), 'subscribed', $guid)) {
+	action('framework/subscription/remove');
+} else {
+	action('framework/subscription/create');
 }
 
 forward(REFERER);

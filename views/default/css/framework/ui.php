@@ -35,6 +35,9 @@ $graphics_url = $base_url . 'mod/hypeFramework/graphics/';
 		background:transparent url(<?php echo $graphics_url ?>loader/bar.gif) no-repeat center center;
 		width:16px;
 		height:11px;
+		display: inline-block;
+		vertical-align: middle;
+		margin-right: 10px;
 	}
 	.hj-loader-arrows {
 		background:transparent url(<?php echo $graphics_url ?>loader/arrows.gif) no-repeat center center;

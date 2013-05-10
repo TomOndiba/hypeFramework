@@ -44,12 +44,12 @@ $english = array(
 	'hj:framework:bookmark:remove:error' => 'Bookmark can not be removed',
 	'hj:framework:bookmark:remove:success' => 'Bookmark successfully removed',
 
-	'hj:framework:subscription:create' => 'Subscribe',
-	'hj:framework:subscription:remove' => 'Unsubscribe',
-	'hj:framework:subscription:create:error' => 'You can\'t subscribe to this item',
-	'hj:framework:subscription:create:success' => 'You have successfully subscribed to notifications',
-	'hj:framework:subscription:remove:error' => 'Subscription can not be removed',
-	'hj:framework:subscription:remove:success' => 'Subscription has been cancelled',
+	'hj:framework:subscription:create' => 'Follow',
+	'hj:framework:subscription:remove' => 'Unfollow',
+	'hj:framework:subscription:create:error' => 'You can\'t follow this item',
+	'hj:framework:subscription:create:success' => 'You are now following this item',
+	'hj:framework:subscription:remove:error' => 'Can not unfollow this item',
+	'hj:framework:subscription:remove:success' => 'You are no longer following this item',
 
 	'edit:plugin:hypeframework:params[interface_ajax]' => 'Enable AJAX Interface',
 	'edit:plugin:hypeframework:params[interface_location]' => 'Enable Location Interface',

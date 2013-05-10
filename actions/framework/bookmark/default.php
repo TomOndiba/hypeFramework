@@ -1,14 +1,11 @@
 <?php
 
 $guid = get_input('guid');
-$entity = get_entity($guid);
 
-if ($entity instanceof hjObject) {
-	if ($entity->isBookmarked()) {
-		action('framework/bookmark/remove');
-	} else {
-		action('framework/bookmark/create');
-	}
+if (check_entity_relationship(elgg_get_logged_in_user_guid(), 'bookmarked', $guid)) {
+	action('framework/bookmark/remove');
+} else {
+	action('framework/bookmark/create');
 }
 
 forward(REFERER);
