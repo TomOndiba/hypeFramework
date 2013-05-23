@@ -43,7 +43,8 @@ function hj_framework_init() {
 		'lists',
 		'hierarchies',
 		'location',
-		'knowledge'
+		'knowledge',
+		'deprecated'
 	);
 
 	foreach ($libraries as $lib) {

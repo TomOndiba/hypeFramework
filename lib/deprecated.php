@@ -15,46 +15,6 @@ function hj_framework_register_libraries() {
 		return false;
 	}
 
-	$shortcuts = hj_framework_path_shortcuts('hypeFrameworkLegacy');
-
-	/**
-	 * Core Libraries
-	 */
-	// Setup functions
-	elgg_register_library('hj:framework:setup', $shortcuts['lib'] . 'framework/setup.php');
-	// A pool of useful recyclable information (dropdowns, arrays etc)
-	elgg_register_library('hj:framework:knowledge', $shortcuts['lib'] . 'framework/knowledge.php');
-	// Menu Builder
-	elgg_register_library('hj:framework:menu', $shortcuts['lib'] . 'framework/menu.php');
-	// URL and Page Handler Functions
-	elgg_register_library('hj:framework:pagehandler', $shortcuts['lib'] . 'framework/pagehandler.php');
-	// Plugin and event hooks Functions
-	elgg_register_library('hj:framework:hooks', $shortcuts['lib'] . 'framework/hooks.php');
-	// Entity related helpers
-	elgg_register_library('hj:framework:entities', $shortcuts['lib'] . 'framework/entities.php');
-	// File Management
-	elgg_register_library('hj:framework:files', $shortcuts['lib'] . 'framework/files.php');
-	// Form Management
-	elgg_register_library('hj:framework:forms', $shortcuts['lib'] . 'framework/forms.php');
-
-	// DomPDF
-	// DomPDF library is not included by default
-	// Download and unzip to lib/dompdf
-	$dompdf = $shortcuts['lib'] . 'dompdf/dompdf_config.inc.php';
-	if (file_exists($dompdf)) {
-		elgg_register_library('hj:framework:dompdf', $dompdf);
-	}
-
-	/**
-	 * Load Libraries
-	 */
-	elgg_load_library('hj:framework:knowledge');
-	elgg_load_library('hj:framework:menu');
-	elgg_load_library('hj:framework:pagehandler');
-	elgg_load_library('hj:framework:hooks');
-	elgg_load_library('hj:framework:entities');
-	elgg_load_library('hj:framework:files');
-
 	return true;
 }
 
@@ -99,7 +59,6 @@ function hj_framework_register_js() {
 //	$hj_js_colorpicker = elgg_get_simplecache_url('js', 'vendors/colorpicker/colorpicker');
 //	elgg_register_js('hj.framework.colorpicker', $hj_js_colorpicker);
 //	elgg_register_simplecache_view('js/vendors/colorpicker/colorpicker');
-
 	// JS for filetree
 	$hj_js_tree = elgg_get_simplecache_url('js', 'vendors/jstree/tree');
 	elgg_register_js('hj.framework.tree', $hj_js_tree);
@@ -155,12 +114,10 @@ function hj_framework_register_css() {
 //	$hj_css_colorpicker = elgg_get_simplecache_url('css', 'vendors/colorpicker/colorpicker.css');
 //	elgg_register_css('hj.framework.colorpicker', $hj_css_colorpicker);
 //	elgg_register_simplecache_view('css/vendors/colorpicker/colorpicker.css');
-
 //	// jQuery UI
 //	$hj_css_jq = elgg_get_simplecache_url('css', 'vendors/jquery/ui/theme');
 //	elgg_register_css('hj.framework.jquitheme', $hj_css_jq);
 //	elgg_register_simplecache_view('css/vendors/jquery/ui/theme');
-
 	// Carousel
 	$hj_css_carousel = elgg_get_simplecache_url('css', 'vendors/carousel/rcarousel.css');
 	elgg_register_css('hj.framework.carousel', $hj_css_carousel);
@@ -248,7 +205,7 @@ function hj_framework_register_hooks() {
  *
  * @return void
  */
-function hj_framework_register_actions($plugin) {
+function hj_framework_register_actions() {
 	if (!elgg_is_active_plugin('hypeFrameworkLegacy')) {
 		return false;
 	}
@@ -281,7 +238,7 @@ function hj_framework_register_view_extentions() {
 	if (!elgg_is_active_plugin('hypeFrameworkLegacy')) {
 		return false;
 	}
-	
+
 //	if (elgg_get_plugin_setting('cleditor', 'hypeFramework') == 'on') {
 //		elgg_extend_view('input/longtext', 'js/vendors/editor/metatags');
 //
@@ -1675,7 +1632,7 @@ function hj_framework_setup() {
 	if (elgg_is_logged_in()) {
 		hj_framework_setup_filefolder_form();
 		hj_framework_setup_file_form();
-		elgg_set_plugin_setting('hj:framework:setup', true);
+		elgg_set_plugin_setting('hj:framework:setup', true, 'hypeFramework');
 		return true;
 	}
 	return false;
