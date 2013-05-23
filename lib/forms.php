@@ -267,54 +267,6 @@ function hj_framework_clear_form_validation_status($form_name) {
 	return;
 }
 
-/**
- * Obtain an array of input types
- *
- * @return array
- */
-function hj_framework_forms_input_types() {
-	$types = array(
-		'text',
-		'plaintext',
-		'longtext',
-		'url',
-		'email',
-		'date',
-		'dropdown',
-		'tags',
-		'checkboxes',
-		'file',
-		'hidden',
-		'radio',
-		'access',
-		'entity_icon',
-		'relationship_tags',
-		'multifile'
-	);
-
-	$types = elgg_trigger_plugin_hook('hj:formbuilder:fieldtypes', 'all', null, $types);
-	return $types;
-}
-
-function hj_framework_forms_filefolder_types() {
-	$types = array('default', 'audio', 'video', 'photo', 'design', 'docs', 'powerpoint');
-	$types = elgg_trigger_plugin_hook('hj:formbuilder:foldertypes', 'all', null, $types);
-	return $types;
-}
-
-/**
- * Create an options_values array for a dropdown of available hjForms
- *
- * @return array 
- */
-function hj_formbuilder_get_forms_as_dropdown() {
-	return false;
-}
-
-function hj_formbuilder_get_forms_as_sections() {
-	return false;
-}
-
 // Custom input processing
 elgg_register_plugin_hook_handler('process:input', 'form:input:type:tags', 'hj_framework_process_tags_input');
 elgg_register_plugin_hook_handler('process:input', 'form:input:type:file', 'hj_framework_process_file_input');
