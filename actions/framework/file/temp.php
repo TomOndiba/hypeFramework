@@ -12,6 +12,8 @@ if ($guids) {
 	}
 }
 
-print json_encode($response);
+if (elgg_is_xhr()) {
+	print json_encode($response);
+}
 
 forward();

@@ -456,12 +456,12 @@ framework.ajax.getUpdatedLists = function(hook, type, params) {
 		
 	elgg.post(href, {
 		beforeSend : function() {
-			$('.hj-ajax-loader', $element).show();
+			$element.addClass('loading');
 			$('.hj-ajax-loader', $container).show();
 		},
 
 		complete : function() {
-			$('.hj-ajax-loader', $element).hide();
+			$element.removeClass('loading');
 			$('.hj-ajax-loader', $container).hide();
 		},
 

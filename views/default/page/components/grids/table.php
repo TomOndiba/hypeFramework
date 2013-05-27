@@ -16,6 +16,11 @@ if (isset($list_options['list_class'])) {
 	$class = "$class {$list_options['list_class']}";
 }
 
+if (isset($vars['list_options']['filter'])) {
+	echo '<div class="hj-framework-list-filter">';
+	echo $vars['list_options']['filter'];
+	echo '</div>';
+}
 
 $table_head = elgg_view('page/components/grids/elements/table/head', $vars);
 

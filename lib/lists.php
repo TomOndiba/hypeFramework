@@ -153,7 +153,7 @@ function hj_framework_get_order_by_clause($porder_by = 'e.time_created', $pdirec
 				case 'prev_last_action' :
 				case 'last_login' :
 				case 'prev_last_login' :
-					$options['joins'][] = "JOIN {$dbprefix}users_entity ue_order_by ON ue_order_by.guid = e.guid";
+					$options['joins'][] = "JOIN {$dbprefix}users_entity ue_order_by ON ue_order_by.guid = e.owner_guid";
 					$order_by = "ue_order_by.$column $direction, e.time_created $direction";
 					break;
 			}

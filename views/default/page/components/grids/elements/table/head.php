@@ -2,12 +2,6 @@
 
 echo '<thead>';
 
-if (isset($vars['list_options']['filter'])) {
-	echo '<div class="hj-framework-list-filter">';
-	echo $vars['list_options']['filter'];
-	echo '</div>';
-}
-
 $list_options = $vars['list_options'];
 $list_view_options = $list_options['list_view_options'];
 $headers = $list_view_options['table']['head'];

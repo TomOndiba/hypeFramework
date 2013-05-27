@@ -1,5 +1,7 @@
 <?php
 
+elgg_register_entity_type('object', 'hjfile');
+
 /**
  * Process uploaded files
  *
@@ -49,6 +51,7 @@ function hj_framework_process_file_upload($name, $entity = null) {
 		}
 
 		$filehandler->setFilename($prefix . $filestorename);
+		$filehandler->title = $file['name'];
 
 		$mime_type = ElggFile::detectMimeType($file['tmp_name'], $file['type']);
 

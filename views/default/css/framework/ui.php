@@ -9,7 +9,6 @@ $graphics_url = $base_url . 'mod/hypeFramework/graphics/';
 	.hj-ajax-loader {
 		margin:0 auto;
 	}
-
 	.hj-loader-circle {
 		background:transparent url(<?php echo $graphics_url ?>loader/circle.gif) no-repeat center center;
 		width:75px;
