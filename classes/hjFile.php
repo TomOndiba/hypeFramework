@@ -13,7 +13,13 @@ class hjFile extends ElggFile {
 	 * @return str
 	 */
 	public function getIconURL($size = 'medium') {
-		return elgg_get_config('url') . "framework/icon/$this->guid/$size/$this->icontime.jpg";
+		if (isset($this->icontime)) {
+			$url = "framework/icon/$this->guid/$size/$this->icontime.jpg";
+		} else {
+			$type = (isset($this->simpletype)) ? $this->simpletype : 'general';
+			$url = "mod/hypeFramework/graphics/mime/{$size}/{$type}.png";
+		}
+		return elgg_normalize_url($url);
 	}
 
 	public function delete() {
