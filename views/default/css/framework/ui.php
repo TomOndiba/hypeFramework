@@ -50,7 +50,7 @@ $graphics_url = $base_url . 'mod/hypeFramework/graphics/';
 		margin:8px auto;
 	}
 
-
+	
 	/** jQuery UI Dialog */
 	.hj-framework-dialog {
 		border: 1px solid #e8e8e8;

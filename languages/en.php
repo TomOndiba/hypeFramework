@@ -69,6 +69,8 @@ $english = array(
 	'hj:framework:filedrop:fallback' => 'Upload images one by one',
 
 	'hj:framework:entity:created' => '%s',
+	'hj:alive:attachments:detach:success' => 'Attachment successfully removed',
+	'hj:alive:attachments:detach:error' => 'Attachment could not be removed',
 	
 		);
 

@@ -498,8 +498,10 @@
 									
 				})
 
-				if (params.pushState !== false)
+				if (params.pushState !== false && !$element.closest('#dialog').length) {
+					// do not update href if we are in a dialog window
 					window.history.replaceState(null, response.output.title, response.href);
+				}
 
 				elgg.trigger_hook('ajax:success', 'framework', { response : response, element : $element});
 			}

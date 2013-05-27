@@ -27,8 +27,6 @@ function hj_framework_process_file_upload($name, $entity = null) {
 		$subtype = $entity->getSubtype();
 	}
 
-	error_log(print_r($files, true));
-	
 	foreach ($files as $file) {
 		if (!is_array($file) || $file['error']) {
 			continue;
