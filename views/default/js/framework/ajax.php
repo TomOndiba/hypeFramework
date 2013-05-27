@@ -438,7 +438,12 @@
 
 	framework.ajax.filterList = function(e) {
 		var params = $(this).serialize();
-		var href = framework.ajax.updateUrlQuery(window.location.href, params);
+		if ($(this).attr('action') == '') {
+			var href = window.location.href;
+		} else {
+			var href = $(this).attr('action');
+		}
+		var href = framework.ajax.updateUrlQuery(href, params);
 		elgg.trigger_hook('refresh:lists', 'framework', { element : $(this), href : href });
 		return false;
 	}
