@@ -10,10 +10,12 @@ if (!$entity instanceof hjObject) {
 
 $container = $entity->getContainerEntity();
 if ($entity->canEdit() && $entity->delete()) {
+	if (elgg_is_xhr()) {
+		print json_encode(array('guid' => $guid));
+	}
 	system_message(elgg_echo('hj:framework:delete:success'));
+	forward($container->getURL());
 } else {
 	register_error(elgg_echo('hj:framework:delete:error:unknown'));
+	forward(REFERER);
 }
-
-echo json_encode(array('guid' => $guid));
-forward($container->getURL());
