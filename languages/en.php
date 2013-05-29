@@ -2,6 +2,8 @@
 
 $english = array(
 
+	'item:object:hjfile' => 'File',
+
 	'hj:framework:input:required' => 'Required Field',
 
 	'hj:framework:error:plugin_order' => '%s can not be activated. Please check your plugin order and ensure that it\'s below hypeFramework in the plugin list',
@@ -69,8 +71,8 @@ $english = array(
 	'hj:framework:filedrop:fallback' => 'Upload images one by one',
 
 	'hj:framework:entity:created' => '%s',
-	'hj:alive:attachments:detach:success' => 'Attachment successfully removed',
-	'hj:alive:attachments:detach:error' => 'Attachment could not be removed',
+
+	'hj:framework:create:file' => 'Upload a new file',
 	
 		);
 
