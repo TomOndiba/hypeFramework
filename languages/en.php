@@ -30,7 +30,7 @@ $english = array(
 
 	'hj:framework:edit:object' => 'Edit %s',
 
-	'hj:framework:delete:error:nothjobject' => 'Error. You can delete this item using this action',
+	'hj:framework:delete:error:notentity' => 'An item you are trying to delete does not exist',
 	'hj:framework:delete:success' => 'Item successfully removed',
 	'hj:framework:delete:error:unknown' => 'An unknown error occured',
 	

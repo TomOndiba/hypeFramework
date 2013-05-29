@@ -124,7 +124,7 @@ function hj_framework_entity_title_menu($hook, $type, $return, $params) {
 
 	$entity = elgg_extract('entity', $params);
 
-	if (!$entity instanceof hjObject) {
+	if (!$entity instanceof hjObject && !$entity instanceof hjFile) {
 		return $return;
 	}
 

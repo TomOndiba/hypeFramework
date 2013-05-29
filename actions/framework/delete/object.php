@@ -1,10 +1,16 @@
 <?php
 
+/**
+ * Delete an entity
+ *
+ * @uses $guid	guid of an entity to be deleted
+ * @return str json encoded string
+ */
 $guid = get_input('guid');
 $entity = get_entity($guid);
 
-if (!$entity instanceof hjObject) {
-	register_error(elgg_echo('hj:framework:delete:error:nothjobject'));
+if (!elgg_instanceof($entity)) {
+	register_error(elgg_echo('hj:framework:delete:error:notentity'));
 	forward(REFERER);
 }
 
@@ -14,8 +20,8 @@ if ($entity->canEdit() && $entity->delete()) {
 		print json_encode(array('guid' => $guid));
 	}
 	system_message(elgg_echo('hj:framework:delete:success'));
-	forward($container->getURL());
+	forward($container->getURL(), 'action');
 } else {
 	register_error(elgg_echo('hj:framework:delete:error:unknown'));
-	forward(REFERER);
+	forward(REFERER, 'action');
 }

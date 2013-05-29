@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Removes a subscription to an entity
+ *
+ * @uses $guid
+ * @return str json encoded string
+ */
 $guid = get_input('guid');
 
 if (check_entity_relationship(elgg_get_logged_in_user_guid(), 'subscribed', $guid)) {
@@ -18,8 +24,8 @@ if (check_entity_relationship(elgg_get_logged_in_user_guid(), 'subscribed', $gui
 	}
 
 	system_message(elgg_echo('hj:framework:subscription:remove:success'));
-	forward(REFERER);
+	forward(REFERER, 'action');
 }
 
 register_error(elgg_echo('hj:framework:subscription:remove:error'));
-forward(REFERER);
+forward(REFERER, 'action');

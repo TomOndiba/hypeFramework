@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Subscription dispatch
+ *
+ * @uses $guid
+ */
 $guid = get_input('guid');
 
 if (check_entity_relationship(elgg_get_logged_in_user_guid(), 'subscribed', $guid)) {
@@ -8,4 +13,4 @@ if (check_entity_relationship(elgg_get_logged_in_user_guid(), 'subscribed', $gui
 	action('framework/subscription/create');
 }
 
-forward(REFERER);
+forward(REFERER, 'action');

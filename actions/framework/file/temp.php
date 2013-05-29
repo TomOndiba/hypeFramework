@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * An action to process temporary file uploads.
+ * Creates new entities and disables them
+ *
+ * @uses $_FILES['file_temp'] Looks for file_temp uploads
+ */
 $guids = hj_framework_process_file_upload('file_temp');
 
 if ($guids) {
@@ -16,4 +22,4 @@ if (elgg_is_xhr()) {
 	print json_encode($response);
 }
 
-forward();
+forward('', 'action');

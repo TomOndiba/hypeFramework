@@ -148,7 +148,6 @@ function hj_framework_register_page_handlers() {
 	// these will be overriden within individual plugins
 	elgg_register_entity_url_handler('object', 'hjform', 'hj_framework_entity_url_forwarder');
 	elgg_register_entity_url_handler('object', 'hjfield', 'hj_framework_entity_url_forwarder');
-	elgg_register_entity_url_handler('object', 'hjfile', 'hj_framework_entity_url_forwarder');
 	elgg_register_entity_url_handler('object', 'hjfilefolder', 'hj_framework_entity_url_forwarder');
 
 	elgg_register_entity_url_handler('object', 'hjannotation', 'hj_framework_annotation_url_forwarder');

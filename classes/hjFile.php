@@ -22,6 +22,23 @@ class hjFile extends ElggFile {
 		return elgg_normalize_url($url);
 	}
 
+	public function getURL() {
+		$friendly_title = elgg_get_friendly_title($this->title);
+		return elgg_normalize_url("framework/file/view/$this->guid/$friendly_title");
+	}
+
+	public function getEditURL() {
+		return "framework/file/edit/$this->guid";
+	}
+
+	public function getDeleteURL() {
+		return elgg_add_action_tokens_to_url(elgg_get_site_url() . "action/framework/delete/object?guid=$this->guid");
+	}
+
+	public function getDownloadURL() {
+		return elgg_normalize_url("framework/download/$this->guid");
+	}
+
 	public function delete() {
 
 		$icon_sizes = hj_framework_get_thumb_sizes($this->getSubtype());
