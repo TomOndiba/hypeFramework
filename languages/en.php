@@ -73,6 +73,12 @@ $english = array(
 	'hj:framework:entity:created' => '%s',
 
 	'hj:framework:create:file' => 'Upload a new file',
+	'hj:framework:download' => 'Download',
+	'edit:object:hjfile:upload' => 'Upload a file',
+	'edit:object:hjfile:title' => 'Title',
+	'edit:object:hjfile:description' => 'Description',
+	'edit:object:hjfile:tags' => 'Tags',
+	'edit:object:hjfile:access_id' => 'Visibility',
 	
 		);
 

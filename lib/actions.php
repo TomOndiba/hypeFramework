@@ -17,6 +17,8 @@ elgg_register_action('framework/subscription/remove', $path_actions . 'framework
 
 elgg_register_action('framework/file/temp', $path_actions . 'framework/file/temp.php');
 
+elgg_register_action('edit/object/hjfile', $path_actions . 'framework/edit/object/hjfile.php');
+
 function hj_framework_edit_object_action() {
 	$form_name = get_input('form_name', false);
 
@@ -135,31 +137,33 @@ function hj_framework_edit_object_action() {
 				$value = get_input($name);
 				set_input($name, null);
 
-				if (!$value) {
-					elgg_delete_metadata(array(
-						'guid' => $entity->guid,
-						'metadata_name' => $name
-					));
+//				if (!$value) {
+//					elgg_delete_metadata(array(
+//						'guid' => $entity->guid,
+//						'metadata_name' => $name
+//					));
+//
+//					continue;
+//				}
+//
+//				if (is_array($value) && count($value) > 1) {
+//					elgg_delete_metadata(array(
+//						'guid' => $entity->guid,
+//						'metadata_name' => $name
+//					));
+//					foreach ($value as $val) {
+//						if (!empty($val)) {
+//							create_metadata($entity->guid, $name, $val, '', $entity->owner_guid, $accesslevel_id, true);
+//						}
+//					}
+//				} else {
+//					if (is_array($value)) {
+//						$value = implode(',', $value);
+//					}
+//					create_metadata($entity->guid, $name, $value, '', $entity->owner_guid, $accesslevel_id);
+//				}
 
-					continue;
-				}
-
-				if (is_array($value) && count($value) > 1) {
-					elgg_delete_metadata(array(
-						'guid' => $entity->guid,
-						'metadata_name' => $name
-					));
-					foreach ($value as $val) {
-						if (!empty($val)) {
-							create_metadata($entity->guid, $name, $val, '', $entity->owner_guid, $accesslevel_id, true);
-						}
-					}
-				} else {
-					if (is_array($value)) {
-						$value = implode(',', $value);
-					}
-					create_metadata($entity->guid, $name, $value, '', $entity->owner_guid, $accesslevel_id);
-				}
+				$entity->$name = $value;
 			}
 		}
 		$entity->save();

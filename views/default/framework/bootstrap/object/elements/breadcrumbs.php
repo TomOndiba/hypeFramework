@@ -22,7 +22,7 @@ foreach ($ancestry as $ancestor) {
 
 if (!empty($breadcrumbs)) {
 	$breadcrumbs = implode(' &#9656; ', $breadcrumbs);
-	echo '<div class="elgg-entity-breadcrumbs">';
+	echo '<span class="elgg-entity-breadcrumbs">';
 	echo $breadcrumbs;
-	echo '</div>';
+	echo '</span>';
 }

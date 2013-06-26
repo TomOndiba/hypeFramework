@@ -169,7 +169,8 @@ function hj_framework_validate_form($form_name = null) {
 				if (is_array($value)) {
 					$empty = 0;
 					foreach ($value as $val) {
-						if (!$val || empty($val)) $empty++;
+						if (!$val || empty($val))
+							$empty++;
 					}
 					if ($empty == count($value)) {
 						$fail = true;
@@ -333,7 +334,7 @@ function hj_framework_process_entity_icon_input($hook, $type, $return, $params) 
 		$file->open("write");
 		$file->close();
 		move_uploaded_file($_FILES[$name]['tmp_name'], $file->getFilenameOnFilestore());
-		
+
 		hj_framework_generate_entity_icons($entity, $file);
 
 		$file->delete();
@@ -464,6 +465,7 @@ function hj_framework_process_category_input($hook, $type, $return, $params) {
 }
 
 elgg_register_plugin_hook_handler('init', 'form:edit:plugin:hypeframework', 'hj_framework_init_plugin_settings_form');
+elgg_register_plugin_hook_handler('init', 'form:edit:object:hjfile', 'hj_framework_init_file_form');
 
 function hj_framework_init_plugin_settings_form($hook, $type, $return, $params) {
 
@@ -488,6 +490,54 @@ function hj_framework_init_plugin_settings_form($hook, $type, $return, $params) 
 	}
 
 	$config['buttons'] = false;
+
+	return $config;
+}
+
+function hj_framework_init_file_form($hook, $type, $return, $params) {
+
+	$entity = elgg_extract('entity', $params, null);
+	$container_guid = ($entity) ? $entity->container_guid : elgg_extract('container_guid', $params, ELGG_ENTITIES_ANY_VALUE);
+	$container = get_entity($container_guid);
+
+	$config = array(
+		'attributes' => array(
+			'enctype' => 'multipart/form-data',
+			'id' => 'form-edit-object-hjfile',
+			'action' => 'action/edit/object/hjfile'
+		),
+		'fields' => array(
+			'type' => array(
+				'input_type' => 'hidden',
+				'value' => 'object'
+			),
+			'subtype' => array(
+				'input_type' => 'hidden',
+				'value' => 'hjfile'
+			),
+			'upload' => array(
+				'input_type' => 'file',
+				'value' => ($entity),
+			),
+			'title' => array(
+				'value' => ($entity) ? $entity->title : '',
+				'required' => true,
+			),
+			'description' => array(
+				'value' => ($entity) ? $entity->description : '',
+				'input_type' => 'longtext',
+				'class' => 'elgg-input-longtext',
+			),
+			'tags' => array(
+				'input_type' => 'tags',
+				'value' => $entity->tags,
+			),
+			'access_id' => array(
+				'input_type' => 'access',
+				'value' => ($entity->access_id) ? $entity->access_id : get_default_access()
+			)
+		)
+	);
 
 	return $config;
 }

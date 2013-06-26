@@ -37,6 +37,9 @@
 		})
 	}
 
+	/**
+	 *	Load missing scripts
+	 */
 	framework.ajax.getScript = function(url, callback) {
 		var head = document.getElementsByTagName("head")[0];
 		var script = document.createElement("script");
@@ -64,6 +67,9 @@
 
 	}
 
+	/**
+	* Load missing stylesheets
+	*/
 	framework.ajax.getStylesheet = function(url, callback) {
 		var head = document.getElementsByTagName("head")[0];
 		var link = document.createElement("link");
@@ -95,6 +101,7 @@
 
 	/**
 	 * Check if any new scripts and stylesheets need to be loaded
+	 * This function is automatically triggered by 'ajax:success','framework' hook
 	 */
 	framework.ajax.fetchOnAjaxSuccess = function(name, type, params, value) {
 
@@ -328,19 +335,17 @@
 			dataType : 'json',
 			beforeSend : function() {
 				elgg.system_message(elgg.echo('hj:framework:ajax:deleting'));
-				$element.addClass('loading')
+				$element.addClass('elgg-state-loading')
 			},
 			complete : function() {
-				$element.removeClass('loading')
+				$element.removeClass('elgg-state-loading')
 			},
 			success : function(response) {
 				
-				if (response.status < 0) {
-
-				} else {
+				if (response.status >= 0) {
 					var uid = response.output.guid;
-					$('.elgg-object[data-uid="' + uid + '"], .elgg-user[data-uid="' + uid + '"], .elgg-group[data-uid="' + uid + '"], [id="elgg-object-' + uid + '"]')
-					.each(function() { $(this).remove()})
+					$('[data-uid="' + uid + '"], [id="elgg-object-' + uid + '"]')
+					.remove()
 				}
 			}
 
@@ -451,12 +456,10 @@
 	framework.ajax.getUpdatedLists = function(hook, type, params) {
 
 		var $element = params.element;
-		if ($element) {
-			var $container = $element.closest('.hj-framework-list-wrapper');
-		} else {
-			var $container = $('.hj-framework-list-wrapper');
-		}
 
+		if ($element.closest('table').length) {
+			$element = $element.closest('table');
+		}
 		if (params.href) {
 			var href = params.href;
 		} else {
@@ -465,13 +468,11 @@
 		
 		elgg.post(href, {
 			beforeSend : function() {
-				$element.addClass('loading');
-				$('.hj-ajax-loader', $container).show();
+				$element.addClass('elgg-state-loading');
 			},
 
 			complete : function() {
-				$element.removeClass('loading');
-				$('.hj-ajax-loader', $container).hide();
+				$element.removeClass('elgg-state-loading');
 			},
 
 			data : {
@@ -498,10 +499,10 @@
 									
 				})
 
-				if (params.pushState !== false && !$element.closest('#dialog').length) {
-					// do not update href if we are in a dialog window
-					window.history.replaceState(null, response.output.title, response.href);
-				}
+//				if (params.pushState !== false && !$element.closest('#dialog').length) {
+//					// do not update href if we are in a dialog window
+//					window.history.replaceState(null, response.output.title, response.href);
+//				}
 
 				elgg.trigger_hook('ajax:success', 'framework', { response : response, element : $element});
 			}

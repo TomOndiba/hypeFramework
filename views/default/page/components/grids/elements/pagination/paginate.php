@@ -81,7 +81,7 @@ if ($count <= $limit && $offset == 0) {
 		$pages->items = array_merge($pages->items, range($current_page + 1, $last_page));
 	}
 
-	$pager .= "<ul class=\"elgg-pagination hj-framework-list-pagination float\">";
+	$pager .= "<ul class=\"elgg-pagination hj-framework-list-pagination float-alt\">";
 	if ($pages->prev['href']) {
 		$link = elgg_view('output/url', $pages->prev);
 		$pager .= "<li>$link</li>";
@@ -129,7 +129,7 @@ echo '<div class="hj-framework-list-filter span3 clearfix">';
 if ($count > 10) {
 	echo elgg_view('input/form', array(
 		'method' => 'GET',
-		'action' => '',
+		'action' => $base_url,
 		'disable_security' => true,
 		'body' => $filter,
 		'class' => 'clearfix'
@@ -137,11 +137,6 @@ if ($count > 10) {
 }
 echo '</div>';
 
-// Loader placeholder
-echo '<div class="span3">';
-echo '<div class="hj-ajax-loader hj-loader-indicator hidden"></div>';
-echo '</div>';
-
-echo '<div class="span6">';
+echo '<div class="span9">';
 echo $pager;
 echo '</div>';

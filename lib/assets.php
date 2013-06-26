@@ -33,9 +33,3 @@ elgg_register_css('jquery.minicolors.css', 'mod/hypeFramework/vendors/minicolors
 
 elgg_register_js('framework.colorpicker', elgg_get_simplecache_url('js', 'framework/colorpicker'), 'footer');
 elgg_register_simplecache_view('js/framework/colorpicker');
-
-elgg_register_js('framework.access.js', elgg_get_simplecache_url('js', 'framework/access'), 'footer');
-elgg_register_simplecache_view('js/framework/access');
-
-elgg_register_css('framework.access.css', elgg_get_simplecache_url('css', 'framework/access'));
-elgg_register_simplecache_view('css/framework/access');

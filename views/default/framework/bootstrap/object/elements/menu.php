@@ -15,5 +15,5 @@ $params = array(
 	'dropdown' => elgg_extract('dropdown', $vars, false)
 );
 
-echo elgg_view_menu('hjentityhead', $params);
+echo elgg_view_menu('entity', $params);
 

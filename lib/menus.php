@@ -1,7 +1,6 @@
 <?php
 
 elgg_register_plugin_hook_handler('register', 'menu:entity', 'hj_framework_entity_menu');
-
 elgg_register_plugin_hook_handler('register', 'menu:title', 'hj_framework_entity_title_menu');
 
 function hj_framework_entity_menu($hook, $type, $return, $params) {
@@ -45,6 +44,7 @@ function hj_framework_entity_menu($hook, $type, $return, $params) {
 
 	if ($items) {
 		foreach ($items as $name => $options) {
+			$options['name'] = $name;
 			$return[$name] = ElggMenuItem::factory($options);
 		}
 	}
@@ -64,8 +64,14 @@ function hj_framework_entity_title_menu($hook, $type, $return, $params) {
 
 		case 'hjfile' :
 			$items = array(
+				'access' => array(
+					'text' => elgg_view('output/access', array('entity' => $entity)),
+					'href' => false,
+					'data-uid' => $entity->guid,
+					'priority' => 100
+				),
 				'download' => array(
-					'text' => elgg_echo('download'),
+					'text' => elgg_echo('hj:framework:download'),
 					'href' => $entity->getDownloadURL(),
 					'class' => 'elgg-button elgg-button-action elgg-button-download',
 					'data-uid' => $entity->guid,
@@ -92,6 +98,7 @@ function hj_framework_entity_title_menu($hook, $type, $return, $params) {
 
 	if ($items) {
 		foreach ($items as $name => $options) {
+			$options['name'] = $name;
 			$return[$name] = ElggMenuItem::factory($options);
 		}
 	}

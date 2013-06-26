@@ -133,6 +133,15 @@ class hjObject extends ElggObject {
 	}
 
 	/**
+	 * Get ancestry relationships
+	 * @see hj_framework_set_ancestry()
+	 * @return array			Hierarchy of ancestors
+	 */
+	public function getAncestry() {
+		return hj_framework_get_ancestry($this->guid);
+	}
+
+	/**
 	 * Get entity title
 	 * @return type
 	 */
